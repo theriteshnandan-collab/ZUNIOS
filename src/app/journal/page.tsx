@@ -1,0 +1,405 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useUser, UserButton } from "@clerk/nextjs";
+import { supabase } from "@/lib/supabase";
+import Link from "next/link";
+import { Input } from "@/components/ui/input";
+import { Card } from "@/components/ui/card";
+import { GlassCard } from "@/components/ui/GlassCard";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, Moon, Sparkles, Trash2, Loader2, Lightbulb, Trophy, BrainCircuit, LayoutGrid, Search, BarChart3, Download } from "lucide-react";
+import DreamDetailModal from "@/components/DreamDetailModal";
+import DreamImage from "@/components/DreamImage";
+import AnalyticsDashboard from "@/components/analytics/AnalyticsDashboard";
+import VoiceInput from "@/components/VoiceInput";
+import SemanticSearch from "@/components/SemanticSearch";
+import { toast } from "sonner";
+import { formatDistanceToNow } from "date-fns";
+import { cn } from "@/lib/utils";
+import { calculateStats } from "@/lib/gamification";
+import { calculateJournalStats } from "@/lib/journal-streaks";
+import { JournalStreakCard } from "@/components/analytics/JournalStreakCard";
+import { DataExportModal } from "@/components/DataExportModal";
+import type { Dream } from "@/types/dream";
+import { JournalLoadingGrid } from "@/components/skeletons/DreamCardSkeleton";
+import { SocialShare } from "@/components/SocialShare";
+import { useTaskStore } from "@/stores/taskStore";
+import { calculateTotalXP, getLevelInfo } from "@/lib/leveling";
+import { calculateTaskStats, getEarnedBadges as getTaskBadges } from "@/lib/task-gamification";
+import { getStreakBadges } from "@/lib/journal-streaks";
+import LevelProgress from "@/components/game/LevelProgress";
+
+
+
+export default function JournalPage() {
+    const { user, isLoaded } = useUser();
+    const [dreams, setDreams] = useState<Dream[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [selectedDream, setSelectedDream] = useState<Dream | null>(null);
+    const [selectedTab, setSelectedTab] = useState('all');
+    const [isExportOpen, setIsExportOpen] = useState(false);
+
+    // XP & Leveling
+    const { tasks, fetchTasks } = useTaskStore();
+
+    // Calculate stats & badges for XP
+    const journalStats = calculateJournalStats(dreams);
+    const taskStats = calculateTaskStats(tasks);
+
+    const earnedStreakBadges = getStreakBadges(journalStats).filter(b => b.earned);
+    const earnedTaskBadges = getTaskBadges(taskStats).filter(b => b.earned);
+    const allBadges = [...earnedStreakBadges, ...earnedTaskBadges]; // Combine badges for XP
+
+    const totalXP = calculateTotalXP(dreams, tasks, allBadges);
+    const levelInfo = getLevelInfo(totalXP);
+
+
+    // Fetch entries on mount
+
+
+
+    const fetchDreams = async () => {
+        setIsLoading(true);
+
+        // GUEST MODE FETCH
+        if (!user) {
+            if (!supabase) {
+                console.error("Supabase client not initialized");
+                setIsLoading(false);
+                return;
+            }
+            const { data, error } = await supabase
+                .from('dreams')
+                .select('*')
+                .eq('user_id', 'guest')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error("Fetch error:", error);
+                toast.error("Failed to load entries");
+            } else {
+                setDreams(data || []);
+            }
+            setIsLoading(false);
+            return;
+        }
+
+        // AUTH MODE FETCH
+        if (!supabase) {
+            console.error("Supabase client not initialized");
+            setIsLoading(false);
+            return;
+        }
+        const { data, error } = await supabase
+            .from('dreams')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error("Fetch error:", error);
+            toast.error("Failed to load entries");
+        } else {
+            setDreams(data || []);
+        }
+        setIsLoading(false);
+    };
+
+    // Fetch entries on mount
+    useEffect(() => {
+        if (isLoaded) {
+            fetchDreams();
+            fetchTasks(); // Fetch tasks for XP calculation
+        }
+    }, [isLoaded, user]);
+
+    const handleDelete = async (id: string, e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (!confirm("Are you sure you want to delete this memory?")) return;
+
+        if (!supabase) {
+            toast.error("Database not available");
+            return;
+        }
+
+        setDeletingId(id);
+
+        let error;
+        // GUEST MODE DELETE
+        if (!user) {
+            const res = await supabase
+                .from('dreams')
+                .delete()
+                .eq('id', id)
+                .eq('user_id', 'guest');
+            error = res.error;
+        } else {
+            // AUTH MODE DELETE
+            const res = await supabase
+                .from('dreams')
+                .delete()
+                .eq('id', id)
+                .eq('user_id', user.id);
+            error = res.error;
+        }
+
+        if (error) {
+            toast.error("Failed to delete");
+        } else {
+            setDreams(prev => prev.filter(d => d.id !== id));
+            toast.success("Memory erased");
+            if (selectedDream?.id === id) setSelectedDream(null);
+        }
+        setDeletingId(null);
+    };
+
+    // Filter dreams based on tab
+    const filteredDreams = selectedTab === 'all'
+        ? dreams
+        : dreams.filter(d => d.category === selectedTab || (selectedTab === 'journal' ? !d.category : false));
+
+    return (
+        <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-purple-500/30">
+            {/* Header */}
+            <header className="sticky top-0 z-10 backdrop-blur-xl bg-black/50 border-b border-white/5">
+                <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                        <Link href="/" className="p-2 rounded-full hover:bg-white/5 transition-colors">
+                            <ArrowLeft className="w-5 h-5 text-gray-400" />
+                        </Link>
+                        <h1 className="text-xl font-semibold bg-gradient-to-r from-purple-400 via-pink-400 to-white bg-clip-text text-transparent">
+                            Memory Bank
+                        </h1>
+                    </div>
+
+                    <div className="flex items-center gap-3">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setIsExportOpen(true)}
+                            className="bg-white/5 border-white/10 hover:bg-white/10 text-white/70"
+                        >
+                            <Download className="w-4 h-4 mr-2" />
+                            Export Data
+                        </Button>
+                        <div className="h-8 w-[1px] bg-white/10 mx-2" />
+                        <UserButton afterSignOutUrl="/" />
+                    </div>
+                </div>
+            </header>
+
+            <main className="max-w-7xl mx-auto px-6 py-8">
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                    {/* Sidebar Stats */}
+                    <div className="space-y-6">
+                        {/* Level Progress (Gamification Header) */}
+                        <LevelProgress levelInfo={levelInfo} />
+
+                        {/* Journal Streak Card */}
+                        <JournalStreakCard stats={journalStats} />
+
+
+                        <div className="p-1 bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
+                            <nav className="flex flex-col gap-1">
+                                <TabButton
+                                    active={selectedTab === 'all'}
+                                    onClick={() => setSelectedTab('all')}
+                                    icon={LayoutGrid}
+                                    label="All Memories"
+                                    count={dreams.length}
+                                />
+                                <TabButton
+                                    active={selectedTab === 'dream'}
+                                    onClick={() => setSelectedTab('dream')}
+                                    icon={Moon}
+                                    label="Visions"
+                                    count={dreams.filter(d => d.category === 'dream').length}
+                                    color="text-purple-400"
+                                />
+                                <TabButton
+                                    active={selectedTab === 'idea'}
+                                    onClick={() => setSelectedTab('idea')}
+                                    icon={Lightbulb}
+                                    label="Builds"
+                                    count={dreams.filter(d => d.category === 'idea').length}
+                                    color="text-amber-400"
+                                />
+                                <TabButton
+                                    active={selectedTab === 'win'}
+                                    onClick={() => setSelectedTab('win')}
+                                    icon={Trophy}
+                                    label="Logs"
+                                    count={dreams.filter(d => d.category === 'win').length}
+                                    color="text-emerald-400"
+                                />
+                                <TabButton
+                                    active={selectedTab === 'thought'}
+                                    onClick={() => setSelectedTab('thought')}
+                                    icon={BrainCircuit}
+                                    label="Thoughts"
+                                    count={dreams.filter(d => d.category === 'thought').length}
+                                    color="text-blue-400"
+                                />
+                            </nav>
+                        </div>
+
+                        {/* Analytics Widget */}
+                        <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                            <h3 className="text-sm font-medium text-white/50 mb-4 flex items-center gap-2">
+                                <BarChart3 className="w-4 h-4" />
+                                Analytics
+                            </h3>
+                            <div className="space-y-4">
+                                <div className="flex justify-between items-center text-sm">
+                                    <span className="text-white/70">Average Mood</span>
+                                    <span className="text-purple-400 font-medium">Coming soon</span>
+                                </div>
+                                <div className="flex justify-between items-center text-sm">
+                                    <span className="text-white/70">Top Theme</span>
+                                    <span className="text-pink-400 font-medium">Coming soon</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Main Content */}
+                    <div className="lg:col-span-3 space-y-6">
+                        {/* Search */}
+                        <SemanticSearch />
+
+                        {isLoading ? (
+                            <JournalLoadingGrid />
+                        ) : filteredDreams.length === 0 ? (
+                            <div className="text-center py-20 bg-white/5 rounded-3xl border border-white/5 border-dashed">
+                                <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <Sparkles className="w-8 h-8 text-white/20" />
+                                </div>
+                                <h3 className="text-xl font-medium text-white/50">No memories found</h3>
+                                <p className="text-sm text-white/30 mt-2">Start capturing your journey to see it here.</p>
+                                <Button asChild className="mt-6 bg-white/10 hover:bg-white/20 text-white border-0">
+                                    <Link href="/">Create New Entry</Link>
+                                </Button>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {filteredDreams.map((dream) => (
+                                    <GlassCard
+                                        key={dream.id}
+                                        className="relative group cursor-pointer hover:border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/10 transition-all duration-300"
+                                        onClick={() => setSelectedDream(dream)}
+                                    >
+                                        <div className="flex flex-col h-full">
+                                            {/* Header */}
+                                            <div className="flex justify-between items-start mb-3">
+                                                <Badge category={dream.category} />
+                                                <span className="text-xs text-white/30 font-mono">
+                                                    {formatDistanceToNow(new Date(dream.created_at), { addSuffix: true })}
+                                                </span>
+                                            </div>
+
+                                            {/* Content */}
+                                            <p className="text-sm text-white/80 line-clamp-3 mb-4 flex-1 font-light leading-relaxed">
+                                                {dream.content}
+                                            </p>
+
+                                            {/* Footer */}
+                                            <div className="flex items-center justify-between pt-3 border-t border-white/5 mt-auto">
+                                                <div className="flex items-center gap-2">
+                                                    {dream.mood && (
+                                                        <span className="text-xs px-2 py-1 rounded-full bg-white/5 text-white/50">
+                                                            {dream.mood}
+                                                        </span>
+                                                    )}
+                                                    {dream.image_url && (
+                                                        <span className="text-xs px-2 py-1 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
+                                                            Visualized
+                                                        </span>
+                                                    )}
+                                                </div>
+
+                                                <Button
+                                                    size="icon"
+                                                    variant="ghost"
+                                                    className="h-8 w-8 text-white/20 hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all"
+                                                    onClick={(e) => handleDelete(dream.id, e)}
+                                                    disabled={deletingId === dream.id}
+                                                >
+                                                    {deletingId === dream.id ? (
+                                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                                    ) : (
+                                                        <Trash2 className="w-4 h-4" />
+                                                    )}
+                                                </Button>
+                                                <SocialShare
+                                                    title={dream.theme || 'New Memory'}
+                                                    description={dream.content}
+                                                    className="h-8 w-8 text-white/20 hover:text-white opacity-0 group-hover:opacity-100 transition-all ml-1"
+                                                />
+                                            </div>
+                                        </div>
+                                    </GlassCard>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Modals */}
+                <DreamDetailModal
+                    dream={selectedDream}
+                    isOpen={!!selectedDream}
+                    onClose={() => setSelectedDream(null)}
+                />
+
+                <DataExportModal
+                    entries={dreams}
+                    isOpen={isExportOpen}
+                    onClose={() => setIsExportOpen(false)}
+                />
+            </main>
+        </div>
+    );
+}
+
+function TabButton({ active, onClick, icon: Icon, label, count, color = "text-white" }: any) {
+    return (
+        <button
+            onClick={onClick}
+            className={cn(
+                "w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200",
+                active
+                    ? "bg-white/10 text-white shadow-sm"
+                    : "text-white/50 hover:bg-white/5 hover:text-white"
+            )}
+        >
+            <div className="flex items-center gap-3">
+                <Icon className={cn("w-4 h-4", active ? color : "text-white/30")} />
+                <span className="text-sm font-medium">{label}</span>
+            </div>
+            {count > 0 && (
+                <span className="text-xs bg-white/10 px-2 py-0.5 rounded-full text-white/40">
+                    {count}
+                </span>
+            )}
+        </button>
+    );
+}
+
+function Badge({ category }: { category?: string }) {
+    const config: any = {
+        dream: { label: 'Vision', color: 'bg-purple-500/10 text-purple-300 border-purple-500/20' },
+        idea: { label: 'Build', color: 'bg-amber-500/10 text-amber-300 border-amber-500/20' },
+        win: { label: 'Log', color: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20' },
+        thought: { label: 'Think', color: 'bg-blue-500/10 text-blue-300 border-blue-500/20' },
+    };
+
+    const style = config[category || 'thought'] || config.thought;
+
+    return (
+        <span className={cn("text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border font-medium", style.color)}>
+            {style.label}
+        </span>
+    );
+}
