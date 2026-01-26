@@ -1,0 +1,316 @@
+
+> zunios@0.1.0 build
+> next build
+
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\Theri\OneDrive\Desktop\NANDRY\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\Theri\OneDrive\Desktop\NANDRY\content-pack\life-stream\package-lock.json
+
+▲ Next.js 16.1.4 (Turbopack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · clientTraceMetadata
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 8 errors:
+./content-pack/life-stream/src/components/SocialShare.tsx:5:1
+Export DropdownMenu doesn't exist in target module
+[0m [90m  3 |[39m [36mimport[39m { [33mShare2[39m[33m,[39m [33mTwitter[39m[33m,[39m [33mLink[39m [36mas[39m [33mLinkIcon[39m[33m,[39m [33mCheck[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m  4 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m"@/components/ui/button"[39m[33m;[39m
+[31m[1m>[22m[39m[90m  5 |[39m [36mimport[39m {
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  6 |[39m     [33mDropdownMenu[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  7 |[39m     [33mDropdownMenuContent[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  8 |[39m     [33mDropdownMenuItem[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  9 |[39m     [33mDropdownMenuTrigger[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m 10 |[39m } [36mfrom[39m [32m"@/components/ui/dropdown-menu"[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 11 |[39m [36mimport[39m { useState } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m 12 |[39m [36mimport[39m { toast } [36mfrom[39m [32m"sonner"[39m[33m;[39m
+ [90m 13 |[39m[0m
+
+The export DropdownMenu was not found in module [project]/content-pack/life-stream/src/components/ui/dropdown-menu.tsx [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./content-pack/life-stream/src/components/SocialShare.tsx [Client Component Browser]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Client Component Browser]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./content-pack/life-stream/src/components/SocialShare.tsx [Client Component SSR]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Client Component SSR]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Server Component]
+
+
+./content-pack/life-stream/src/components/SocialShare.tsx:5:1
+Export DropdownMenu doesn't exist in target module
+[0m [90m  3 |[39m [36mimport[39m { [33mShare2[39m[33m,[39m [33mTwitter[39m[33m,[39m [33mLink[39m [36mas[39m [33mLinkIcon[39m[33m,[39m [33mCheck[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m  4 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m"@/components/ui/button"[39m[33m;[39m
+[31m[1m>[22m[39m[90m  5 |[39m [36mimport[39m {
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  6 |[39m     [33mDropdownMenu[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  7 |[39m     [33mDropdownMenuContent[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  8 |[39m     [33mDropdownMenuItem[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  9 |[39m     [33mDropdownMenuTrigger[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m 10 |[39m } [36mfrom[39m [32m"@/components/ui/dropdown-menu"[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 11 |[39m [36mimport[39m { useState } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m 12 |[39m [36mimport[39m { toast } [36mfrom[39m [32m"sonner"[39m[33m;[39m
+ [90m 13 |[39m[0m
+
+The export DropdownMenu was not found in module [project]/content-pack/life-stream/src/components/ui/dropdown-menu.tsx [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./content-pack/life-stream/src/components/SocialShare.tsx [Client Component Browser]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Client Component Browser]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./content-pack/life-stream/src/components/SocialShare.tsx [Client Component SSR]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Client Component SSR]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Server Component]
+
+
+./content-pack/life-stream/src/components/SocialShare.tsx:5:1
+Export DropdownMenuContent doesn't exist in target module
+[0m [90m  3 |[39m [36mimport[39m { [33mShare2[39m[33m,[39m [33mTwitter[39m[33m,[39m [33mLink[39m [36mas[39m [33mLinkIcon[39m[33m,[39m [33mCheck[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m  4 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m"@/components/ui/button"[39m[33m;[39m
+[31m[1m>[22m[39m[90m  5 |[39m [36mimport[39m {
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  6 |[39m     [33mDropdownMenu[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  7 |[39m     [33mDropdownMenuContent[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  8 |[39m     [33mDropdownMenuItem[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  9 |[39m     [33mDropdownMenuTrigger[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m 10 |[39m } [36mfrom[39m [32m"@/components/ui/dropdown-menu"[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 11 |[39m [36mimport[39m { useState } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m 12 |[39m [36mimport[39m { toast } [36mfrom[39m [32m"sonner"[39m[33m;[39m
+ [90m 13 |[39m[0m
+
+The export DropdownMenuContent was not found in module [project]/content-pack/life-stream/src/components/ui/dropdown-menu.tsx [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./content-pack/life-stream/src/components/SocialShare.tsx [Client Component Browser]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Client Component Browser]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./content-pack/life-stream/src/components/SocialShare.tsx [Client Component SSR]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Client Component SSR]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Server Component]
+
+
+./content-pack/life-stream/src/components/SocialShare.tsx:5:1
+Export DropdownMenuContent doesn't exist in target module
+[0m [90m  3 |[39m [36mimport[39m { [33mShare2[39m[33m,[39m [33mTwitter[39m[33m,[39m [33mLink[39m [36mas[39m [33mLinkIcon[39m[33m,[39m [33mCheck[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m  4 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m"@/components/ui/button"[39m[33m;[39m
+[31m[1m>[22m[39m[90m  5 |[39m [36mimport[39m {
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  6 |[39m     [33mDropdownMenu[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  7 |[39m     [33mDropdownMenuContent[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  8 |[39m     [33mDropdownMenuItem[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  9 |[39m     [33mDropdownMenuTrigger[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m 10 |[39m } [36mfrom[39m [32m"@/components/ui/dropdown-menu"[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 11 |[39m [36mimport[39m { useState } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m 12 |[39m [36mimport[39m { toast } [36mfrom[39m [32m"sonner"[39m[33m;[39m
+ [90m 13 |[39m[0m
+
+The export DropdownMenuContent was not found in module [project]/content-pack/life-stream/src/components/ui/dropdown-menu.tsx [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./content-pack/life-stream/src/components/SocialShare.tsx [Client Component Browser]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Client Component Browser]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./content-pack/life-stream/src/components/SocialShare.tsx [Client Component SSR]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Client Component SSR]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Server Component]
+
+
+./content-pack/life-stream/src/components/SocialShare.tsx:5:1
+Export DropdownMenuItem doesn't exist in target module
+[0m [90m  3 |[39m [36mimport[39m { [33mShare2[39m[33m,[39m [33mTwitter[39m[33m,[39m [33mLink[39m [36mas[39m [33mLinkIcon[39m[33m,[39m [33mCheck[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m  4 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m"@/components/ui/button"[39m[33m;[39m
+[31m[1m>[22m[39m[90m  5 |[39m [36mimport[39m {
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  6 |[39m     [33mDropdownMenu[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  7 |[39m     [33mDropdownMenuContent[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  8 |[39m     [33mDropdownMenuItem[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  9 |[39m     [33mDropdownMenuTrigger[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m 10 |[39m } [36mfrom[39m [32m"@/components/ui/dropdown-menu"[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 11 |[39m [36mimport[39m { useState } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m 12 |[39m [36mimport[39m { toast } [36mfrom[39m [32m"sonner"[39m[33m;[39m
+ [90m 13 |[39m[0m
+
+The export DropdownMenuItem was not found in module [project]/content-pack/life-stream/src/components/ui/dropdown-menu.tsx [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./content-pack/life-stream/src/components/SocialShare.tsx [Client Component Browser]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Client Component Browser]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./content-pack/life-stream/src/components/SocialShare.tsx [Client Component SSR]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Client Component SSR]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Server Component]
+
+
+./content-pack/life-stream/src/components/SocialShare.tsx:5:1
+Export DropdownMenuItem doesn't exist in target module
+[0m [90m  3 |[39m [36mimport[39m { [33mShare2[39m[33m,[39m [33mTwitter[39m[33m,[39m [33mLink[39m [36mas[39m [33mLinkIcon[39m[33m,[39m [33mCheck[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m  4 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m"@/components/ui/button"[39m[33m;[39m
+[31m[1m>[22m[39m[90m  5 |[39m [36mimport[39m {
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  6 |[39m     [33mDropdownMenu[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  7 |[39m     [33mDropdownMenuContent[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  8 |[39m     [33mDropdownMenuItem[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  9 |[39m     [33mDropdownMenuTrigger[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m 10 |[39m } [36mfrom[39m [32m"@/components/ui/dropdown-menu"[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 11 |[39m [36mimport[39m { useState } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m 12 |[39m [36mimport[39m { toast } [36mfrom[39m [32m"sonner"[39m[33m;[39m
+ [90m 13 |[39m[0m
+
+The export DropdownMenuItem was not found in module [project]/content-pack/life-stream/src/components/ui/dropdown-menu.tsx [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./content-pack/life-stream/src/components/SocialShare.tsx [Client Component Browser]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Client Component Browser]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./content-pack/life-stream/src/components/SocialShare.tsx [Client Component SSR]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Client Component SSR]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Server Component]
+
+
+./content-pack/life-stream/src/components/SocialShare.tsx:5:1
+Export DropdownMenuTrigger doesn't exist in target module
+[0m [90m  3 |[39m [36mimport[39m { [33mShare2[39m[33m,[39m [33mTwitter[39m[33m,[39m [33mLink[39m [36mas[39m [33mLinkIcon[39m[33m,[39m [33mCheck[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m  4 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m"@/components/ui/button"[39m[33m;[39m
+[31m[1m>[22m[39m[90m  5 |[39m [36mimport[39m {
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  6 |[39m     [33mDropdownMenu[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  7 |[39m     [33mDropdownMenuContent[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  8 |[39m     [33mDropdownMenuItem[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  9 |[39m     [33mDropdownMenuTrigger[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m 10 |[39m } [36mfrom[39m [32m"@/components/ui/dropdown-menu"[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 11 |[39m [36mimport[39m { useState } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m 12 |[39m [36mimport[39m { toast } [36mfrom[39m [32m"sonner"[39m[33m;[39m
+ [90m 13 |[39m[0m
+
+The export DropdownMenuTrigger was not found in module [project]/content-pack/life-stream/src/components/ui/dropdown-menu.tsx [app-client] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./content-pack/life-stream/src/components/SocialShare.tsx [Client Component Browser]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Client Component Browser]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./content-pack/life-stream/src/components/SocialShare.tsx [Client Component SSR]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Client Component SSR]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Server Component]
+
+
+./content-pack/life-stream/src/components/SocialShare.tsx:5:1
+Export DropdownMenuTrigger doesn't exist in target module
+[0m [90m  3 |[39m [36mimport[39m { [33mShare2[39m[33m,[39m [33mTwitter[39m[33m,[39m [33mLink[39m [36mas[39m [33mLinkIcon[39m[33m,[39m [33mCheck[39m } [36mfrom[39m [32m"lucide-react"[39m[33m;[39m
+ [90m  4 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m"@/components/ui/button"[39m[33m;[39m
+[31m[1m>[22m[39m[90m  5 |[39m [36mimport[39m {
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  6 |[39m     [33mDropdownMenu[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  7 |[39m     [33mDropdownMenuContent[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  8 |[39m     [33mDropdownMenuItem[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m  9 |[39m     [33mDropdownMenuTrigger[39m[33m,[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m>[22m[39m[90m 10 |[39m } [36mfrom[39m [32m"@/components/ui/dropdown-menu"[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 11 |[39m [36mimport[39m { useState } [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m 12 |[39m [36mimport[39m { toast } [36mfrom[39m [32m"sonner"[39m[33m;[39m
+ [90m 13 |[39m[0m
+
+The export DropdownMenuTrigger was not found in module [project]/content-pack/life-stream/src/components/ui/dropdown-menu.tsx [app-ssr] (ecmascript).
+The module has no exports at all.
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./content-pack/life-stream/src/components/SocialShare.tsx [Client Component Browser]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Client Component Browser]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./content-pack/life-stream/src/components/SocialShare.tsx [Client Component SSR]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Client Component SSR]
+    ./content-pack/life-stream/src/app/journal/page.tsx [Server Component]
+
+
+    at <unknown> (./content-pack/life-stream/src/components/SocialShare.tsx:5:1)
+    at <unknown> (./content-pack/life-stream/src/components/SocialShare.tsx:5:1)
+    at <unknown> (./content-pack/life-stream/src/components/SocialShare.tsx:5:1)
+    at <unknown> (./content-pack/life-stream/src/components/SocialShare.tsx:5:1)
+    at <unknown> (./content-pack/life-stream/src/components/SocialShare.tsx:5:1)
+    at <unknown> (./content-pack/life-stream/src/components/SocialShare.tsx:5:1)
+    at <unknown> (./content-pack/life-stream/src/components/SocialShare.tsx:5:1)
+    at <unknown> (./content-pack/life-stream/src/components/SocialShare.tsx:5:1)

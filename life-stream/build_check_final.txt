@@ -1,0 +1,45 @@
+
+> zunios@0.1.0 build
+> next build
+
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\Theri\OneDrive\Desktop\NANDRY\package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\Theri\OneDrive\Desktop\NANDRY\content-pack\life-stream\package-lock.json
+
+▲ Next.js 16.1.4 (Turbopack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · clientTraceMetadata
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 5.2s
+  Running next.config.js provided runAfterProductionCompile ...
+✓ Completed runAfterProductionCompile in 9426ms
+  Running TypeScript ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/7) ...
+  Generating static pages using 7 workers (1/7) 
+  Generating static pages using 7 workers (3/7) 
+  Generating static pages using 7 workers (5/7) 
+✓ Generating static pages using 7 workers (7/7) in 284.4ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /api/analyze
+├ ƒ /api/dreams/[id]
+├ ƒ /api/entries/save
+├ ƒ /api/search
+├ ƒ /api/tasks
+├ ○ /journal
+├ ○ /tasks
+└ ○ /test-health
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
