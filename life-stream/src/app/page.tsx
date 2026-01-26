@@ -17,7 +17,6 @@ import DreamLoader from "@/components/DreamLoader";
 import DreamImage from "@/components/DreamImage";
 import confetti from "canvas-confetti";
 import VoiceRecorder from "@/components/VoiceRecorder";
-import VoiceRecorder from "@/components/VoiceRecorder";
 import LandingSections from "@/components/marketing/LandingSections";
 import ZuniosLogo from "@/components/ZuniosLogo";
 
