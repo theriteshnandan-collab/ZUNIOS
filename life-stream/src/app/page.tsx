@@ -17,7 +17,9 @@ import DreamLoader from "@/components/DreamLoader";
 import DreamImage from "@/components/DreamImage";
 import confetti from "canvas-confetti";
 import VoiceRecorder from "@/components/VoiceRecorder";
+import VoiceRecorder from "@/components/VoiceRecorder";
 import LandingSections from "@/components/marketing/LandingSections";
+import ZuniosLogo from "@/components/ZuniosLogo";
 
 
 export default function Home() {
@@ -274,13 +276,8 @@ export default function Home() {
 
         {/* Header */}
         <div className="space-y-4">
-          <div className="flex items-center justify-center gap-2 mb-6 relative">
-            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-              <span className="font-serif font-bold text-white text-lg">Z</span>
-            </div>
-            <span className="text-xl font-medium tracking-widest uppercase opacity-70">
-              ZUNIOS
-            </span>
+          <div className="flex items-center justify-center mb-6 scale-125">
+            <ZuniosLogo size="xl" showText={true} className="flex-col !gap-4" />
           </div>
 
           <h1 className="text-4xl md:text-7xl font-bold font-serif tracking-tight bg-gradient-to-br from-white via-white to-white/50 bg-clip-text text-transparent pb-2">
