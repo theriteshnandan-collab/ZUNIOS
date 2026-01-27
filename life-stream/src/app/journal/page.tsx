@@ -279,8 +279,10 @@ export default function JournalPage() {
                     </div>
 
                     {/* 3. Time Travel (Calendar) */}
-                    <div className="w-full">
-                        <DateNavigator dreams={dreams} onDateSelect={handleDateSelect} />
+                    <div className="w-full flex justify-center">
+                        <div className="w-full max-w-lg">
+                            <DateNavigator dreams={dreams} onDateSelect={handleDateSelect} />
+                        </div>
                     </div>
 
                     {/* 4. Main Content (Focus Mode or Timeline) */}
