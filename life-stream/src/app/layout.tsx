@@ -35,6 +35,7 @@ export const viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
+  interactiveWidget: "resizes-content", // Key for mobile keyboard handling
 };
 
 export const metadata: Metadata = {

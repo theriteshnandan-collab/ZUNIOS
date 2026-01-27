@@ -56,47 +56,7 @@ export default function Home() {
       };
     }
   };
-
-  const modeData = getModeData();
-
-  const handleAnalyze = async (text: string, predictedMode: EntryMode) => {
-    if (!text.trim()) return;
-
-    setIsLoading(true);
-    setMode(predictedMode); // Sync global mode
-
-    try {
-      const response = await fetch("/api/analyze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        // PASS THE PREDICTED MODE
-        body: JSON.stringify({ dream: text, category: predictedMode }),
-      });
-      const data = await response.json();
-
-      if (data.error) {
-        throw new Error(data.error);
-      }
-
-      setResult({ ...data, content: text, category: predictedMode });
-    } catch (error: any) {
-      console.error("Failed to analyze", error);
-      toast.error(error.message || "Failed to analyze");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const { user } = useUser();
-
-  const handleSave = async () => {
-    if (!result) return;
-
-    // GUEST MODE SAVE
-    if (!user) {
-      setIsSaving(true);
-      try {
-        const guestDream = {
+*        const guestDream = {
           id: crypto.randomUUID(),
           content: result.content,
           theme: result.theme,

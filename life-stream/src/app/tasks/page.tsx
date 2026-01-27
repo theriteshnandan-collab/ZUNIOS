@@ -74,8 +74,8 @@ export default function TasksPage() {
             </header>
 
             {/* Stats Bar */}
-            <div className="max-w-6xl mx-auto px-6 py-6">
-                <div className="grid grid-cols-4 gap-4">
+            <div className="max-w-6xl mx-auto px-4 py-6">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                     <StatsCard
                         label="Total"
                         count={counts.total}

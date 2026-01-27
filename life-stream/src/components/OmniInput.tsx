@@ -99,9 +99,9 @@ export default function OmniInput({ onAnalyze, isAnalyzing, initialMode = 'thoug
                 {/* Bottom Bar */}
                 <div className="flex items-center justify-between px-4 pb-4">
                     {/* Mode Indicator & Tools */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
                         <div className={cn(
-                            "flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/20 border border-white/5 transition-colors",
+                            "flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/20 border border-white/5 transition-colors shrink-0",
                             activeModeConfig.color
                         )}>
                             <activeModeConfig.icon className="w-3.5 h-3.5" />
@@ -113,7 +113,7 @@ export default function OmniInput({ onAnalyze, isAnalyzing, initialMode = 'thoug
                             <button
                                 onClick={() => setShowTemplates(!showTemplates)}
                                 className={cn(
-                                    "flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/5 transition-colors text-xs font-medium",
+                                    "flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/5 transition-colors text-xs font-medium shrink-0 touch-target",
                                     showTemplates ? "bg-white/10 text-white" : "bg-black/20 text-white/50 hover:text-white"
                                 )}
                             >
@@ -123,7 +123,7 @@ export default function OmniInput({ onAnalyze, isAnalyzing, initialMode = 'thoug
                         )}
 
                         {text.length > 5 && (
-                            <span className="text-[10px] text-white/20 animate-in fade-in slide-in-from-left-2">
+                            <span className="hidden sm:inline-block text-[10px] text-white/20 animate-in fade-in slide-in-from-left-2 whitespace-nowrap">
                                 Auto-detecting...
                             </span>
                         )}
@@ -166,17 +166,16 @@ export default function OmniInput({ onAnalyze, isAnalyzing, initialMode = 'thoug
                         exit={{ opacity: 0, y: 10 }}
                         className="absolute top-full left-0 mt-2 w-full max-w-sm bg-gray-900/95 border border-white/10 rounded-xl shadow-xl backdrop-blur-xl z-20 overflow-hidden"
                     >
-                        <div className="p-2 space-y-1">
+                        <div className="p-1 space-y-0.5">
                             {templates.map(template => (
                                 <button
                                     key={template.id}
                                     onClick={() => handleTemplateSelect(template)}
-                                    className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 text-left transition-colors group"
+                                    className="w-full flex items-center gap-2 p-1.5 rounded-lg hover:bg-white/10 text-left transition-colors group"
                                 >
-                                    <span className="text-xl group-hover:scale-110 transition-transform">{template.icon}</span>
+                                    <span className="text-lg group-hover:scale-110 transition-transform">{template.icon}</span>
                                     <div>
-                                        <p className="text-sm font-medium text-white">{template.title}</p>
-                                        <p className="text-xs text-white/40 line-clamp-1">{template.prompt}</p>
+                                        <p className="text-xs font-medium text-white">{template.title}</p>
                                     </div>
                                     <ArrowRight className="w-3 h-3 text-white/20 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </button>
