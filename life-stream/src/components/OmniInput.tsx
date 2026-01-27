@@ -173,14 +173,17 @@ export default function OmniInput({ onAnalyze, isAnalyzing, initialMode = 'thoug
                             {templates.map(template => (
                                 <button
                                     key={template.id}
-                                    onClick={() => handleTemplateSelect(template)}
-                                    className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 active:bg-white/20 text-left transition-all group cursor-pointer"
+                                    onMouseDown={(e) => {
+                                        e.preventDefault(); // Prevent focus loss
+                                        handleTemplateSelect(template);
+                                    }}
+                                    className="w-full flex items-center gap-2 p-1.5 rounded-lg hover:bg-white/10 active:bg-white/20 text-left transition-all group cursor-pointer"
                                 >
-                                    <span className="text-xl group-hover:scale-110 transition-transform">{template.icon}</span>
+                                    <span className="text-lg group-hover:scale-110 transition-transform">{template.icon}</span>
                                     <div className="flex-1">
-                                        <p className="text-sm font-medium text-white group-hover:text-primary transition-colors">{template.title}</p>
+                                        <p className="text-xs font-medium text-white group-hover:text-primary transition-colors">{template.title}</p>
                                     </div>
-                                    <ArrowRight className="w-4 h-4 text-white/20 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <ArrowRight className="w-3 h-3 text-white/20 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </button>
                             ))}
                         </div>
