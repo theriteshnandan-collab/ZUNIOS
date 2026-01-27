@@ -155,7 +155,7 @@ export default function Home() {
           {/* Image Side - Controlled Size */}
           <div className="relative group w-full md:w-[280px] shrink-0">
             <div className="absolute -inset-1 bg-gradient-to-r from-primary to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200" />
-            <div className="relative rounded-xl shadow-2xl w-full max-h-[280px] overflow-hidden">
+            <div className="relative rounded-xl shadow-2xl w-full aspect-square md:aspect-auto md:h-[280px] overflow-hidden bg-black/50">
               <DreamImage
                 src={result.imageUrl}
                 alt="Visualization"
