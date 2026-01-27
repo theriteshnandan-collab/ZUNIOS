@@ -234,26 +234,19 @@ export default function JournalPage() {
 
             <main className="max-w-7xl mx-auto px-6 py-8">
                 <div className="max-w-7xl mx-auto space-y-8">
-                    {/* 1. Stats Row */}
+                    {/* 1. Stats Row & Calendar Dashboard */}
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <LevelProgress levelInfo={levelInfo} />
-                        <JournalStreakCard stats={journalStats} />
-                        {/* Analytics Widget */}
-                        <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
-                            <h3 className="text-sm font-medium text-white/50 mb-4 flex items-center gap-2">
-                                <BarChart3 className="w-4 h-4" />
-                                Analytics
-                            </h3>
-                            <div className="space-y-4">
-                                <div className="flex justify-between items-center text-sm">
-                                    <span className="text-white/70">Average Mood</span>
-                                    <span className="text-purple-400 font-medium">Coming soon</span>
-                                </div>
-                                <div className="flex justify-between items-center text-sm">
-                                    <span className="text-white/70">Top Theme</span>
-                                    <span className="text-pink-400 font-medium">Coming soon</span>
-                                </div>
-                            </div>
+                        {/* Level & Streak (Compact) */}
+                        <div className="md:col-span-1">
+                            <LevelProgress levelInfo={levelInfo} />
+                        </div>
+                        <div className="md:col-span-1">
+                            <JournalStreakCard stats={journalStats} />
+                        </div>
+
+                        {/* Calendar (Rectangular Dashboard Widget) */}
+                        <div className="md:col-span-2 h-full">
+                            <DateNavigator dreams={dreams} onDateSelect={handleDateSelect} />
                         </div>
                     </div>
 
@@ -278,12 +271,6 @@ export default function JournalPage() {
                         </div>
                     </div>
 
-                    {/* 3. Time Travel (Calendar) */}
-                    <div className="w-full flex justify-center">
-                        <div className="w-full max-w-lg">
-                            <DateNavigator dreams={dreams} onDateSelect={handleDateSelect} />
-                        </div>
-                    </div>
 
                     {/* 4. Main Content (Focus Mode or Timeline) */}
                     <div className="min-h-[500px]">
