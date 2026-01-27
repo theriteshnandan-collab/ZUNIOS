@@ -35,7 +35,8 @@ export default function Home() {
         title: "Log Your Moment",
         icon: Sparkles
       };
-      case 'journal': return {
+      case 'journal':
+      case 'thought': return {
         title: "Think It Through",
         icon: BrainCircuit
       };
