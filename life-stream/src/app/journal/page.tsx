@@ -61,6 +61,7 @@ export default function JournalPage() {
     const [selectedDream, setSelectedDream] = useState<Dream | null>(null);
     const [selectedTab, setSelectedTab] = useState('all');
     const [isExportOpen, setIsExportOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState(""); // Added missing state
 
     // XP & Leveling
     const { tasks, fetchTasks } = useTaskStore();
