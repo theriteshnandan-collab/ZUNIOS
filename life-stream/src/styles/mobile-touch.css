@@ -43,7 +43,8 @@
 
     /* Sheet/Modal Mobile Stacking */
     .mobile-sheet {
-        @apply fixed left-0 right-0 bottom-0 z-50 rounded-t-2xl bg-background border-t shadow-2xl safe-area-bottom;
+        @apply fixed left-0 right-0 bottom-0 z-50 rounded-t-2xl bg-background border-t shadow-2xl;
+        padding-bottom: env(safe-area-inset-bottom);
     }
 }
 
