@@ -20,7 +20,7 @@ export function JournalGrid({ dreams, onSelect, onDelete, deletingId }: JournalG
     if (dreams.length === 0) return null;
 
     return (
-        <div className="columns-1 md:columns-2 lg:columns-3 gap-4 space-y-4">
+        <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
             {dreams.map((dream) => (
                 <div key={dream.id} className="break-inside-avoid mb-4">
                     <GlassCard
@@ -42,7 +42,7 @@ export function JournalGrid({ dreams, onSelect, onDelete, deletingId }: JournalG
                                     <img
                                         src={dream.image_url}
                                         alt={dream.theme || "Dream visualization"}
-                                        className="w-full h-48 object-cover opacity-90 group-hover:opacity-100 transition-opacity"
+                                        className="w-full h-36 object-cover opacity-90 group-hover:opacity-100 transition-opacity"
                                         loading="lazy"
                                     />
                                 </div>
