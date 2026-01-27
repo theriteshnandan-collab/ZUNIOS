@@ -203,6 +203,7 @@ export default function Home() {
                   transition={{ delay: i * 0.1 }}
                   className="p-3 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors"
                 >
+                  {/* <VoiceRecorder onTranscript={(text) => setEntry(prev => prev + (prev ? " " : "") + text)} /> */}
                   <p className="text-muted-foreground leading-relaxed text-base">{item}</p>
                 </motion.div>
               ))}
