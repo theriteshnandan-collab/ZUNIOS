@@ -2,76 +2,161 @@
 
 import * as React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { DayPicker } from "react-day-picker";
+import {
+    addMonths,
+    eachDayOfInterval,
+    endOfMonth,
+    endOfWeek,
+    format,
+    isSameMonth,
+    isSameDay,
+    startOfMonth,
+    startOfWeek,
+    subMonths
+} from "date-fns";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+export type CalendarProps = {
+    mode?: "single" | "range" | "multiple";
+    selected?: Date | undefined;
+    onSelect?: (date: Date | undefined) => void;
+    className?: string;
+    classNames?: any;
+    modifiers?: {
+        hasEntry?: (date: Date) => boolean;
+    };
+    modifiersClassNames?: {
+        hasEntry?: string;
+    };
+    showOutsideDays?: boolean;
+} & React.HTMLAttributes<HTMLDivElement>;
 
 function Calendar({
     className,
     classNames,
     showOutsideDays = true,
+    mode = "single",
+    selected,
+    onSelect,
+    modifiers,
+    modifiersClassNames,
     ...props
 }: CalendarProps) {
+    // State for the currently visible month
+    const [currentMonth, setCurrentMonth] = React.useState<Date>(new Date()); // Default to today/now
+
+    // Effect: If selected date changes and is valid, jump to it (optional, but good UX)
+    // React.useEffect(() => {
+    //   if (selected) setCurrentMonth(selected);
+    // }, [selected]);
+
+    // Generators
+    const today = new Date();
+
+    const nextMonth = () => setCurrentMonth(addMonths(currentMonth, 1));
+    const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
+
+    // Grid Generation Logic (Crucial Step 2)
+    // 1. Find the first day of the visual grid (start of week of start of month)
+    const monthStart = startOfMonth(currentMonth);
+    const monthEnd = endOfMonth(currentMonth);
+    const startDate = startOfWeek(monthStart); // Default Sunday start
+    const endDate = endOfWeek(monthEnd);
+
+    // 2. Generate all days
+    const calendarDays = eachDayOfInterval({
+        start: startDate,
+        end: endDate,
+    });
+
+    // Weekday Headers
+    const weekDays = ["S", "M", "T", "W", "T", "F", "S"];
+
     return (
-        <DayPicker
-            showOutsideDays={showOutsideDays}
-            className={cn("p-2", className)}
-            // Keep narrow weekday names (S, M, T, W, T, F, S)
-            formatters={{
-                formatWeekdayName: (day) => day.toLocaleDateString("en-US", { weekday: "narrow" }),
-            }}
-            classNames={{
-                months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-                month: "space-y-4 w-full",
-                caption: "flex justify-center pt-1 relative items-center mb-2",
-                caption_label: "text-sm font-medium uppercase tracking-widest text-white/90",
-                nav: "space-x-1 flex items-center bg-white/5 rounded-full p-0.5",
-                nav_button: cn(
-                    buttonVariants({ variant: "ghost" }),
-                    "h-6 w-6 bg-transparent p-0 opacity-50 hover:opacity-100 text-white hover:bg-white/10"
-                ),
-                nav_button_previous: "absolute left-1",
-                nav_button_next: "absolute right-1",
+        <div className={cn("p-3", className)} {...props}>
+            {/* 4. Header: Month Year + Navigation */}
+            <div className="flex items-center justify-between mb-4">
+                <span className="text-sm font-semibold text-white ml-2">
+                    {format(currentMonth, "MMMM yyyy")}
+                </span>
+                <div className="flex items-center gap-1">
+                    <button
+                        onClick={prevMonth}
+                        className={cn(buttonVariants({ variant: "ghost" }), "h-7 w-7 p-0 text-zinc-400 hover:text-white")}
+                    >
+                        <ChevronLeft className="h-4 w-4" />
+                    </button>
+                    <button
+                        onClick={nextMonth}
+                        className={cn(buttonVariants({ variant: "ghost" }), "h-7 w-7 p-0 text-zinc-400 hover:text-white")}
+                    >
+                        <ChevronRight className="h-4 w-4" />
+                    </button>
+                </div>
+            </div>
 
-                // GRID ARCHITECTURE REINFORCED
-                // We override ALL table elements to behave like block/grid elements
-                table: "w-full border-collapse space-y-1 block",
-                tbody: "block w-full",
-                head_row: "grid grid-cols-7 mb-2 w-full", // Explicit 7-col grid for header
-                head_cell: "text-muted-foreground rounded-md w-full font-normal text-[0.8rem] text-center flex items-center justify-center", // Centered
+            {/* 1. Visual Structure: CSS Grid 7 Cols */}
+            <div className="grid grid-cols-7 gap-y-2">
+                {/* Weekday Headers */}
+                {weekDays.map((day, i) => (
+                    <div key={i} className="flex justify-center items-center">
+                        <span className="text-xs font-semibold text-zinc-500 uppercase">
+                            {day}
+                        </span>
+                    </div>
+                ))}
 
-                row: "grid grid-cols-7 mt-2 w-full", // Explicit 7-col grid for days
-                cell: "h-9 w-full text-center text-sm p-0 relative flex items-center justify-center [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+                {/* Main Grid Dates */}
+                {calendarDays.map((day, dayIdx) => {
+                    const isSelected = selected && isSameDay(day, selected);
+                    const isToday = isSameDay(day, today);
+                    const isOutside = !isSameMonth(day, currentMonth);
+                    const hasEntry = modifiers?.hasEntry?.(day);
 
-                day: cn(
-                    buttonVariants({ variant: "ghost" }),
-                    "h-8 w-8 p-0 font-normal aria-selected:opacity-100 text-sm hover:bg-purple-500/20 hover:text-purple-200"
-                ),
-                day_range_end: "day-range-end",
-                day_selected:
-                    "bg-purple-500 text-white hover:bg-purple-600 hover:text-white focus:bg-purple-600 focus:text-white rounded-full shadow-lg shadow-purple-500/20",
-                day_today: "bg-white/10 text-white font-bold ring-1 ring-white/20",
-                // IMPROVED OUTSIDE DAYS
-                day_outside:
-                    "day-outside text-zinc-500 opacity-100 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30", // Fully opaque but grey
-                day_disabled: "text-muted-foreground opacity-50",
-                day_range_middle:
-                    "aria-selected:bg-accent aria-selected:text-accent-foreground",
-                day_hidden: "invisible",
-                ...classNames,
-            }}
-            components={{
-                Chevron: (props) => {
-                    if (props.orientation === 'left') return <ChevronLeft className="h-4 w-4" />;
-                    return <ChevronRight className="h-4 w-4" />;
-                }
-            }}
-            {...props}
-        />
+                    // 3. Styling & States
+                    return (
+                        <div key={day.toString()} className="flex justify-center items-center aspect-square relative">
+                            <button
+                                onClick={() => onSelect?.(day)}
+                                className={cn(
+                                    "h-9 w-9 rounded-full flex items-center justify-center text-sm transition-all relative z-10",
+
+                                    // Normal State (Current Month)
+                                    !isOutside && "text-white hover:bg-white/10",
+
+                                    // Padding Dates (Outside)
+                                    isOutside && "text-zinc-700 opacity-40 hover:bg-white/5",
+
+                                    // Today's Date (Blue/Purple Circle)
+                                    // User asked for "bg-blue-600 text-white". We stick to theme or request.
+                                    // Let's use Blue-600 as requested for Today to be distinct.
+                                    // But usually Selected is the strong color.
+                                    // Let's make "Selected" the Strong Purple, and "Today" a Ring or Blue.
+                                    // User Prompt: "Today's Date: Highlight with distinct background... eg bg-blue-600".
+                                    // I will use Blue for Today if not selected.
+                                    isToday && !isSelected && "bg-blue-600/20 text-blue-200 ring-1 ring-blue-500",
+
+                                    // Selected State (Overrides everything)
+                                    isSelected && "bg-purple-600 text-white shadow-lg shadow-purple-500/30 hover:bg-purple-500",
+                                )}
+                            >
+                                {format(day, "d")}
+                            </button>
+
+                            {/* Modifiers (Has Entry Dot) */}
+                            {hasEntry && !isSelected && (
+                                <div className={cn(
+                                    "absolute bottom-1 w-1 h-1 rounded-full bg-purple-400",
+                                    modifiersClassNames?.hasEntry // Allow external styling if needed, though we hardcode position
+                                )} />
+                            )}
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
     );
 }
-Calendar.displayName = "Calendar";
 
 export { Calendar };
