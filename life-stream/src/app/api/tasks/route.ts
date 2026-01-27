@@ -104,7 +104,11 @@ export async function POST(req: Request) {
     } catch (error: any) {
         console.error("POST /api/tasks error:", error);
         return NextResponse.json(
-            { error: "Failed to create task" },
+            {
+                error: "Internal Server Error",
+                message: error.message,
+                stack: error.stack
+            },
             { status: 500 }
         );
     }
