@@ -16,7 +16,9 @@ function getSupabase() {
 export async function GET(req: Request) {
     try {
         const { userId } = await auth();
-        const guestId = userId || 'guest';
+        // FLIGHT FIX: DB expects UUID, so 'guest' string fails.
+        // We use a NIL UUID for guest tasks
+        const guestId = userId || '00000000-0000-0000-0000-000000000000';
 
         const supabase = getSupabase();
 
@@ -165,7 +167,7 @@ export async function PATCH(req: Request) {
 export async function DELETE(req: Request) {
     try {
         const { userId } = await auth();
-        const guestId = userId || 'guest';
+        const guestId = userId || '00000000-0000-0000-0000-000000000000';
 
         const { searchParams } = new URL(req.url);
         const id = searchParams.get('id');

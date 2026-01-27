@@ -5,7 +5,7 @@ import { predictMode } from "@/lib/auto-classifier";
 import { EntryMode, MODE_LABELS } from "@/lib/theme-config";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Send, Sparkles, Mic, Eye, Zap, Target, Brain, Wand2, ArrowRight } from "lucide-react";
+import { Send, Sparkles, Eye, Zap, Target, Brain, Wand2, ArrowRight } from "lucide-react";
 import { getTemplatesForCategory, EntryTemplate } from "@/lib/entry-templates";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -131,13 +131,6 @@ export default function OmniInput({ onAnalyze, isAnalyzing, initialMode = 'thoug
 
                     {/* Action Buttons */}
                     <div className="flex items-center gap-2">
-                        <Button
-                            size="icon"
-                            variant="ghost"
-                            className="h-10 w-10 rounded-full text-white/50 hover:bg-white/10 hover:text-white"
-                        >
-                            <Mic className="w-5 h-5" />
-                        </Button>
                         <Button
                             size="icon"
                             onClick={() => {
