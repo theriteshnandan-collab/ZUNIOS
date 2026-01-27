@@ -30,7 +30,7 @@ export type CalendarProps = {
         hasEntry?: string;
     };
     showOutsideDays?: boolean;
-} & React.HTMLAttributes<HTMLDivElement>;
+} & Omit<React.HTMLAttributes<HTMLDivElement>, "onSelect">;
 
 function Calendar({
     className,
