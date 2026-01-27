@@ -251,7 +251,7 @@ export default function JournalPage() {
                     </div>
 
                     {/* 2. Search & Filter Row */}
-                    <div className="flex flex-col md:flex-row gap-4 items-center justify-between sticky top-[70px] z-40 bg-[#0a0a0a]/80 backdrop-blur-xl p-4 rounded-2xl border border-white/5 shadow-2xl">
+                    <div className="flex flex-col md:flex-row gap-4 items-center justify-between sticky top-[70px] z-40 bg-[#0a0a0a]/90 backdrop-blur-xl p-4 rounded-2xl border border-white/10 shadow-[0_0_20px_rgba(168,85,247,0.15)] ring-1 ring-purple-500/20">
                         <div className="relative w-full md:w-96 group">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 group-focus-within:text-purple-400 transition-colors" />
                             <Input
