@@ -23,7 +23,8 @@
 
     /* Mobile-Optimized Scrolling */
     .mobile-scroll {
-        @apply overflow-y-auto overscroll-y-contain -webkit-overflow-scrolling-touch;
+        @apply overflow-y-auto overscroll-y-contain;
+        -webkit-overflow-scrolling: touch;
     }
 
     /* Prevent Pull-to-Refresh on specific containers */

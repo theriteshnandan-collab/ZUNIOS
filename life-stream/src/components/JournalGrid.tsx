@@ -20,7 +20,6 @@ export function JournalGrid({ dreams, onSelect, onDelete, deletingId }: JournalG
     if (dreams.length === 0) return null;
 
     return (
-    return (
         <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
             {dreams.map((dream) => (
                 <div key={dream.id} className="break-inside-avoid mb-4">
