@@ -47,7 +47,8 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
             if (!res.ok) {
                 const errorData = await res.json().catch(() => ({}));
-                throw new Error(errorData.error || `HTTP error! status: ${res.status}`);
+                console.error("Task creation failed (API):", errorData);
+                throw new Error(errorData.details || errorData.error || `HTTP error! status: ${res.status}`);
             }
 
             const data = await res.json();

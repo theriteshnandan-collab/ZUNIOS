@@ -53,7 +53,10 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
     try {
         const { userId } = await auth();
-        const guestId = userId || 'guest';
+        // FLIGHT FIX: DB expects UUID, so 'guest' string fails.
+        // We use a NIL UUID for guest tasks or a specific guest UUID if needed.
+        // For now, let's use the Nil UUID: 00000000-0000-0000-0000-000000000000
+        const guestId = userId || '00000000-0000-0000-0000-000000000000';
 
         const body: CreateTaskInput = await req.json();
 
@@ -85,7 +88,11 @@ export async function POST(req: Request) {
         if (error) {
             console.error("Create task error:", error);
             return NextResponse.json(
-                { error: "Failed to create task" },
+                {
+                    error: "Failed to create task",
+                    details: error.message,
+                    hint: error.details
+                },
                 { status: 500 }
             );
         }
