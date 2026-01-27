@@ -42,6 +42,10 @@ export const metadata: Metadata = {
   title: "Zunios | The OS for Your Mind",
   description: "Capture your consciousness. Record visions, builds, logs, and thoughts in a unified operating system for your potential.",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/icon.svg",
+    apple: "/icon.svg", // We can use SVG for Apple touch icon in most modern contexts or it will fallback
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
