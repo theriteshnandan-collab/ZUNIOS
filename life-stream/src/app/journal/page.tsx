@@ -20,7 +20,10 @@ import {
     Trash2,
     Loader2,
     LayoutGrid,
-    Moon
+    Moon,
+    Lightbulb,
+    Trophy,
+    BrainCircuit
 } from "lucide-react";
 import DreamInsightModal from "@/components/DreamInsightModal";
 import DreamImage from "@/components/DreamImage";
