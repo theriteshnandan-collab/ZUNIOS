@@ -49,10 +49,10 @@ export default function Home() {
   const handleAnalyze = async (text: string, analysisMode: EntryMode) => {
     setIsLoading(true);
     try {
-      const response = await fetch('/api/dreams/analyze', {
+      const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: text, mode: analysisMode })
+        body: JSON.stringify({ dream: text, category: analysisMode })
       });
 
       const data = await response.json();
