@@ -44,16 +44,17 @@ export default function Footer() {
                     <div className="space-y-4">
                         <h3 className="text-sm font-medium text-white/50 uppercase tracking-widest">Connect</h3>
                         <div className="flex justify-center md:justify-start gap-4">
-                            <Link href="https://x.com/NandanRite30165" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-muted-foreground hover:text-white transition-all group">
+                            <Link href="https://x.com/zunioscodes" target="_blank" rel="noopener noreferrer" className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-muted-foreground hover:text-white transition-all group">
                                 {/* X Logo */}
                                 <svg role="img" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-muted-foreground group-hover:text-white transition-colors" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
                                 </svg>
                             </Link>
-                            <Link href="#" className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-muted-foreground hover:text-white transition-all">
+                            {/* GitHub Removed as requested */}
+                            {/* <Link href="#" className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-muted-foreground hover:text-white transition-all">
                                 <Github className="w-4 h-4" />
-                            </Link>
-                            <Link href="mailto:theriteshnandan@gmail.com" className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-muted-foreground hover:text-white transition-all">
+                            </Link> */}
+                            <Link href="mailto:zunios.codes@gmail.com" className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-muted-foreground hover:text-white transition-all">
                                 <Mail className="w-4 h-4" />
                             </Link>
                         </div>
@@ -64,7 +65,7 @@ export default function Footer() {
                 <div className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground/40">
                     <p>© 2026 Zunios Systems. All rights reserved.</p>
                     <p className="flex items-center gap-1.5">
-                        Engineered by <span className="text-white/60">Ritesh Nandan</span>
+                        Made with <Heart className="w-3 h-3 text-red-500 fill-red-500 inline" /> by <span className="text-white/60">Zunios Team</span>
                     </p>
                 </div>
             </div>

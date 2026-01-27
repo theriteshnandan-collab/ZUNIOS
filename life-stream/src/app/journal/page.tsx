@@ -211,7 +211,7 @@ export default function JournalPage() {
                         <Link href="/" className="p-2 rounded-full hover:bg-white/5 transition-colors">
                             <ArrowLeft className="w-5 h-5 text-gray-400" />
                         </Link>
-                        <h1 className="text-xl font-semibold bg-gradient-to-r from-purple-400 via-pink-400 to-white bg-clip-text text-transparent">
+                        <h1 className="text-xl font-semibold text-white/90 tracking-tight">
                             Memory Bank
                         </h1>
                     </div>
@@ -260,12 +260,12 @@ export default function JournalPage() {
                     {/* 2. Search & Filter Row */}
                     <div className="flex flex-col md:flex-row gap-4 items-center justify-between sticky top-[70px] z-40 bg-[#0a0a0a]/80 backdrop-blur-xl p-4 rounded-2xl border border-white/5 shadow-2xl">
                         <div className="relative w-full md:w-96 group">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 group-focus-within:text-purple-400 transition-colors" />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 group-focus-within:text-purple-400 transition-colors" />
                             <Input
                                 placeholder="Search your mind..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="pl-10 bg-black/50 border-white/5 focus:border-purple-500/50 transition-all"
+                                className="pl-10 bg-white/5 border-white/20 focus:border-purple-500/50 text-white placeholder:text-zinc-500 transition-all"
                             />
                         </div>
 
