@@ -114,7 +114,9 @@ export async function POST(req: Request) {
 export async function PATCH(req: Request) {
     try {
         const { userId } = await auth();
-        const guestId = userId || 'guest';
+        // FLIGHT FIX: DB expects UUID, so 'guest' string fails.
+        // We use a NIL UUID for guest tasks
+        const guestId = userId || '00000000-0000-0000-0000-000000000000';
 
         const { id, ...updates }: { id: string } & UpdateTaskInput = await req.json();
 
