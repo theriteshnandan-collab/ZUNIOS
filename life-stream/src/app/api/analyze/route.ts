@@ -191,22 +191,21 @@ Return ONLY valid JSON:
         let imageUrl = "";
 
         try {
-            // The gen.pollinations.ai endpoint requires a model parameter
-            // Valid models: kontext, turbo, seedream, seedream-pro
-            const imageResponse = await fetch(`https://gen.pollinations.ai/image/${encodedPrompt}?model=turbo`, {
-                headers: {
-                    "Authorization": `Bearer ${process.env.POLLINATIONS_API_KEY}`
-                }
+            // Use the public Pollinations endpoint which is robust and free
+            // model: 'flux' is high quality, or 'turbo' for speed
+            const imageResponse = await fetch(`https://image.pollinations.ai/prompt/${encodedPrompt}?model=flux&width=1024&height=1024&nologo=true`, {
+                method: 'GET',
+                // No headers needed for public endpoint
             });
 
             if (imageResponse.ok) {
                 // Convert to base64 data URL
                 const arrayBuffer = await imageResponse.arrayBuffer();
                 const base64 = Buffer.from(arrayBuffer).toString('base64');
-                const contentType = imageResponse.headers.get('content-type') || 'image/png';
+                const contentType = imageResponse.headers.get('content-type') || 'image/jpeg';
                 imageUrl = `data:${contentType};base64,${base64}`;
             } else {
-                console.error(`Pollinations returned ${imageResponse.status}: ${imageResponse.statusText}`);
+                console.error(`Pollinations Public API error: ${imageResponse.status}`);
             }
         } catch (imgError) {
             console.error("Pollinations Image Error:", imgError);
