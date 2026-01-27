@@ -35,8 +35,8 @@ export default function Footer() {
                     <div className="space-y-4">
                         <h3 className="text-sm font-medium text-white/50 uppercase tracking-widest">Explore</h3>
                         <ul className="space-y-2 text-sm text-muted-foreground">
-                            <li><Link href="/" className="hover:text-primary transition-colors">New Entry</Link></li>
-                            <li><Link href="/journal" className="hover:text-primary transition-colors">Memory Bank</Link></li>
+                            <li><Link href="/" className="hover:text-primary transition-colors touch-target justify-start pl-0">New Entry</Link></li>
+                            <li><Link href="/journal" className="hover:text-primary transition-colors touch-target justify-start pl-0">Memory Bank</Link></li>
                         </ul>
                     </div>
 

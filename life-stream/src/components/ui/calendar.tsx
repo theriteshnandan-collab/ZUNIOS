@@ -96,12 +96,12 @@ function Calendar({
                 </div>
             </div>
 
-            {/* 1. Visual Structure: CSS Grid 7 Cols - Ultra Compact Vertical */}
-            <div className="grid grid-cols-7 gap-y-[2px]">
+            {/* 1. Visual Structure: CSS Grid 7 Cols - Responsive Compact */}
+            <div className="grid grid-cols-7 gap-y-1 md:gap-y-[2px]">
                 {/* Weekday Headers */}
                 {weekDays.map((day, i) => (
-                    <div key={i} className="flex justify-center items-center h-5">
-                        <span className="text-[9px] font-bold text-zinc-600 uppercase tracking-widest">
+                    <div key={i} className="flex justify-center items-center h-8 md:h-5">
+                        <span className="text-[10px] md:text-[9px] font-bold text-zinc-600 uppercase tracking-widest">
                             {day}
                         </span>
                     </div>
@@ -116,11 +116,11 @@ function Calendar({
 
                     // 3. Styling & States
                     return (
-                        <div key={day.toString()} className="flex justify-center items-center h-6 relative">
+                        <div key={day.toString()} className="flex justify-center items-center h-9 w-9 md:h-6 md:w-6 relative">
                             <button
                                 onClick={() => onSelect?.(day)}
                                 className={cn(
-                                    "h-6 w-6 rounded-full flex items-center justify-center text-[10px] sm:text-[10px] transition-all relative z-10",
+                                    "h-8 w-8 md:h-6 md:w-6 rounded-full flex items-center justify-center text-xs md:text-[10px] transition-all relative z-10 touch-target",
 
                                     // Normal State (Current Month)
                                     !isOutside && "text-white hover:bg-white/10",
@@ -128,13 +128,7 @@ function Calendar({
                                     // Padding Dates (Outside)
                                     isOutside && "text-zinc-700 opacity-40 hover:bg-white/5",
 
-                                    // Today's Date (Blue/Purple Circle)
-                                    // User asked for "bg-blue-600 text-white". We stick to theme or request.
-                                    // Let's use Blue-600 as requested for Today to be distinct.
-                                    // But usually Selected is the strong color.
-                                    // Let's make "Selected" the Strong Purple, and "Today" a Ring or Blue.
-                                    // User Prompt: "Today's Date: Highlight with distinct background... eg bg-blue-600".
-                                    // I will use Blue for Today if not selected.
+                                    // Today's Date
                                     isToday && !isSelected && "bg-blue-600/20 text-blue-200 ring-1 ring-blue-500",
 
                                     // Selected State (Overrides everything)
