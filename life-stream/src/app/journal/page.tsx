@@ -309,33 +309,32 @@ export default function JournalPage() {
                                 </Button>
                             </div>
                         ) : (
-                        ): (
-                                <div className = "space-y-12">
+                            <div className="space-y-12">
                                 {sortedKeys.map((dateKey) => (
-                        <div key={dateKey} id={`month-${dateKey}`} className="relative">
-                            <div className="sticky top-[80px] z-[5] py-4 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5 mb-6 flex items-baseline justify-between">
-                                <h2 className="text-2xl font-serif font-bold tracking-tight text-white/90">
-                                    {dateKey}
-                                </h2>
-                                <span className="text-xs font-mono text-white/30">
-                                    {groupedDreams[dateKey].length} Entries
-                                </span>
-                            </div>
+                                    <div key={dateKey} id={`month-${dateKey}`} className="relative">
+                                        <div className="sticky top-[80px] z-[5] py-4 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5 mb-6 flex items-baseline justify-between">
+                                            <h2 className="text-2xl font-serif font-bold tracking-tight text-white/90">
+                                                {dateKey}
+                                            </h2>
+                                            <span className="text-xs font-mono text-white/30">
+                                                {groupedDreams[dateKey].length} Entries
+                                            </span>
+                                        </div>
 
-                            <JournalGrid
-                                dreams={groupedDreams[dateKey]}
-                                onSelect={setSelectedDream}
-                                onDelete={handleDelete}
-                                deletingId={deletingId}
-                            />
-                        </div>
+                                        <JournalGrid
+                                            dreams={groupedDreams[dateKey]}
+                                            onSelect={setSelectedDream}
+                                            onDelete={handleDelete}
+                                            deletingId={deletingId}
+                                        />
+                                    </div>
                                 ))}
-                    </div>
+                            </div>
                         )}
+                    </div>
                 </div>
-        </div>
 
-                {/* Modals */ }
+                {/* Modals */}
                 <DreamInsightModal
                     dream={selectedDream}
                     isOpen={!!selectedDream}
