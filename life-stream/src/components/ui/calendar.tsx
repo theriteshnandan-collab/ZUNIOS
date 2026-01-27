@@ -96,12 +96,12 @@ function Calendar({
                 </div>
             </div>
 
-            {/* 1. Visual Structure: CSS Grid 7 Cols */}
-            <div className="grid grid-cols-7 gap-y-2">
+            {/* 1. Visual Structure: CSS Grid 7 Cols - Ultra Compact Vertical */}
+            <div className="grid grid-cols-7 gap-y-[2px]">
                 {/* Weekday Headers */}
                 {weekDays.map((day, i) => (
-                    <div key={i} className="flex justify-center items-center">
-                        <span className="text-xs font-semibold text-zinc-500 uppercase">
+                    <div key={i} className="flex justify-center items-center h-5">
+                        <span className="text-[9px] font-bold text-zinc-600 uppercase tracking-widest">
                             {day}
                         </span>
                     </div>
@@ -116,11 +116,11 @@ function Calendar({
 
                     // 3. Styling & States
                     return (
-                        <div key={day.toString()} className="flex justify-center items-center aspect-square relative">
+                        <div key={day.toString()} className="flex justify-center items-center h-6 relative">
                             <button
                                 onClick={() => onSelect?.(day)}
                                 className={cn(
-                                    "h-9 w-9 rounded-full flex items-center justify-center text-sm transition-all relative z-10",
+                                    "h-6 w-6 rounded-full flex items-center justify-center text-[10px] sm:text-[10px] transition-all relative z-10",
 
                                     // Normal State (Current Month)
                                     !isOutside && "text-white hover:bg-white/10",
