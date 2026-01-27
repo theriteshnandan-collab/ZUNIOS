@@ -245,7 +245,7 @@ export default function JournalPage() {
                         </div>
 
                         {/* Calendar (Rectangular Dashboard Widget) */}
-                        <div className="md:col-span-2 h-full">
+                        <div className="md:col-span-2">
                             <DateNavigator dreams={dreams} onDateSelect={handleDateSelect} />
                         </div>
                     </div>

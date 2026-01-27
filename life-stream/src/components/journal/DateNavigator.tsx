@@ -29,7 +29,7 @@ export function DateNavigator({ dreams, onDateSelect }: DateNavigatorProps) {
     };
 
     return (
-        <GlassCard className="p-3 border-white/5 space-y-2 h-full flex flex-col justify-center">
+        <GlassCard className="p-2 border-white/5 space-y-1 h-full flex flex-col justify-center">
             <div className="flex items-center justify-between px-1">
                 <div className="flex items-center gap-2">
                     <CalendarIcon className="w-4 h-4 text-purple-400" />
