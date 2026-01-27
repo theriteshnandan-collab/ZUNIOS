@@ -41,6 +41,7 @@ export default function JournalPage() {
     const [dreams, setDreams] = useState<Dream[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [deletingId, setDeletingId] = useState<string | null>(null);
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
     const [selectedDream, setSelectedDream] = useState<Dream | null>(null);
     const [selectedTab, setSelectedTab] = useState('all');
     const [isExportOpen, setIsExportOpen] = useState(false);
@@ -164,24 +165,25 @@ export default function JournalPage() {
         ? dreams
         : dreams.filter(d => d.category === selectedTab || (selectedTab === 'journal' ? !d.category : false));
 
-    // Grouping
-    const groupedDreams = groupDreamsByDate(filteredDreams);
-    const sortedKeys = getSortedDreamKeys(groupedDreams);
-
     const handleDateSelect = (date: Date) => {
-        // Logic to scroll to the specific date or filter
-        // For now, let's filter the view to just that month if not already visible
-        // Or essentially, we can just toast for now, but better:
-        // Scroll to the month? 
-        const monthKey = format(date, "MMMM yyyy");
-        const element = document.getElementById(`month-${monthKey}`);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-            toast.success(`Traveled to ${format(date, "PPP")}`);
+        // Toggle: if clicking the same date, clear it. Else set it.
+        if (selectedDate && format(date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd')) {
+            setSelectedDate(undefined);
+            toast.info("Showing all memories");
         } else {
-            toast.info("No entries visible for this date in current filter.");
+            setSelectedDate(date);
+            toast.success(`Traveled to ${format(date, "MMMM do")}`);
         }
     };
+
+    // Filter by Date if selected
+    const viewDreams = selectedDate
+        ? filteredDreams.filter(d => format(new Date(d.created_at), 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd'))
+        : filteredDreams;
+
+    // Grouping (only needed if NOT in focus mode, but we can compute it cheaply)
+    const groupedDreams = groupDreamsByDate(viewDreams);
+    const sortedKeys = getSortedDreamKeys(groupedDreams);
 
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-purple-500/30">
@@ -309,17 +311,47 @@ export default function JournalPage() {
                                 </Button>
                             </div>
                         ) : (
-                            <div className="space-y-12">
+                            <div className="space-y-8">
+                                {/* Focus Mode Header */}
+                                {selectedDate && (
+                                    <div className="flex items-center justify-between bg-purple-500/10 border border-purple-500/20 p-4 rounded-xl backdrop-blur-md">
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-2 bg-purple-500/20 rounded-full">
+                                                <CalendarIcon className="w-5 h-5 text-purple-300" />
+                                            </div>
+                                            <div>
+                                                <h2 className="text-lg font-bold text-white">
+                                                    {format(selectedDate, "MMMM do, yyyy")}
+                                                </h2>
+                                                <p className="text-xs text-white/50">
+                                                    {viewDreams.length} Entries found
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => setSelectedDate(undefined)}
+                                            className="hover:bg-purple-500/20 hover:text-purple-300"
+                                        >
+                                            Clear Filter
+                                        </Button>
+                                    </div>
+                                )}
+
                                 {sortedKeys.map((dateKey) => (
                                     <div key={dateKey} id={`month-${dateKey}`} className="relative">
-                                        <div className="sticky top-[80px] z-[5] py-4 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5 mb-6 flex items-baseline justify-between">
-                                            <h2 className="text-2xl font-serif font-bold tracking-tight text-white/90">
-                                                {dateKey}
-                                            </h2>
-                                            <span className="text-xs font-mono text-white/30">
-                                                {groupedDreams[dateKey].length} Entries
-                                            </span>
-                                        </div>
+                                        {/* Only show Month Header if NOT in Focus Mode (redundant) */}
+                                        {!selectedDate && (
+                                            <div className="sticky top-[80px] z-[5] py-4 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5 mb-6 flex items-baseline justify-between">
+                                                <h2 className="text-2xl font-serif font-bold tracking-tight text-white/90">
+                                                    {dateKey}
+                                                </h2>
+                                                <span className="text-xs font-mono text-white/30">
+                                                    {groupedDreams[dateKey].length} Entries
+                                                </span>
+                                            </div>
+                                        )}
 
                                         <JournalGrid
                                             dreams={groupedDreams[dateKey]}
