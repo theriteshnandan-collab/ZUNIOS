@@ -29,8 +29,8 @@ export function DateNavigator({ dreams, onDateSelect }: DateNavigatorProps) {
     };
 
     return (
-        <GlassCard className="p-4 border-white/5 space-y-4">
-            <div className="flex items-center justify-between">
+        <GlassCard className="p-3 border-white/5 space-y-2 h-full flex flex-col justify-center">
+            <div className="flex items-center justify-between px-1">
                 <div className="flex items-center gap-2">
                     <CalendarIcon className="w-4 h-4 text-purple-400" />
                     <h3 className="text-sm font-medium text-white/70">Time Travel</h3>
