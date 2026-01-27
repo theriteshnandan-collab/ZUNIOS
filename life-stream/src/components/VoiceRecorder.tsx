@@ -81,42 +81,31 @@ export default function VoiceRecorder({ onTranscript, className }: VoiceRecorder
 
             let audioChunks: Float32Array[] = [];
 
-            source.connect(processor);
             processor.connect(audioContext.destination);
 
             processor.onaudioprocess = (e) => {
                 const inputData = e.inputBuffer.getChannelData(0);
-                // Clone the data because inputBuffer is reused
                 audioChunks.push(new Float32Array(inputData));
             };
 
             setStatus('listening');
             toast.info("Listening... (Speak clearly)");
-
-            // Store ref to stop later
             (window as any).stopAudioCapture = () => {
                 source.disconnect();
                 processor.disconnect();
                 stream.getTracks().forEach(track => track.stop());
-                audioContext.close();
 
-                // Merge chunks
-                const length = audioChunks.reduce((acc, chunk) => acc + chunk.length, 0);
-                const merged = new Float32Array(length);
-                let offset = 0;
-                for (const chunk of audioChunks) {
-                    merged.set(chunk, offset);
-                    offset += chunk.length;
-                }
-
+                // Process audio
                 setStatus('processing');
-                toast.info("Processing with AI...", { duration: 2000 });
-                worker.current?.postMessage({ audio: merged });
+                worker.current?.postMessage({
+                    type: 'generate',
+                    data: { audio: audioChunks, language: 'en' }
+                });
             };
 
-        } catch (err) {
-            console.error(err);
-            toast.error("Microphone access denied.");
+        } catch (error) {
+            console.error("Microphone error:", error);
+            toast.error("Microphone access denied");
             setStatus('idle');
         }
     };
@@ -128,40 +117,61 @@ export default function VoiceRecorder({ onTranscript, className }: VoiceRecorder
     };
 
     return (
-        <div className={cn("relative flex items-center gap-2", className)}>
-            {status === 'loading' && (
-                <div className="absolute -top-8 left-1/2 -translate-x-1/2 w-48 bg-background/80 backdrop-blur-md text-xs border rounded p-1 shadow-lg">
-                    <div className="flex justify-between mb-1">
-                        <span>Downloading Brain...</span>
-                        <span>{progress.toFixed(0)}%</span>
+        <div className={cn("relative z-20", className)}>
+            {/* Status: IDLE */}
+            {status === 'idle' && (
+                <Button
+                    onClick={startRecording}
+                    className="group relative px-6 py-6 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-500/50 transition-all duration-500 shadow-xl overflow-hidden"
+                >
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/0 via-purple-500/10 to-pink-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="flex items-center gap-3 relative z-10">
+                        <div className="p-2 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                            <Mic className="w-4 h-4 text-white" />
+                        </div>
+                        <div className="text-left">
+                            <span className="block text-xs font-medium text-white/50 uppercase tracking-widest group-hover:text-purple-300 transition-colors">
+                                Memory Bank
+                            </span>
+                            <span className="block text-sm font-semibold text-white/90 group-hover:text-white transition-colors">
+                                Record Entry
+                            </span>
+                        </div>
                     </div>
-                    <div className="h-1 bg-muted rounded overflow-hidden">
-                        <div className="h-full bg-primary transition-all duration-300" style={{ width: `${progress}%` }} />
-                    </div>
+                </Button>
+            )}
+
+            {/* Status: LISTENING */}
+            {status === 'listening' && (
+                <div className="flex items-center gap-3 px-6 py-4 rounded-full bg-[#0a0a0a] border border-red-500/30 shadow-[0_0_30px_rgba(239,68,68,0.2)] animate-pulse">
+                    <span className="relative flex h-3 w-3">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                    </span>
+                    <span className="text-sm font-medium text-red-200">Listening...</span>
+                    <Button
+                        size="icon"
+                        variant="ghost"
+                        onClick={stopRecording}
+                        className="ml-2 h-8 w-8 rounded-full bg-white/10 hover:bg-white/20 text-white"
+                    >
+                        <Square className="w-4 h-4 fill-current" />
+                    </Button>
                 </div>
             )}
 
-            <Button
-                variant="ghost"
-                size="icon"
-                onClick={status === 'listening' ? stopRecording : startRecording}
-                disabled={status === 'processing' || status === 'loading'}
-                className={cn(
-                    "rounded-full transition-all duration-300 w-10 h-10",
-                    status === 'listening' ? "bg-red-500/20 text-red-400 hover:bg-red-500/30 animate-pulse" :
-                        status === 'processing' ? "bg-blue-500/20 text-blue-400 animate-spin" :
-                            "hover:bg-white/10 text-muted-foreground hover:text-white"
-                )}
-                title={status === 'listening' ? "Stop (Process)" : "Start AI Voice"}
-            >
-                {status === 'listening' ? (
-                    <Square className="w-4 h-4 fill-current" />
-                ) : status === 'processing' || status === 'loading' ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                    <Mic className="w-5 h-5" />
-                )}
-            </Button>
+            {/* Status: PROCESSING */}
+            {(status === 'processing' || status === 'loading') && (
+                <div className="flex items-center gap-3 px-6 py-4 rounded-full bg-[#0a0a0a] border border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.2)]">
+                    <Loader2 className="w-4 h-4 text-purple-400 animate-spin" />
+                    <div className="flex flex-col">
+                        <span className="text-sm font-medium text-white">Transcribing</span>
+                        {progress > 0 && (
+                            <span className="text-[10px] text-white/50">Loading Model... {Math.round(progress)}%</span>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
