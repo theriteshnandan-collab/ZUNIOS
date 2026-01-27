@@ -9,19 +9,19 @@ import { Card } from "@/components/ui/card";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/button";
 import {
-import {
-        Plus,
-        Search,
-        Filter,
-        Calendar as CalendarIcon,
-        BarChart3,
-        ArrowLeft,
-        Sparkles,
-        Download,
-        Trash2,
-        Loader2,
-        LayoutGrid
-    } from "lucide-react";
+    Plus,
+    Search,
+    Filter,
+    Calendar as CalendarIcon,
+    BarChart3,
+    ArrowLeft,
+    Sparkles,
+    Download,
+    Trash2,
+    Loader2,
+    LayoutGrid,
+    Moon
+} from "lucide-react";
 import DreamInsightModal from "@/components/DreamInsightModal";
 import DreamImage from "@/components/DreamImage";
 import AnalyticsDashboard from "@/components/analytics/AnalyticsDashboard";
