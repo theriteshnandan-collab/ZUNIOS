@@ -64,6 +64,9 @@ export default function OmniInput({ onAnalyze, isAnalyzing, initialMode = 'thoug
 
     const handleTemplateSelect = (template: EntryTemplate) => {
         setText(template.prompt);
+        // Enforce mode update immediately
+        setPredictedMode(template.category);
+
         // Force height update
         setTimeout(() => {
             if (textareaRef.current) {
@@ -157,14 +160,14 @@ export default function OmniInput({ onAnalyze, isAnalyzing, initialMode = 'thoug
                 </div>
             </div>
 
-            {/* Templates Dropdown - Outside overflow-hidden container */}
+            {/* Templates Dropdown - Compressed Width */}
             <AnimatePresence>
                 {showTemplates && templates.length > 0 && (
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        className="absolute top-full left-0 mt-2 w-full max-w-sm bg-gray-900/95 border border-white/10 rounded-xl shadow-xl backdrop-blur-xl z-20 overflow-hidden"
+                        className="absolute top-full left-0 mt-2 w-auto min-w-[240px] max-w-[90vw] bg-gray-900/95 border border-white/10 rounded-xl shadow-xl backdrop-blur-xl z-20 overflow-hidden"
                     >
                         <div className="p-1 space-y-0.5">
                             {templates.map(template => (
