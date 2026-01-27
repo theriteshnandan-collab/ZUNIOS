@@ -232,63 +232,11 @@ export default function JournalPage() {
             </header>
 
             <main className="max-w-7xl mx-auto px-6 py-8">
-                <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-                    {/* Sidebar Stats */}
-                    <div className="space-y-6">
-                        {/* Level Progress (Gamification Header) */}
+                <div className="max-w-7xl mx-auto space-y-8">
+                    {/* 1. Stats Row */}
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <LevelProgress levelInfo={levelInfo} />
-
-                        {/* Journal Streak Card */}
                         <JournalStreakCard stats={journalStats} />
-
-                        {/* Date Navigator (Brick 4) */}
-                        <DateNavigator dreams={dreams} onDateSelect={handleDateSelect} />
-
-
-                        <div className="p-1 bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
-                            <nav className="flex flex-col gap-1">
-                                <TabButton
-                                    active={selectedTab === 'all'}
-                                    onClick={() => setSelectedTab('all')}
-                                    icon={LayoutGrid}
-                                    label="All Memories"
-                                    count={dreams.length}
-                                />
-                                <TabButton
-                                    active={selectedTab === 'dream'}
-                                    onClick={() => setSelectedTab('dream')}
-                                    icon={Moon}
-                                    label="Visions"
-                                    count={dreams.filter(d => d.category === 'dream').length}
-                                    color="text-purple-400"
-                                />
-                                <TabButton
-                                    active={selectedTab === 'idea'}
-                                    onClick={() => setSelectedTab('idea')}
-                                    icon={Lightbulb}
-                                    label="Builds"
-                                    count={dreams.filter(d => d.category === 'idea').length}
-                                    color="text-amber-400"
-                                />
-                                <TabButton
-                                    active={selectedTab === 'win'}
-                                    onClick={() => setSelectedTab('win')}
-                                    icon={Trophy}
-                                    label="Logs"
-                                    count={dreams.filter(d => d.category === 'win').length}
-                                    color="text-emerald-400"
-                                />
-                                <TabButton
-                                    active={selectedTab === 'thought'}
-                                    onClick={() => setSelectedTab('thought')}
-                                    icon={BrainCircuit}
-                                    label="Thoughts"
-                                    count={dreams.filter(d => d.category === 'thought').length}
-                                    color="text-blue-400"
-                                />
-                            </nav>
-                        </div>
-
                         {/* Analytics Widget */}
                         <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
                             <h3 className="text-sm font-medium text-white/50 mb-4 flex items-center gap-2">
@@ -308,11 +256,34 @@ export default function JournalPage() {
                         </div>
                     </div>
 
-                    {/* Main Content */}
-                    <div className="lg:col-span-3 space-y-6">
-                        {/* Search */}
-                        <SemanticSearch />
+                    {/* 2. Search & Filter Row */}
+                    <div className="flex flex-col md:flex-row gap-4 items-center justify-between sticky top-[70px] z-40 bg-[#0a0a0a]/80 backdrop-blur-xl p-4 rounded-2xl border border-white/5 shadow-2xl">
+                        <div className="relative w-full md:w-96 group">
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 group-focus-within:text-purple-400 transition-colors" />
+                            <Input
+                                placeholder="Search your mind..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="pl-10 bg-black/50 border-white/5 focus:border-purple-500/50 transition-all"
+                            />
+                        </div>
 
+                        <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
+                            <TabButton active={selectedTab === 'all'} onClick={() => setSelectedTab('all')} icon={LayoutGrid} label="All" count={dreams.length} />
+                            <TabButton active={selectedTab === 'dream'} onClick={() => setSelectedTab('dream')} icon={Moon} label="Visions" count={dreams.filter(d => d.category === 'dream').length} color="text-purple-400" />
+                            <TabButton active={selectedTab === 'idea'} onClick={() => setSelectedTab('idea')} icon={Lightbulb} label="Builds" count={dreams.filter(d => d.category === 'idea').length} color="text-amber-400" />
+                            <TabButton active={selectedTab === 'win'} onClick={() => setSelectedTab('win')} icon={Trophy} label="Logs" count={dreams.filter(d => d.category === 'win').length} color="text-emerald-400" />
+                            <TabButton active={selectedTab === 'thought'} onClick={() => setSelectedTab('thought')} icon={BrainCircuit} label="Thoughts" count={dreams.filter(d => d.category === 'thought').length} color="text-blue-400" />
+                        </div>
+                    </div>
+
+                    {/* 3. Time Travel (Calendar) */}
+                    <div className="w-full">
+                        <DateNavigator dreams={dreams} onDateSelect={handleDateSelect} />
+                    </div>
+
+                    {/* 4. Main Content (Focus Mode or Timeline) */}
+                    <div className="min-h-[500px]">
                         {isLoading ? (
                             <JournalLoadingGrid />
                         ) : filteredDreams.length === 0 ? (
