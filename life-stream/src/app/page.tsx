@@ -59,7 +59,8 @@ export default function Home() {
       const data = await response.json();
       if (data.error) throw new Error(data.error);
 
-      setResult(data);
+      // Merge original text content so it can be saved later
+      setResult({ ...data, content: text });
     } catch (error) {
       console.error("Analysis failed:", error);
       toast.error("Failed to analyze. Please try again.");
