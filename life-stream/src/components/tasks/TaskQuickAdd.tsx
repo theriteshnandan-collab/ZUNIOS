@@ -37,7 +37,7 @@ export function TaskQuickAdd({ onAdd }: TaskQuickAddProps) {
             setContent('');
             setPriority('medium');
             onAdd?.();
-            // Keep modal open for quick successive adds
+            setIsOpen(false); // Auto-vanish on success
         }
     };
 
