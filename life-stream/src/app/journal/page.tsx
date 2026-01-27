@@ -29,6 +29,8 @@ import { calculateTotalXP, getLevelInfo } from "@/lib/leveling";
 import { calculateTaskStats, getEarnedBadges as getTaskBadges } from "@/lib/task-gamification";
 import { getStreakBadges } from "@/lib/journal-streaks";
 import LevelProgress from "@/components/game/LevelProgress";
+import { groupDreamsByDate, getSortedDreamKeys } from "@/lib/journal-grouping";
+import { JournalGrid } from "@/components/JournalGrid";
 
 
 
@@ -160,6 +162,10 @@ export default function JournalPage() {
         ? dreams
         : dreams.filter(d => d.category === selectedTab || (selectedTab === 'journal' ? !d.category : false));
 
+    // Grouping
+    const groupedDreams = groupDreamsByDate(filteredDreams);
+    const sortedKeys = getSortedDreamKeys(groupedDreams);
+
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-purple-500/30">
             {/* Header */}
@@ -283,70 +289,33 @@ export default function JournalPage() {
                                 </Button>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {filteredDreams.map((dream) => (
-                                    <GlassCard
-                                        key={dream.id}
-                                        className="relative group cursor-pointer hover:border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/10 transition-all duration-300"
-                                        onClick={() => setSelectedDream(dream)}
-                                    >
-                                        <div className="flex flex-col h-full">
-                                            {/* Header */}
-                                            <div className="flex justify-between items-start mb-3">
-                                                <Badge category={dream.category} />
-                                                <span className="text-xs text-white/30 font-mono">
-                                                    {formatDistanceToNow(new Date(dream.created_at), { addSuffix: true })}
-                                                </span>
-                                            </div>
-
-                                            {/* Content */}
-                                            <p className="text-sm text-white/80 line-clamp-3 mb-4 flex-1 font-serif leading-relaxed tracking-wide">
-                                                {dream.content}
-                                            </p>
-
-                                            {/* Footer */}
-                                            <div className="flex items-center justify-between pt-3 border-t border-white/5 mt-auto">
-                                                <div className="flex items-center gap-2">
-                                                    {dream.mood && (
-                                                        <span className="text-xs px-2 py-1 rounded-full bg-white/5 text-white/50">
-                                                            {dream.mood}
-                                                        </span>
-                                                    )}
-                                                    {dream.image_url && (
-                                                        <span className="text-xs px-2 py-1 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
-                                                            Visualized
-                                                        </span>
-                                                    )}
-                                                </div>
-
-                                                <Button
-                                                    size="icon"
-                                                    variant="ghost"
-                                                    className="h-8 w-8 text-white/20 hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all"
-                                                    onClick={(e) => handleDelete(dream.id, e)}
-                                                    disabled={deletingId === dream.id}
-                                                >
-                                                    {deletingId === dream.id ? (
-                                                        <Loader2 className="w-4 h-4 animate-spin" />
-                                                    ) : (
-                                                        <Trash2 className="w-4 h-4" />
-                                                    )}
-                                                </Button>
-                                                <SocialShare
-                                                    title={dream.theme || 'New Memory'}
-                                                    description={dream.content}
-                                                    className="h-8 w-8 text-white/20 hover:text-white opacity-0 group-hover:opacity-100 transition-all ml-1"
-                                                />
-                                            </div>
-                                        </div>
-                                    </GlassCard>
-                                ))}
+                        ): (
+                                <div className = "space-y-12">
+                                {sortedKeys.map((dateKey) => (
+                        <div key={dateKey} className="relative">
+                            <div className="sticky top-[80px] z-[5] py-4 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5 mb-6 flex items-baseline justify-between">
+                                <h2 className="text-2xl font-serif font-bold tracking-tight text-white/90">
+                                    {dateKey}
+                                </h2>
+                                <span className="text-xs font-mono text-white/30">
+                                    {groupedDreams[dateKey].length} Entries
+                                </span>
                             </div>
-                        )}
-                    </div>
-                </div>
 
-                {/* Modals */}
+                            <JournalGrid
+                                dreams={groupedDreams[dateKey]}
+                                onSelect={setSelectedDream}
+                                onDelete={handleDelete}
+                                deletingId={deletingId}
+                            />
+                        </div>
+                                ))}
+                    </div>
+                        )}
+                </div>
+        </div>
+
+                {/* Modals */ }
                 <DreamInsightModal
                     dream={selectedDream}
                     isOpen={!!selectedDream}
@@ -358,8 +327,8 @@ export default function JournalPage() {
                     isOpen={isExportOpen}
                     onClose={() => setIsExportOpen(false)}
                 />
-            </main>
-        </div>
+            </main >
+        </div >
     );
 }
 
