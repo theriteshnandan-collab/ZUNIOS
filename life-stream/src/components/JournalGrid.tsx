@@ -20,7 +20,8 @@ export function JournalGrid({ dreams, onSelect, onDelete, deletingId }: JournalG
     if (dreams.length === 0) return null;
 
     return (
-        <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+    return (
+        <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
             {dreams.map((dream) => (
                 <div key={dream.id} className="break-inside-avoid mb-4">
                     <GlassCard
@@ -63,25 +64,27 @@ export function JournalGrid({ dreams, onSelect, onDelete, deletingId }: JournalG
                                     )}
                                 </div>
 
-                                <div className="flex items-center">
-                                    <SocialShare
-                                        title={dream.theme || 'New Memory'}
-                                        description={dream.content}
-                                        className="h-8 w-8 text-white/20 hover:text-white opacity-0 group-hover:opacity-100 transition-all mr-1"
-                                    />
-                                    <Button
-                                        size="icon"
-                                        variant="ghost"
-                                        className="h-8 w-8 text-white/20 hover:text-red-400 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 transition-all"
-                                        onClick={(e) => onDelete(dream.id, e)}
-                                        disabled={deletingId === dream.id}
-                                    >
-                                        {deletingId === dream.id ? (
-                                            <Loader2 className="w-4 h-4 animate-spin" />
-                                        ) : (
-                                            <Trash2 className="w-4 h-4" />
-                                        )}
-                                    </Button>
+                                <div className="flex items-center gap-1">
+                                    <div className="opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex items-center">
+                                        <SocialShare
+                                            title={dream.theme || 'New Memory'}
+                                            description={dream.content}
+                                            className="h-8 w-8 text-white/40 hover:text-white transition-all mr-1 touch-target"
+                                        />
+                                        <Button
+                                            size="icon"
+                                            variant="ghost"
+                                            className="h-8 w-8 text-white/40 hover:text-red-400 hover:bg-red-500/10 transition-all touch-target"
+                                            onClick={(e) => onDelete(dream.id, e)}
+                                            disabled={deletingId === dream.id}
+                                        >
+                                            {deletingId === dream.id ? (
+                                                <Loader2 className="w-4 h-4 animate-spin" />
+                                            ) : (
+                                                <Trash2 className="w-4 h-4" />
+                                            )}
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
