@@ -18,7 +18,7 @@ function Calendar({
         <DayPicker
             showOutsideDays={showOutsideDays}
             className={cn("p-2", className)}
-            // Force narrow weekday names (S, M, T, W, T, F, S) for modernity
+            // Keep narrow weekday names (S, M, T, W, T, F, S)
             formatters={{
                 formatWeekdayName: (day) => day.toLocaleDateString("en-US", { weekday: "narrow" }),
             }}
@@ -35,14 +35,15 @@ function Calendar({
                 nav_button_previous: "absolute left-1",
                 nav_button_next: "absolute right-1",
 
-                // GRID ARCHITECTURE
-                // Use standard table display for robust column alignment
-                table: "w-full border-collapse space-y-1",
-                head_row: "flex w-full mb-2", // Flex row for headers
-                head_cell: "text-muted-foreground rounded-md w-full font-normal text-[0.8rem] text-center flex-1", // Flex-1 ensures equal width
+                // GRID ARCHITECTURE REINFORCED
+                // We override ALL table elements to behave like block/grid elements
+                table: "w-full border-collapse space-y-1 block",
+                tbody: "block w-full",
+                head_row: "grid grid-cols-7 mb-2 w-full", // Explicit 7-col grid for header
+                head_cell: "text-muted-foreground rounded-md w-full font-normal text-[0.8rem] text-center flex items-center justify-center", // Centered
 
-                row: "flex w-full mt-2", // Flex row for days
-                cell: "h-9 w-full text-center text-sm p-0 relative flex-1 flex items-center justify-center [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+                row: "grid grid-cols-7 mt-2 w-full", // Explicit 7-col grid for days
+                cell: "h-9 w-full text-center text-sm p-0 relative flex items-center justify-center [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
 
                 day: cn(
                     buttonVariants({ variant: "ghost" }),
@@ -52,8 +53,9 @@ function Calendar({
                 day_selected:
                     "bg-purple-500 text-white hover:bg-purple-600 hover:text-white focus:bg-purple-600 focus:text-white rounded-full shadow-lg shadow-purple-500/20",
                 day_today: "bg-white/10 text-white font-bold ring-1 ring-white/20",
+                // IMPROVED OUTSIDE DAYS
                 day_outside:
-                    "day-outside text-zinc-500 opacity-50 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30",
+                    "day-outside text-zinc-500 opacity-100 aria-selected:bg-accent/50 aria-selected:text-muted-foreground aria-selected:opacity-30", // Fully opaque but grey
                 day_disabled: "text-muted-foreground opacity-50",
                 day_range_middle:
                     "aria-selected:bg-accent aria-selected:text-accent-foreground",
