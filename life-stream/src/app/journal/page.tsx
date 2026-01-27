@@ -31,6 +31,8 @@ import { getStreakBadges } from "@/lib/journal-streaks";
 import LevelProgress from "@/components/game/LevelProgress";
 import { groupDreamsByDate, getSortedDreamKeys } from "@/lib/journal-grouping";
 import { JournalGrid } from "@/components/JournalGrid";
+import { DateNavigator } from "@/components/journal/DateNavigator";
+import { format } from "date-fns";
 
 
 
@@ -166,6 +168,21 @@ export default function JournalPage() {
     const groupedDreams = groupDreamsByDate(filteredDreams);
     const sortedKeys = getSortedDreamKeys(groupedDreams);
 
+    const handleDateSelect = (date: Date) => {
+        // Logic to scroll to the specific date or filter
+        // For now, let's filter the view to just that month if not already visible
+        // Or essentially, we can just toast for now, but better:
+        // Scroll to the month? 
+        const monthKey = format(date, "MMMM yyyy");
+        const element = document.getElementById(`month-${monthKey}`);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+            toast.success(`Traveled to ${format(date, "PPP")}`);
+        } else {
+            toast.info("No entries visible for this date in current filter.");
+        }
+    };
+
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-purple-500/30">
             {/* Header */}
@@ -205,6 +222,9 @@ export default function JournalPage() {
 
                         {/* Journal Streak Card */}
                         <JournalStreakCard stats={journalStats} />
+
+                        {/* Date Navigator (Brick 4) */}
+                        <DateNavigator dreams={dreams} onDateSelect={handleDateSelect} />
 
 
                         <div className="p-1 bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
@@ -292,7 +312,7 @@ export default function JournalPage() {
                         ): (
                                 <div className = "space-y-12">
                                 {sortedKeys.map((dateKey) => (
-                        <div key={dateKey} className="relative">
+                        <div key={dateKey} id={`month-${dateKey}`} className="relative">
                             <div className="sticky top-[80px] z-[5] py-4 bg-[#0a0a0a]/95 backdrop-blur-xl border-b border-white/5 mb-6 flex items-baseline justify-between">
                                 <h2 className="text-2xl font-serif font-bold tracking-tight text-white/90">
                                     {dateKey}
