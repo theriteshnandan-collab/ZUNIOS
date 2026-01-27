@@ -167,20 +167,20 @@ export default function OmniInput({ onAnalyze, isAnalyzing, initialMode = 'thoug
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        className="absolute top-full left-0 mt-2 w-auto min-w-[240px] max-w-[90vw] bg-gray-900/95 border border-white/10 rounded-xl shadow-xl backdrop-blur-xl z-20 overflow-hidden"
+                        className="absolute top-full left-0 mt-2 w-auto min-w-[240px] max-w-[90vw] bg-gray-900/95 border border-white/10 rounded-xl shadow-xl backdrop-blur-xl z-[100] overflow-hidden"
                     >
                         <div className="p-1 space-y-0.5">
                             {templates.map(template => (
                                 <button
                                     key={template.id}
                                     onClick={() => handleTemplateSelect(template)}
-                                    className="w-full flex items-center gap-2 p-1.5 rounded-lg hover:bg-white/10 text-left transition-colors group"
+                                    className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 active:bg-white/20 text-left transition-all group cursor-pointer"
                                 >
-                                    <span className="text-lg group-hover:scale-110 transition-transform">{template.icon}</span>
-                                    <div>
-                                        <p className="text-xs font-medium text-white">{template.title}</p>
+                                    <span className="text-xl group-hover:scale-110 transition-transform">{template.icon}</span>
+                                    <div className="flex-1">
+                                        <p className="text-sm font-medium text-white group-hover:text-primary transition-colors">{template.title}</p>
                                     </div>
-                                    <ArrowRight className="w-3 h-3 text-white/20 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    <ArrowRight className="w-4 h-4 text-white/20 ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </button>
                             ))}
                         </div>
