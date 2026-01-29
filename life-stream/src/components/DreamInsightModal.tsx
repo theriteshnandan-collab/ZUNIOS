@@ -8,7 +8,7 @@ import DreamImage from "@/components/DreamImage";
 import { useState, useRef } from "react";
 import ArtifactCard from "./ArtifactCard";
 import { Dream } from "@/types/dream";
-import RelatedMemories from "@/components/RelatedMemories";
+import RelatedMemories from "@/components/journal/RelatedMemories";
 
 interface DreamInsightModalProps {
     dream: Dream | null;
