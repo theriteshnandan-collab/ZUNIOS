@@ -97,16 +97,23 @@ export default function TasksPage() {
                             <button
                                 onClick={() => setViewMode('list')}
                                 className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? 'bg-purple-500/30 text-purple-400' : 'text-white/40 hover:text-white'}`}
-                                title="Dashboard View"
+                                title="Mission Log"
                             >
                                 <ListTodo className="w-5 h-5" />
                             </button>
                             <button
                                 onClick={() => setViewMode('kanban')}
                                 className={`p-2 rounded-lg transition-colors ${viewMode === 'kanban' ? 'bg-purple-500/30 text-purple-400' : 'text-white/40 hover:text-white'}`}
-                                title="Kanban Board"
+                                title="Board View"
                             >
                                 <LayoutGrid className="w-5 h-5" />
+                            </button>
+                            <button
+                                onClick={() => setViewMode('calendar')}
+                                className={`p-2 rounded-lg transition-colors ${viewMode === 'calendar' ? 'bg-purple-500/30 text-purple-400' : 'text-white/40 hover:text-white'}`}
+                                title="Calendar View"
+                            >
+                                <CalendarIcon className="w-5 h-5" />
                             </button>
                         </div>
                     </div>
