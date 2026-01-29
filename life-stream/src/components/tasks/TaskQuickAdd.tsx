@@ -30,7 +30,12 @@ export function TaskQuickAdd({ onAdd }: TaskQuickAddProps) {
         if (!content.trim() || isSubmitting) return;
 
         setIsSubmitting(true);
-        const task = await addTask({ content: content.trim(), priority });
+        // Default to "Today" for visibility in calendar
+        const task = await addTask({
+            content: content.trim(),
+            priority,
+            due_date: new Date().toISOString()
+        });
         setIsSubmitting(false);
 
         if (task) {
