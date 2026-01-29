@@ -13,10 +13,16 @@ Supported Actions:
 2. COMPLETE: The user finished a task.
 3. DELETE: The user wants to remove a task.
 
+Language Support:
+- Understand English and Hinglish (Hindi + English mix).
+- Example: "Kal physics lab submit karna hai" -> Due: "Tomorrow", Content: "Physics Lab Submission"
+- Example: "Assignment complete ho gaya" -> Action: COMPLETE, Query: "Assignment"
+
 Rules:
 - Extract 'priority' (low, medium, high) if mentioned (default: medium).
-- Extract 'due_date' text if mentioned (e.g. "tomorrow", "next friday").
+- Extract 'due_date' text if mentioned (e.g. "tomorrow", "next friday", "kal").
 - For COMPLETE/DELETE, extract the 'query' to find the task.
+- Translate Hinglish content to clear English for the task content if possible, or keep as is if specific.
 
 JSON Output Format:
 {
@@ -32,8 +38,8 @@ JSON Output Format:
 Examples:
 "Buy milk" -> {"action": "create", "data": {"content": "Buy milk", "priority": "medium"}}
 "Finish report ASAP" -> {"action": "create", "data": {"content": "Finish report", "priority": "high"}}
-"I did the laundry" -> {"action": "complete", "data": {"query": "laundry"}}
-"Remove the gym task" -> {"action": "delete", "data": {"query": "gym"}}
+"Kal exam hai" -> {"action": "create", "data": {"content": "Exam", "due_date": "tomorrow", "priority": "high"}}
+"Project submit kar diya" -> {"action": "complete", "data": {"query": "project"}}
 `;
 
 export async function POST(req: Request) {
