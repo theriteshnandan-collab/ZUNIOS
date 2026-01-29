@@ -143,14 +143,14 @@ return (
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-0">
-                        {/* Image Side */}
-                        <div className="relative aspect-square md:aspect-auto">
+                        {/* Image Side - Cinematic Mode (Brick 8) */}
+                        <div className="relative aspect-square md:aspect-auto overflow-hidden group">
+                            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent z-10 md:hidden" /> {/* Mobile text protection */}
                             <DreamImage
                                 src={dream.image_url || ''}
                                 alt={dream.theme || 'Dream'}
-                                className="w-full h-full"
+                                className="w-full h-full object-cover animate-ken-burns"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent md:bg-gradient-to-r" />
                         </div>
 
                         {/* Content Side */}

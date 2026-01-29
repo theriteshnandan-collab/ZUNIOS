@@ -16,6 +16,21 @@
   }
 }
 
+@keyframes ken-burns {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+.animate-ken-burns {
+  animation: ken-burns 20s ease-out infinite alternate;
+  will-change: transform;
+}
+
 .bg-aurora {
   background: linear-gradient(-45deg, #050510, #0f0a1a, #0a0f18, #050510);
   background-size: 400% 400%;
