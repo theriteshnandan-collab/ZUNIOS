@@ -1,6 +1,32 @@
 @import "tailwindcss";
 @import "./../styles/mobile-touch.css";
 
+/* OFFICAL DESIGN: THE LIVING BACKGROUND (CSS GPU) */
+@keyframes aurora-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.bg-aurora {
+  background: linear-gradient(-45deg, #050510, #0f0a1a, #0a0f18, #050510);
+  background-size: 400% 400%;
+  animation: aurora-flow 15s ease infinite;
+  position: fixed;
+  inset: 0;
+  z-index: -50;
+  will-change: background-position;
+  /* GPU Hint */
+}
+
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
