@@ -14,13 +14,17 @@ const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
                 className={cn(
                     // Base glass effect
                     "relative overflow-hidden rounded-2xl",
-                    "border border-white/10 bg-white/5 backdrop-blur-xl",
+                    "border border-white/5 bg-white/5 backdrop-blur-xl", // Reduced border opacity, moving to specular ring
                     // Smooth transitions
                     "transition-all duration-300 ease-out",
                     // Hover effects
-                    "hover:bg-white/[0.08] hover:border-white/15",
+                    "hover:bg-white/[0.08]",
                     "hover:shadow-2xl hover:shadow-purple-500/10",
                     "hover:-translate-y-0.5",
+                    // Active Physics (Brick 4)
+                    "active:scale-[0.98] active:duration-100",
+                    // Specular Highlight (Inner Ring 1px)
+                    "after:absolute after:inset-0 after:rounded-2xl after:border after:border-white/10 after:pointer-events-none",
                     // Group for child animations
                     "group",
                     className

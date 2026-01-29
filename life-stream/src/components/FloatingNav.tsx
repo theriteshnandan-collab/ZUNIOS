@@ -35,22 +35,32 @@ export default function FloatingNav() {
                     </Link>
 
                     {/* Nav Items */}
-                    <nav className="flex items-center gap-1 bg-white/5 rounded-full p-1 border border-white/5">
-                        {navItems.map((item) => {
-                            const isActive = pathname === item.href;
+                    <motion.nav
+                        initial={{ y: 100, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }} // Physics
+                        className="flex items-center gap-2 p-2 rounded-full border border-white/10 bg-black/40 backdrop-blur-2xl shadow-2xl shadow-black/50"
+                    >
+                        {MAIN_LINKS.map(link => {
+                            const isActive = pathname === link.href;
                             return (
-                                <Link
-                                    key={item.name}
-                                    href={item.href}
-                                    className={cn(
-                                        "px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2",
-                                        isActive
-                                            ? "bg-white/10 text-white shadow-sm"
-                                            : "text-muted-foreground hover:text-white hover:bg-white/5"
+                                <Link key={link.href} href={link.href} className="relative group">
+                                    <div className={cn(
+                                        "relative z-10 p-4 rounded-full transition-all duration-300 touch-manipulation", // Hit Area 48px+ (p-4 + icon)
+                                        isActive ? "text-purple-300 bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5",
+                                        "active:scale-90" // Tactile feedback
+                                    )}>
+                                        <link.icon className={cn("w-6 h-6", isActive && "stroke-[2.5px]")} />
+                                    </div>
+
+                                    {/* Active Glow */}
+                                    {isActive && (
+                                        <motion.div
+                                            layoutId="nav-glow"
+                                            className="absolute inset-0 bg-purple-500/20 blur-lg rounded-full -z-10"
+                                            transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                        />
                                     )}
-                                >
-                                    <item.icon className="w-3.5 h-3.5" />
-                                    {item.name}
                                 </Link>
                             );
                         })}
