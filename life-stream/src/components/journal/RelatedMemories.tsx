@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Sparkles, ArrowRight } from 'lucide-react';
 import { memoryService, type Memory } from '@/lib/memory-service';
 import { format } from 'date-fns';
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface RelatedMemoriesProps {
     content: string;
@@ -38,7 +39,7 @@ export function RelatedMemories({ content, currentId }: RelatedMemoriesProps) {
         fetchMemories();
     }, [content, currentId]);
 
-    import { Skeleton } from "@/components/ui/skeleton";
+
 
     // ... inside component
 

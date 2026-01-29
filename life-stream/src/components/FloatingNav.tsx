@@ -68,7 +68,7 @@ export default function FloatingNav() {
 
                     {/* User Action */}
                     <div className="flex items-center gap-4">
-                        {mounted && (
+                        {mounted ? (
                             <>
                                 <SignedIn>
                                     <UserButton afterSignOutUrl="/" />
@@ -82,7 +82,7 @@ export default function FloatingNav() {
                                 </SignedOut>
                             </>
                         ) : (
-                        <div className="w-8 h-8 rounded-full bg-white/10 animate-pulse" />
+                            <div className="w-8 h-8 rounded-full bg-white/10 animate-pulse" />
                         )}
                     </div>
                 </div>
