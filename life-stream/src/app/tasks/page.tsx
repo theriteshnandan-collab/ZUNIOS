@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useTaskStore } from '@/stores/taskStore';
 import { TaskCard } from '@/components/tasks/TaskCard';
 import { TaskQuickAdd } from '@/components/tasks/TaskQuickAdd';
+import { TaskCommandCenter } from '@/components/tasks/TaskCommandCenter';
 import type { Task } from '@/types/task';
 
 type ViewMode = 'list' | 'kanban';
@@ -22,18 +23,13 @@ export default function TasksPage() {
 
     const counts = getTaskCount();
 
-    const filteredTasks = filter === 'all'
-        ? tasks
-        : tasks.filter(t => t.status === filter);
-
-    const todoTasks = tasks.filter(t => t.status === 'todo');
-    const inProgressTasks = tasks.filter(t => t.status === 'in_progress');
-    const doneTasks = tasks.filter(t => t.status === 'done');
+    // ... (filters)
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
             {/* Header */}
             <header className="sticky top-0 z-40 backdrop-blur-xl bg-gray-950/80 border-b border-white/5">
+                {/* ... existing header content ... */}
                 <div className="max-w-6xl mx-auto px-6 py-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
@@ -73,8 +69,11 @@ export default function TasksPage() {
                 </div>
             </header>
 
-            {/* Stats Bar */}
-            <div className="max-w-6xl mx-auto px-4 py-6">
+            <main className="max-w-6xl mx-auto px-4 py-8 space-y-8">
+                {/* AI Command Center */}
+                <TaskCommandCenter />
+
+                {/* Stats Bar */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                     <StatsCard
                         label="Total"
@@ -109,63 +108,63 @@ export default function TasksPage() {
                         active={filter === 'done'}
                     />
                 </div>
-            </div>
-
-            {/* Main Content */}
-            <main className="max-w-6xl mx-auto px-6 pb-24">
-                {isLoading ? (
-                    <div className="flex items-center justify-center py-20">
-                        <div className="animate-spin w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full" />
-                    </div>
-                ) : viewMode === 'list' ? (
-                    /* List View */
-                    <div className="space-y-3">
-                        <AnimatePresence mode="popLayout">
-                            {filteredTasks.length === 0 ? (
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="text-center py-20"
-                                >
-                                    <Target className="w-16 h-16 text-white/10 mx-auto mb-4" />
-                                    <p className="text-white/50 mb-2">No tasks yet</p>
-                                    <p className="text-sm text-white/30">Click the + button to add your first task</p>
-                                </motion.div>
-                            ) : (
-                                filteredTasks.map(task => (
-                                    <TaskCard key={task.id} task={task} />
-                                ))
-                            )}
-                        </AnimatePresence>
-                    </div>
-                ) : (
-                    /* Kanban View */
-                    <div className="grid md:grid-cols-3 gap-6">
-                        <KanbanColumn
-                            title="To Do"
-                            tasks={todoTasks}
-                            color="gray"
-                            icon={Target}
-                        />
-                        <KanbanColumn
-                            title="In Progress"
-                            tasks={inProgressTasks}
-                            color="purple"
-                            icon={Clock}
-                        />
-                        <KanbanColumn
-                            title="Done"
-                            tasks={doneTasks}
-                            color="green"
-                            icon={CheckCircle}
-                        />
-                    </div>
-                )}
-            </main>
-
-            {/* Quick Add FAB */}
-            <TaskQuickAdd />
         </div>
+
+            {/* Main Content */ }
+    <main className="max-w-6xl mx-auto px-6 pb-24">
+        {isLoading ? (
+            <div className="flex items-center justify-center py-20">
+                <div className="animate-spin w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full" />
+            </div>
+        ) : viewMode === 'list' ? (
+            /* List View */
+            <div className="space-y-3">
+                <AnimatePresence mode="popLayout">
+                    {filteredTasks.length === 0 ? (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            className="text-center py-20"
+                        >
+                            <Target className="w-16 h-16 text-white/10 mx-auto mb-4" />
+                            <p className="text-white/50 mb-2">No tasks yet</p>
+                            <p className="text-sm text-white/30">Click the + button to add your first task</p>
+                        </motion.div>
+                    ) : (
+                        filteredTasks.map(task => (
+                            <TaskCard key={task.id} task={task} />
+                        ))
+                    )}
+                </AnimatePresence>
+            </div>
+        ) : (
+            /* Kanban View */
+            <div className="grid md:grid-cols-3 gap-6">
+                <KanbanColumn
+                    title="To Do"
+                    tasks={todoTasks}
+                    color="gray"
+                    icon={Target}
+                />
+                <KanbanColumn
+                    title="In Progress"
+                    tasks={inProgressTasks}
+                    color="purple"
+                    icon={Clock}
+                />
+                <KanbanColumn
+                    title="Done"
+                    tasks={doneTasks}
+                    color="green"
+                    icon={CheckCircle}
+                />
+            </div>
+        )}
+    </main>
+
+    {/* Quick Add FAB */ }
+    <TaskQuickAdd />
+        </div >
     );
 }
 
