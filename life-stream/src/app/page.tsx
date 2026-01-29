@@ -25,7 +25,7 @@ export default function Home() {
   // MODE STATE (Global)
   const { mode } = useMode();
   const { user } = useUser();
-  const { addTask } = useTaskStore();
+  const addTask = useTaskStore((state) => state.addTask);
   const [streak, setStreak] = useState(0);
 
   // Brick 9.5: Real Streak Logic
