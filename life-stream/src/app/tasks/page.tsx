@@ -28,16 +28,13 @@ export default function TasksPage() {
 
     const filteredTasks = tasks.filter(task => {
         if (filter === 'all') return true;
-        if (filter === 'todo') return !task.completed;
-        if (filter === 'in_progress') return !task.completed; // Logic simplification for now
-        if (filter === 'done') return task.completed;
-        return true;
+        return task.status === filter;
     });
 
     // Kanban Buckets
-    const todoTasks = tasks.filter(t => !t.completed);
-    const inProgressTasks = tasks.filter(t => !t.completed && false); // Placeholder
-    const doneTasks = tasks.filter(t => t.completed);
+    const todoTasks = tasks.filter(t => t.status === 'todo');
+    const inProgressTasks = tasks.filter(t => t.status === 'in_progress');
+    const doneTasks = tasks.filter(t => t.status === 'done');
 
     const handleCommandExecuted = (result: any) => {
         const { action, data } = result;
@@ -45,11 +42,12 @@ export default function TasksPage() {
         if (action === 'create') {
             const newTask: Task = {
                 id: crypto.randomUUID(),
+                user_id: 'user_current', // Placeholder until real auth
                 content: data.content,
-                completed: false,
+                status: 'todo',
                 priority: data.priority || 'medium',
-                date: data.date || undefined,
-                createdAt: new Date()
+                due_date: data.date ? new Date(data.date).toISOString() : undefined,
+                created_at: new Date().toISOString()
             };
             addTask(newTask);
             toast.success("Task Deployed", { description: data.content });

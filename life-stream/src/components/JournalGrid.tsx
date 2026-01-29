@@ -103,10 +103,8 @@ export default function JournalGrid({ dreams, onSelect, onDelete, deletingId }: 
                         </div>
                     </GlassCard>
                 </div>
-                </div>
-    ))
-}
-        </div >
+            ))}
+        </div>
     );
 }
 

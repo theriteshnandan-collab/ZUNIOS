@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from "@/lib/utils";
 import { UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import ZuniosLogo from "@/components/ZuniosLogo";
+import { motion } from "framer-motion";
 
 export default function FloatingNav() {
     const pathname = usePathname();

@@ -133,8 +133,8 @@ export default function DreamInsightModal({ dream, isOpen, onClose }: DreamInsig
                                 <div className="relative aspect-square md:aspect-auto overflow-hidden group min-h-[300px]">
                                     <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent z-10 md:hidden" /> {/* Mobile text protection */}
                                     <DreamImage
-                                        imageUrl={dream.image_url || ''}
-                                        prompt={dream.theme || 'Dream'}
+                                        src={dream.image_url || ''}
+                                        alt={dream.theme || 'Dream'}
                                         className="w-full h-full object-cover animate-ken-burns"
                                     />
                                 </div>
