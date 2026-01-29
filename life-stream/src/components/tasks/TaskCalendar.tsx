@@ -25,7 +25,6 @@ export default function TaskCalendar({ tasks, selectedDate, onSelectDate }: Task
         <div className="w-full h-full flex flex-col gap-6">
             <GlassCard className="p-6 w-full flex-shrink-0">
                 <Calendar
-                    required={false}
                     mode="single"
                     selected={selectedDate}
                     onSelect={onSelectDate}
