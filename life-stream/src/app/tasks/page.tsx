@@ -172,7 +172,7 @@ export default function TasksPage() {
                                             <h3 className="text-sm font-medium text-white/50 uppercase tracking-wider mb-4">Sector Status</h3>
                                             <div className="space-y-4">
                                                 <MetricRow label="Pending" value={counts.todo} color="text-white" />
-                                                <MetricRow label="Active" value={counts.inProgress} color="text-purple-400" />
+
                                                 <MetricRow label="Complete" value={counts.done} color="text-emerald-400" />
                                                 <div className="pt-4 mt-4 border-t border-white/10 flex justify-between items-center">
                                                     <span className="text-sm text-white/40">Total Efficiency</span>
