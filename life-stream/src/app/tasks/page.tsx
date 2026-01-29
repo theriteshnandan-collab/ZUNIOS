@@ -18,7 +18,7 @@ type ViewMode = 'list' | 'kanban' | 'calendar';
 export default function TasksPage() {
     const { tasks, isLoading, fetchTasks, getTaskCount, addTask, toggleComplete, deleteTask } = useTaskStore();
     const [viewMode, setViewMode] = useState<ViewMode>('list');
-    const [filter, setFilter] = useState<'all' | 'todo' | 'in_progress' | 'done'>('all');
+    const [filter, setFilter] = useState<'all' | 'todo' | 'done'>('all');
 
     useEffect(() => {
         fetchTasks();
@@ -33,7 +33,7 @@ export default function TasksPage() {
 
     // Kanban Buckets
     const todoTasks = tasks.filter(t => t.status === 'todo');
-    const inProgressTasks = tasks.filter(t => t.status === 'in_progress');
+
     const doneTasks = tasks.filter(t => t.status === 'done');
 
     const handleCommandExecuted = (result: any) => {
@@ -95,13 +95,6 @@ export default function TasksPage() {
                         {/* View Toggle */}
                         <div className="flex items-center gap-2 bg-white/5 rounded-xl p-1">
                             <button
-                                onClick={() => setViewMode('list')}
-                                className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? 'bg-purple-500/30 text-purple-400' : 'text-white/40 hover:text-white'}`}
-                                title="Mission Log"
-                            >
-                                <ListTodo className="w-5 h-5" />
-                            </button>
-                            <button
                                 onClick={() => setViewMode('kanban')}
                                 className={`p-2 rounded-lg transition-colors ${viewMode === 'kanban' ? 'bg-purple-500/30 text-purple-400' : 'text-white/40 hover:text-white'}`}
                                 title="Board View"
@@ -134,9 +127,8 @@ export default function TasksPage() {
                 ) : (
                     <div className="min-h-[400px]">
                         {viewMode === 'kanban' ? (
-                            <div className="grid md:grid-cols-3 gap-6">
+                            <div className="grid md:grid-cols-2 gap-6">
                                 <KanbanColumn title="To Do" tasks={todoTasks} color="gray" icon={Target} />
-                                <KanbanColumn title="In Progress" tasks={inProgressTasks} color="purple" icon={Clock} />
                                 <KanbanColumn title="Done" tasks={doneTasks} color="green" icon={CheckCircle} />
                             </div>
                         ) : (
@@ -148,7 +140,6 @@ export default function TasksPage() {
                                     <div className="hidden lg:flex items-center gap-2 mb-4">
                                         <FilterBadge label="All" active={filter === 'all'} onClick={() => setFilter('all')} />
                                         <FilterBadge label="To Do" active={filter === 'todo'} onClick={() => setFilter('todo')} />
-                                        <FilterBadge label="In Progress" active={filter === 'in_progress'} onClick={() => setFilter('in_progress')} />
                                         <FilterBadge label="Done" active={filter === 'done'} onClick={() => setFilter('done')} />
                                     </div>
 

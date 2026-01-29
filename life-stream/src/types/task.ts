@@ -1,6 +1,6 @@
 // Task types for KOGITO Task System
 
-export type TaskStatus = 'todo' | 'in_progress' | 'done';
+export type TaskStatus = 'todo' | 'done';
 export type TaskPriority = 'low' | 'medium' | 'high';
 
 export interface Task {
@@ -37,8 +37,8 @@ export const PRIORITY_CONFIG = {
 } as const;
 
 // Status configuration with colors
+// Status configuration with colors
 export const STATUS_CONFIG = {
     todo: { label: 'To Do', color: '#9CA3AF', icon: 'Circle' },
-    in_progress: { label: 'In Progress', color: '#8B5CF6', icon: 'Clock' },
     done: { label: 'Done', color: '#10B981', icon: 'CheckCircle' }
 } as const;

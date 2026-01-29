@@ -36,9 +36,9 @@ export function TaskCard({ task, onComplete }: TaskCardProps) {
     };
 
     const handleStatusCycle = async () => {
-        const statusOrder: Task['status'][] = ['todo', 'in_progress', 'done'];
+        const statusOrder: Task['status'][] = ['todo', 'done'];
         const currentIndex = statusOrder.indexOf(task.status);
-        const nextStatus = statusOrder[(currentIndex + 1) % 3];
+        const nextStatus = statusOrder[(currentIndex + 1) % 2];
         await updateTask(task.id, { status: nextStatus });
     };
 
@@ -122,7 +122,6 @@ export function TaskCard({ task, onComplete }: TaskCardProps) {
                             }}
                         >
                             {task.status === 'todo' && <Circle className="w-3 h-3" />}
-                            {task.status === 'in_progress' && <Clock className="w-3 h-3" />}
                             {task.status === 'done' && <Check className="w-3 h-3" />}
                             <span>{STATUS_CONFIG[task.status].label}</span>
                         </button>

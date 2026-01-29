@@ -15,9 +15,8 @@ interface TaskState {
 
     // Computed getters
     getTodoTasks: () => Task[];
-    getInProgressTasks: () => Task[];
     getDoneTasks: () => Task[];
-    getTaskCount: () => { todo: number; inProgress: number; done: number; total: number };
+    getTaskCount: () => { todo: number; done: number; total: number };
 }
 
 export const useTaskStore = create<TaskState>((set, get) => ({
@@ -107,13 +106,11 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
     // Computed getters
     getTodoTasks: () => get().tasks.filter(t => t.status === 'todo'),
-    getInProgressTasks: () => get().tasks.filter(t => t.status === 'in_progress'),
     getDoneTasks: () => get().tasks.filter(t => t.status === 'done'),
     getTaskCount: () => {
         const tasks = get().tasks;
         return {
             todo: tasks.filter(t => t.status === 'todo').length,
-            inProgress: tasks.filter(t => t.status === 'in_progress').length,
             done: tasks.filter(t => t.status === 'done').length,
             total: tasks.length
         };
