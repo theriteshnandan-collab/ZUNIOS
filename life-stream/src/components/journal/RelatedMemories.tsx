@@ -38,11 +38,16 @@ export function RelatedMemories({ content, currentId }: RelatedMemoriesProps) {
         fetchMemories();
     }, [content, currentId]);
 
+    import { Skeleton } from "@/components/ui/skeleton";
+
+    // ... inside component
+
     if (isLoading) {
         return (
-            <div className="space-y-3 mt-8 animate-pulse">
-                <div className="h-4 w-32 bg-white/10 rounded" />
-                <div className="h-24 bg-white/5 rounded-xl" />
+            <div className="space-y-3 mt-8">
+                <Skeleton className="h-4 w-32" />
+                <Skeleton className="h-24 w-full" />
+                <Skeleton className="h-24 w-full opacity-50" />
             </div>
         );
     }
