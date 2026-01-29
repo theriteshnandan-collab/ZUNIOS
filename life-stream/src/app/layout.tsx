@@ -1,7 +1,7 @@
 import { ClerkProvider } from '@clerk/nextjs'
 import { Analytics } from "@vercel/analytics/next"
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Crimson_Pro } from "next/font/google";
+import { Inter, Crimson_Pro, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import BackgroundLayout from "@/components/BackgroundLayout";
@@ -13,19 +13,27 @@ import { ModeProvider } from "@/components/ModeProvider";
 import OnboardingModal from "@/components/OnboardingModal";
 import NoiseOverlay from "@/components/ui/NoiseOverlay";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+import { Inter, Crimson_Pro, JetBrains_Mono } from "next/font/google";
+
+// 1. The Machine (System Interface)
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap", // Performance: Show text immediately
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+// 2. The Code (Monospace)
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
+// 3. The Soul (Reading Experience)
 const crimsonPro = Crimson_Pro({
   variable: "--font-crimson-pro",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const viewport = {
@@ -81,7 +89,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className="dark">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} ${crimsonPro.variable} antialiased bg-background text-foreground`}
+          className={`${inter.variable} ${crimsonPro.variable} ${jetbrainsMono.variable} antialiased bg-[#050510] text-[#E0E0E0] select-none overscroll-none`}
         >
           <ModeProvider>
             <OnboardingModal />
