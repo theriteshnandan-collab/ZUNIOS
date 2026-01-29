@@ -1,27 +1,15 @@
-import { useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { Task } from "@/types/task";
-import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, Circle } from "lucide-react";
 import { GlassCard } from "../ui/GlassCard";
-import { isSameCalendarDay, normalizeDateKey, formatCalendarDate } from "@/lib/date-utils";
+import { normalizeDateKey } from "@/lib/date-utils";
 
 interface TaskCalendarProps {
     tasks: Task[];
+    selectedDate: Date | undefined;
+    onSelectDate: (date: Date | undefined) => void;
 }
 
-export default function TaskCalendar({ tasks }: TaskCalendarProps) {
-    // Initialize with today's date
-    const [date, setDate] = useState<Date | undefined>(new Date());
-
-    // Filter tasks securely using our new strict utility
-    const selectedTasks = tasks.filter((task) => {
-        return isSameCalendarDay(task.due_date, date);
-    });
-
-    const pendingTasks = selectedTasks.filter(t => t.status !== 'done');
-    const completedTasks = selectedTasks.filter(t => t.status === 'done');
-
+export default function TaskCalendar({ tasks, selectedDate, onSelectDate }: TaskCalendarProps) {
     // Pre-calculate days with tasks map for O(1) lookup during render
     const taskDayMap = tasks.reduce((acc, task) => {
         if (task.status !== 'done') {
@@ -37,9 +25,10 @@ export default function TaskCalendar({ tasks }: TaskCalendarProps) {
         <div className="w-full h-full flex flex-col gap-6">
             <GlassCard className="p-6 w-full flex-shrink-0">
                 <Calendar
+                    required={false}
                     mode="single"
-                    selected={date}
-                    onSelect={setDate}
+                    selected={selectedDate}
+                    onSelect={onSelectDate}
                     className="w-full border-0 select-none"
                     classNames={{
                         month: "w-full space-y-4",
@@ -73,73 +62,10 @@ export default function TaskCalendar({ tasks }: TaskCalendarProps) {
                 />
             </GlassCard>
 
-            {/* Daily Briefing - Split View */}
-            <AnimatePresence mode="popLayout">
-                {date && (selectedTasks.length > 0 || pendingTasks.length === 0) && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 20 }}
-                        className="grid lg:grid-cols-2 gap-4 flex-grow overflow-auto"
-                    >
-                        {/* Pending Operations */}
-                        <div className="space-y-3">
-                            <h3 className="text-xs font-bold text-white/40 pl-1 uppercase tracking-widest flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.5)]"></span>
-                                Pending [{pendingTasks.length}]
-                            </h3>
-                            <div className="space-y-2">
-                                {pendingTasks.length > 0 ? (
-                                    pendingTasks.map((task) => (
-                                        <motion.div
-                                            key={task.id}
-                                            layout
-                                            className="group bg-white/5 border border-white/5 rounded-xl p-3 flex items-start gap-3 hover:bg-white/10 hover:border-purple-500/30 transition-all cursor-default"
-                                        >
-                                            <div className="mt-1 p-1.5 rounded-full bg-white/5 text-purple-400 group-hover:scale-110 transition-transform">
-                                                <Circle className="w-4 h-4" />
-                                            </div>
-                                            <p className="text-white/80 text-sm font-medium leading-relaxed pt-0.5">{task.content}</p>
-                                        </motion.div>
-                                    ))
-                                ) : (
-                                    <div className="p-6 rounded-xl border border-white/5 border-dashed text-center text-white/20 bg-white/[0.02]">
-                                        <p className="text-sm">No pending operations</p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Completed Log */}
-                        <div className="space-y-3">
-                            <h3 className="text-xs font-bold text-white/40 pl-1 uppercase tracking-widest flex items-center gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></span>
-                                Completed [{completedTasks.length}]
-                            </h3>
-                            <div className="space-y-2">
-                                {completedTasks.length > 0 ? (
-                                    completedTasks.map((task) => (
-                                        <motion.div
-                                            key={task.id}
-                                            layout
-                                            className="bg-emerald-500/[0.02] border border-emerald-500/10 rounded-xl p-3 flex items-start gap-3 opacity-60 hover:opacity-100 transition-opacity"
-                                        >
-                                            <div className="mt-1 p-1.5 rounded-full bg-emerald-500/10 text-emerald-400">
-                                                <CheckCircle2 className="w-4 h-4" />
-                                            </div>
-                                            <p className="text-white/40 text-sm font-medium leading-relaxed line-through pt-0.5">{task.content}</p>
-                                        </motion.div>
-                                    ))
-                                ) : (
-                                    <div className="p-6 rounded-xl border border-white/5 border-dashed text-center text-white/20 bg-white/[0.02]">
-                                        <p className="text-sm">No completed tasks</p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {/* Visual Hint */}
+            <div className="text-center text-white/30 text-xs uppercase tracking-widest">
+                {selectedDate ? "Filtering by Date" : "Showing All Missions"}
+            </div>
         </div>
     );
 }
