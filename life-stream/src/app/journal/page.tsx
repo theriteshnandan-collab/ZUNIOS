@@ -46,7 +46,7 @@ import { calculateTaskStats, getEarnedBadges as getTaskBadges } from "@/lib/task
 import { getStreakBadges } from "@/lib/journal-streaks";
 import LevelProgress from "@/components/game/LevelProgress";
 import { groupDreamsByDate, getSortedDreamKeys } from "@/lib/journal-grouping";
-import { JournalGrid } from "@/components/JournalGrid";
+import JournalGrid from "@/components/JournalGrid";
 import { DateNavigator } from "@/components/journal/DateNavigator";
 import { format } from "date-fns";
 
