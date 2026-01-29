@@ -80,6 +80,36 @@ export default function OmniInput({ onAnalyze, isAnalyzing, initialMode = 'thoug
 
     const activeModeConfig = MODE_CONFIG[predictedMode] || MODE_CONFIG.thought;
     const templates = getTemplatesForCategory(predictedMode);
+    // Brick 10: Typewriter Effect
+    const [placeholder, setPlaceholder] = useState("");
+    const [placeholderIndex, setPlaceholderIndex] = useState(0);
+    const [charIndex, setCharIndex] = useState(0);
+
+    const PLACEHOLDERS = [
+        "What are you building?",
+        "What was your dream?",
+        "Log a victory...",
+        "Capture a thought..."
+    ];
+
+    useEffect(() => {
+        const currentText = PLACEHOLDERS[placeholderIndex];
+
+        if (charIndex < currentText.length) {
+            const timeout = setTimeout(() => {
+                setPlaceholder(prev => prev + currentText[charIndex]);
+                setCharIndex(prev => prev + 1);
+            }, 50 + Math.random() * 30); // Random typing speed
+            return () => clearTimeout(timeout);
+        } else {
+            const timeout = setTimeout(() => {
+                setPlaceholder("");
+                setCharIndex(0);
+                setPlaceholderIndex(prev => (prev + 1) % PLACEHOLDERS.length);
+            }, 3000); // Wait before clearing
+            return () => clearTimeout(timeout);
+        }
+    }, [charIndex, placeholderIndex]);
 
     return (
         <div className="w-full relative z-50">
@@ -94,7 +124,7 @@ export default function OmniInput({ onAnalyze, isAnalyzing, initialMode = 'thoug
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="Capture your stream of consciousness..."
+                    placeholder={placeholder}
                     className="w-full bg-transparent text-lg text-white placeholder:text-white/20 p-6 min-h-[120px] outline-none resize-none font-light leading-relaxed scrollbar-hide"
                     disabled={isAnalyzing}
                 />
