@@ -75,6 +75,37 @@ export default function Home() {
   const handleAnalyze = async (text: string, analysisMode: EntryMode) => {
     setIsLoading(true);
     try {
+      // 🔀 COMMAND ROUTER
+      // Check if this is a Task Command (e.g. "Task: Buy Milk", "Remind me to...", "Todo: ...")
+      const commandRegex = /^(task|todo|remind|mission)\b/i;
+
+      if (commandRegex.test(text)) {
+        console.log("🚀 Command Detected: Routing to Task Engine");
+
+        const response = await fetch('/api/analyze-task', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ command: text })
+        });
+
+        const data = await response.json();
+
+        if (data.error) throw new Error(data.error);
+
+        // Success - Task Created
+        confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+        toast.success(
+          data.action === 'create' ? "Mission Deployed" : "Command Executed",
+          { description: data.data?.content || "Operation successful" }
+        );
+
+        // Do NOT show revelation view for tasks. 
+        // Just clear loading state.
+        setIsLoading(false);
+        return;
+      }
+
+      // 🔮 STANDARD ANALYSIS (Dream/Journal)
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -86,7 +117,7 @@ export default function Home() {
 
       // Merge original text content so it can be saved later
       setResult({ ...data, content: text });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Analysis failed:", error);
       toast.error("Failed to analyze. Please try again.");
     } finally {
