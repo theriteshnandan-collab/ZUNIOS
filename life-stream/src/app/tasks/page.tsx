@@ -30,19 +30,39 @@ export default function TasksPage() {
     // ... (filters)
 
     const handleCommandExecuted = (result: any) => {
-        // Logic to handle the parsed command
-        if (result.action === 'create') {
+        const { action, data } = result;
+
+        if (action === 'create') {
             const newTask: Task = {
                 id: crypto.randomUUID(),
-                content: result.data.content,
+                content: data.content,
                 completed: false,
-                priority: result.data.priority || 'medium',
-                date: result.data.due_date, // AI might return 'tomorrow' string, needs parsing if we want strictly dates, but for now trusting string or handling in renderer
+                priority: data.priority || 'medium',
+                date: data.due_date,
                 createdAt: new Date()
             };
-            addTask(newTask); // Using addTask from the store
+            addTask(newTask);
+            toast.success("Task Deployed", { description: data.content });
         }
-        // TODO: Handle 'complete' and 'delete'
+
+        // Brick 5: The Quick Kill (Fuzzy Match Completion)
+        else if (action === 'complete' || action === 'delete') {
+            const targetContent = data.content.toLowerCase();
+            // Find matched task (simple includes match for now)
+            const matchedTask = tasks.find(t => t.content.toLowerCase().includes(targetContent));
+
+            if (matchedTask) {
+                if (action === 'complete') {
+                    toggleComplete(matchedTask.id);
+                    toast.success("Target Neutralized", { description: `Completed: ${matchedTask.content}` });
+                } else {
+                    deleteTask(matchedTask.id);
+                    toast.info("Target Eliminated", { description: `Deleted: ${matchedTask.content}` });
+                }
+            } else {
+                toast.error("Target Not Found", { description: `Could not locate "${data.content}" in sector.` });
+            }
+        }
     };
 
     return (
