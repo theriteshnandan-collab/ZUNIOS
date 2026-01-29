@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Moon, Sparkles, Lightbulb, Target, BrainCircuit } from "lucide-react";
+import { Moon, Sparkles, Lightbulb, Target, BrainCircuit, Flame } from "lucide-react";
 import OmniInput from "@/components/OmniInput";
+import { cn } from "@/lib/utils";
 import { useMode } from "@/components/ModeProvider";
 import { EntryMode } from "@/lib/theme-config";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { useUser, SignInButton } from "@clerk/nextjs";
+import { useUser, SignInButton, UserButton } from "@clerk/nextjs";
 import { toast } from "sonner";
 import DreamLoader from "@/components/DreamLoader";
 import DreamImage from "@/components/DreamImage";
@@ -241,80 +242,79 @@ export default function Home() {
             </div>
 
             <div className="space-y-3">
-              <div className="space-y-3">
-                {(Array.isArray(result.interpretation) ? result.interpretation : [result.interpretation || "Analysis unavailable"]).map((item: string, i: number) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.1 }}
-                    className="p-3 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors"
-                  >
-                    <div className="flex items-center gap-4">
-                      {/* Brick 9: The Streak Flame */}
-                      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20">
-                        <Flame className={cn("w-4 h-4 text-orange-500 fill-orange-500", streak > 0 ? "animate-fire" : "opacity-50")} />
-                        <span className="text-xs font-medium text-orange-200">
-                          {streak} Day Streak
-                        </span>
-                      </div>
-
-                      <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10">
-                        <UserButton afterSignOutUrl="/" />
-                      </div>
+              {(Array.isArray(result.interpretation) ? result.interpretation : [result.interpretation || "Analysis unavailable"]).map((item: string, i: number) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  className="p-3 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors"
+                >
+                  <div className="flex items-center gap-4">
+                    {/* Brick 9: The Streak Flame */}
+                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20">
+                      <Flame className={cn("w-4 h-4 text-orange-500 fill-orange-500", streak > 0 ? "animate-fire" : "opacity-50")} />
+                      <span className="text-xs font-medium text-orange-200">
+                        {streak} Day Streak
+                      </span>
                     </div>
-                    <p className="text-muted-foreground leading-relaxed text-base">{item}</p>
-                  </motion.div>
-                ))}
 
-                {/* ZUNIOS Signature */}
-                <div className="text-right pt-2">
-                  <span className="text-sm text-white/30 italic">— ZUNIOS</span>
-                </div>
-              </div>
-
-              {/* Guest Warning */}
-              {!user && (
-                <GlassCard className="p-4 mb-6 border-amber-500/30 bg-amber-500/5">
-                  <div className="flex flex-col gap-3 text-center">
-                    <div className="flex items-center justify-center gap-2 text-amber-200/90 font-medium">
-                      <Sparkles className="w-4 h-4" />
-                      <span>Sign in to save this</span>
+                    <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10">
+                      <UserButton afterSignOutUrl="/" />
                     </div>
-                    <p className="text-xs text-amber-200/60">
-                      Create a free account to keep a permanent record.
-                    </p>
-                    <SignInButton mode="modal">
-                      <Button variant="secondary" className="w-full bg-amber-500/10 hover:bg-amber-500/20 text-amber-100 border border-amber-500/20">
-                        Sign In Now
-                      </Button>
-                    </SignInButton>
                   </div>
-                </GlassCard>
-              )}
+                  <p className="text-muted-foreground leading-relaxed text-base">{item}</p>
+                </motion.div>
+              ))}
 
-              <div className="flex gap-4 mt-8">
-                <Button
-                  onClick={handleSave}
-                  disabled={isSaving}
-                  className="flex-1 bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20"
-                >
-                  {isSaving ? (
-                    <Sparkles className="w-4 h-4 mr-2 animate-spin" />
-                  ) : (
-                    <Sparkles className="w-4 h-4 mr-2" />
-                  )}
-                  {isSaving ? "Saving..." : "Save to Zunios"}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => setResult(null)}
-                  className="flex-1 hover:bg-white/5"
-                >
-                  Discard
-                </Button>
+              {/* ZUNIOS Signature */}
+              <div className="text-right pt-2">
+                <span className="text-sm text-white/30 italic">— ZUNIOS</span>
               </div>
             </div>
+
+            {/* Guest Warning */}
+            {!user && (
+              <GlassCard className="p-4 mb-6 border-amber-500/30 bg-amber-500/5">
+                <div className="flex flex-col gap-3 text-center">
+                  <div className="flex items-center justify-center gap-2 text-amber-200/90 font-medium">
+                    <Sparkles className="w-4 h-4" />
+                    <span>Sign in to save this</span>
+                  </div>
+                  <p className="text-xs text-amber-200/60">
+                    Create a free account to keep a permanent record.
+                  </p>
+                  <SignInButton mode="modal">
+                    <Button variant="secondary" className="w-full bg-amber-500/10 hover:bg-amber-500/20 text-amber-100 border border-amber-500/20">
+                      Sign In Now
+                    </Button>
+                  </SignInButton>
+                </div>
+              </GlassCard>
+            )}
+
+            <div className="flex gap-4 mt-8">
+              <Button
+                onClick={handleSave}
+                disabled={isSaving}
+                className="flex-1 bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20"
+              >
+                {isSaving ? (
+                  <Sparkles className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Sparkles className="w-4 h-4 mr-2" />
+                )}
+                {isSaving ? "Saving..." : "Save to Zunios"}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setResult(null)}
+                className="flex-1 hover:bg-white/5"
+              >
+                Discard
+              </Button>
+            </div>
+          </div>
         </motion.div >
       </div >
     );
