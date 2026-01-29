@@ -89,7 +89,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className="dark">
         <body
-          className={`${inter.variable} ${crimsonPro.variable} ${jetbrainsMono.variable} antialiased bg-[#050510] text-[#E0E0E0] select-none overscroll-none`}
+          className={`${inter.variable} ${crimsonPro.variable} ${jetbrainsMono.variable} antialiased bg-[#050510] text-[#E0E0E0] select-none`}
         >
           <ModeProvider>
             <OnboardingModal />

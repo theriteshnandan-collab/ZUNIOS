@@ -165,6 +165,8 @@
     touch-action: manipulation;
     /* Zero-Lag Tap */
     -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+    /* Brick 13: Smooth Scroll */
   }
 
   body {
