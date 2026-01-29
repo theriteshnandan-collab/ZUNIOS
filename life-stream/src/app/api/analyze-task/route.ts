@@ -16,6 +16,7 @@ Input Analysis Rules:
 - "Finish/Khatam" -> Action: COMPLETE.
 - "Delete/Hatao" -> Action: DELETE.
 - "Urgent/ASAP/Jaldi" -> Priority: HIGH.
+- "Lab/Exam/Submission" -> Priority: HIGH.
 
 Output Structure (Strict JSON):
 {
