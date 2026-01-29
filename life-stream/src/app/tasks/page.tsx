@@ -11,6 +11,7 @@ import TaskCommandCenter from '@/components/tasks/TaskCommandCenter';
 import type { Task } from '@/types/task';
 import TaskCalendarComponent from '@/components/tasks/TaskCalendar';
 import { toast } from 'sonner';
+import { isSameCalendarDay } from '@/lib/date-utils';
 
 type ViewMode = 'list' | 'kanban' | 'calendar';
 
@@ -36,20 +37,8 @@ export default function TasksPage() {
 
         // 2. Filter by Date (if selected)
         if (selectedDate) {
-            // Import strict check to ensure "Connection"
-            // We can't use require inside filter loop cleanly in strict TS usually, better to rely on imported utility if possible or dynamic import outside.
-            // But since this file is client side, let's just assume we need to replicate the logic or import it at top.
-            // The file has no import for date-utils yet? Let's add it. 
-            // Wait, I cannot add import easily if I don't see top of file. 
-            // I will implement a safe local check or ensure the import is added.
-            // Actually, I will add the import to the top of the file in this write.
-            const taskDate = task.due_date ? new Date(task.due_date) : null;
-            if (!taskDate) return false;
-
-            // Strict YYYY-MM-DD comparison
-            const target = selectedDate.toISOString().split('T')[0];
-            const current = taskDate.toISOString().split('T')[0];
-            return target === current;
+            // Strict YYYY-MM-DD comparison using imported utility
+            return isSameCalendarDay(task.due_date, selectedDate);
         }
 
         return true;
