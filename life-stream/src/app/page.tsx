@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Moon, Sparkles, Lightbulb, Target, BrainCircuit, Flame } from "lucide-react";
+import { Moon, Sparkles, Lightbulb, Target, BrainCircuit, Zap } from "lucide-react";
 import OmniInput from "@/components/OmniInput";
 import { cn } from "@/lib/utils";
 import { useMode } from "@/components/ModeProvider";
@@ -251,9 +251,9 @@ export default function Home() {
                   className="p-3 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors"
                 >
                   <div className="flex items-center gap-4">
-                    {/* Brick 9: The Streak Flame - Rebuilt for Stability */}
+                    {/* Brick 9: The Streak Zap (Lightning) - Replaces Flame for Stability */}
                     <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20">
-                      <Flame className={cn("w-4 h-4 text-orange-500 fill-orange-500", streak > 0 ? "animate-fire" : "opacity-50")} />
+                      <Zap className={cn("w-4 h-4 text-orange-500 fill-orange-500", streak > 0 ? "animate-fire" : "opacity-50")} />
                       <span className="text-xs font-medium text-orange-200">
                         {streak} Day Streak
                       </span>
