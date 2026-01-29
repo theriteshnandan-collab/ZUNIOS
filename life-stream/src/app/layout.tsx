@@ -1,7 +1,7 @@
 import { ClerkProvider } from '@clerk/nextjs'
 import { Analytics } from "@vercel/analytics/next"
 import type { Metadata } from "next";
-import { Inter, Crimson_Pro, JetBrains_Mono } from "next/font/google";
+
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import BackgroundLayout from "@/components/BackgroundLayout";

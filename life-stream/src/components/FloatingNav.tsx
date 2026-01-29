@@ -41,7 +41,7 @@ export default function FloatingNav() {
                         transition={{ type: "spring", stiffness: 300, damping: 30 }} // Physics
                         className="flex items-center gap-2 p-2 rounded-full border border-white/10 bg-black/40 backdrop-blur-2xl shadow-2xl shadow-black/50"
                     >
-                        {MAIN_LINKS.map(link => {
+                        {navItems.map(link => {
                             const isActive = pathname === link.href;
                             return (
                                 <Link key={link.href} href={link.href} className="relative group">

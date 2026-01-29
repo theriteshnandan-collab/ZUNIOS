@@ -7,17 +7,16 @@ import Link from 'next/link';
 import { useTaskStore } from '@/stores/taskStore';
 import { TaskCard } from '@/components/tasks/TaskCard';
 import { TaskQuickAdd } from '@/components/tasks/TaskQuickAdd';
-import { TaskCommandCenter } from '@/components/tasks/TaskCommandCenter';
+import TaskCommandCenter from '@/components/tasks/TaskCommandCenter';
 import type { Task } from '@/types/task';
-
-import { TaskCalendar } from '@/components/tasks/TaskCalendar'; // Note: Ensure export is correct
-import TaskCalendarComponent from '@/components/tasks/TaskCalendar'; // Default export import
+import TaskCalendarComponent from '@/components/tasks/TaskCalendar';
 import { Calendar as CalendarIcon } from 'lucide-react';
+import { toast } from 'sonner';
 
 type ViewMode = 'list' | 'kanban' | 'calendar';
 
 export default function TasksPage() {
-    const { tasks, isLoading, fetchTasks, getTaskCount } = useTaskStore();
+    const { tasks, isLoading, fetchTasks, getTaskCount, addTask, toggleComplete, deleteTask } = useTaskStore();
     const [viewMode, setViewMode] = useState<ViewMode>('list');
     const [filter, setFilter] = useState<'all' | 'todo' | 'in_progress' | 'done'>('all');
 
@@ -27,7 +26,18 @@ export default function TasksPage() {
 
     const counts = getTaskCount();
 
-    // ... (filters)
+    const filteredTasks = tasks.filter(task => {
+        if (filter === 'all') return true;
+        if (filter === 'todo') return !task.completed;
+        if (filter === 'in_progress') return !task.completed; // Logic simplification for now
+        if (filter === 'done') return task.completed;
+        return true;
+    });
+
+    // Kanban Buckets
+    const todoTasks = tasks.filter(t => !t.completed);
+    const inProgressTasks = tasks.filter(t => !t.completed && false); // Placeholder
+    const doneTasks = tasks.filter(t => t.completed);
 
     const handleCommandExecuted = (result: any) => {
         const { action, data } = result;
@@ -38,17 +48,14 @@ export default function TasksPage() {
                 content: data.content,
                 completed: false,
                 priority: data.priority || 'medium',
-                date: data.due_date,
+                date: data.date || undefined,
                 createdAt: new Date()
             };
             addTask(newTask);
             toast.success("Task Deployed", { description: data.content });
         }
-
-        // Brick 5: The Quick Kill (Fuzzy Match Completion)
         else if (action === 'complete' || action === 'delete') {
             const targetContent = data.content.toLowerCase();
-            // Find matched task (simple includes match for now)
             const matchedTask = tasks.find(t => t.content.toLowerCase().includes(targetContent));
 
             if (matchedTask) {
@@ -69,7 +76,6 @@ export default function TasksPage() {
         <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
             {/* Header */}
             <header className="sticky top-0 z-40 backdrop-blur-xl bg-gray-950/80 border-b border-white/5">
-                {/* ... existing header content ... */}
                 <div className="max-w-6xl mx-auto px-6 py-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
@@ -92,22 +98,19 @@ export default function TasksPage() {
                         <div className="flex items-center gap-2 bg-white/5 rounded-xl p-1">
                             <button
                                 onClick={() => setViewMode('list')}
-                                className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? 'bg-purple-500/30 text-purple-400' : 'text-white/40 hover:text-white'
-                                    }`}
+                                className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? 'bg-purple-500/30 text-purple-400' : 'text-white/40 hover:text-white'}`}
                             >
                                 <ListTodo className="w-5 h-5" />
                             </button>
                             <button
                                 onClick={() => setViewMode('kanban')}
-                                className={`p-2 rounded-lg transition-colors ${viewMode === 'kanban' ? 'bg-purple-500/30 text-purple-400' : 'text-white/40 hover:text-white'
-                                    }`}
+                                className={`p-2 rounded-lg transition-colors ${viewMode === 'kanban' ? 'bg-purple-500/30 text-purple-400' : 'text-white/40 hover:text-white'}`}
                             >
                                 <LayoutGrid className="w-5 h-5" />
                             </button>
                             <button
                                 onClick={() => setViewMode('calendar')}
-                                className={`p-2 rounded-lg transition-colors ${viewMode === 'calendar' ? 'bg-purple-500/30 text-purple-400' : 'text-white/40 hover:text-white'
-                                    }`}
+                                className={`p-2 rounded-lg transition-colors ${viewMode === 'calendar' ? 'bg-purple-500/30 text-purple-400' : 'text-white/40 hover:text-white'}`}
                             >
                                 <CalendarIcon className="w-5 h-5" />
                             </button>
@@ -118,53 +121,8 @@ export default function TasksPage() {
 
             <main className="max-w-6xl mx-auto px-4 py-8 space-y-8">
                 {/* AI Command Center */}
-                <TaskCommandCenter />
+                <TaskCommandCenter onCommandExecuted={handleCommandExecuted} />
 
-                {/* Stats Bar */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-                    <StatsCard
-                        label="Total"
-                        count={counts.total}
-                        icon={Target}
-                        color="purple"
-                        onClick={() => setFilter('all')}
-                        active={filter === 'all'}
-                    />
-                    <StatsCard
-                        label="To Do"
-                        count={counts.todo}
-                        icon={Target}
-                        color="gray"
-                        onClick={() => setFilter('todo')}
-                        active={filter === 'todo'}
-                    />
-                    <StatsCard
-                        label="In Progress"
-                        count={counts.inProgress}
-                        icon={Clock}
-                        color="purple"
-                        onClick={() => setFilter('in_progress')}
-                        active={filter === 'in_progress'}
-                    />
-                    <StatsCard
-                        label="Done"
-                        count={counts.done}
-                        icon={CheckCircle}
-                        color="green"
-                        onClick={() => setFilter('done')}
-                        active={filter === 'done'}
-                    />
-                </div>
-        </div>
-
-            {/* Main Content */ }
-    <main className="max-w-6xl mx-auto px-6 pb-24 space-y-8">
-        {/* AI Command Center */}
-        <TaskCommandCenter />
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left: Task List / Kanban */}
-            <div className="lg:col-span-2 space-y-6">
                 {/* Stats Bar */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                     <StatsCard label="Total" count={counts.total} icon={Target} color="purple" onClick={() => setFilter('all')} active={filter === 'all'} />
@@ -173,78 +131,60 @@ export default function TasksPage() {
                     <StatsCard label="Done" count={counts.done} icon={CheckCircle} color="green" onClick={() => setFilter('done')} active={filter === 'done'} />
                 </div>
 
+                {/* View Render */}
                 {isLoading ? (
                     <div className="flex items-center justify-center py-20">
                         <div className="animate-spin w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full" />
                     </div>
-                ) : viewMode === 'list' ? (
-                    /* List View */
-                    <div className="space-y-3">
-                        <AnimatePresence mode="popLayout">
-                            {filteredTasks.length === 0 ? (
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    className="text-center py-20"
-                                >
-                                    <Target className="w-16 h-16 text-white/10 mx-auto mb-4" />
-                                    <p className="text-white/50 mb-2">No tasks yet</p>
-                                    <p className="text-sm text-white/30">Type a command above or click +</p>
-                                    ) : viewMode === 'calendar' ? (
-                                    <TaskCalendarComponent tasks={tasks} />
-                                    ) : (
-                                    <div className={viewMode === 'list' ? 'space-y-4' : 'grid grid-cols-1 md:grid-cols-3 gap-6'}>
-                                        {viewMode === 'list' ? (
+                ) : (
+                    <div className="min-h-[400px]">
+                        {viewMode === 'calendar' && (
+                            <TaskCalendarComponent tasks={tasks} />
+                        )}
+
+                        {viewMode === 'kanban' && (
+                            <div className="grid md:grid-cols-3 gap-6">
+                                <KanbanColumn title="To Do" tasks={todoTasks} color="gray" icon={Target} />
+                                <KanbanColumn title="In Progress" tasks={inProgressTasks} color="purple" icon={Clock} />
+                                <KanbanColumn title="Done" tasks={doneTasks} color="green" icon={CheckCircle} />
+                            </div>
+                        )}
+
+                        {viewMode === 'list' && (
+                            <div className="grid lg:grid-cols-3 gap-6">
+                                <div className="lg:col-span-2 space-y-3">
+                                    <AnimatePresence mode="popLayout">
+                                        {filteredTasks.length === 0 ? (
+                                            <motion.div
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                className="text-center py-20"
+                                            >
+                                                <Target className="w-16 h-16 text-white/10 mx-auto mb-4" />
+                                                <p className="text-white/50 mb-2">No tasks yet</p>
+                                                <p className="text-sm text-white/30">Type a command above or click +</p>
+                                            </motion.div>
+                                        ) : (
                                             filteredTasks.map((task) => (
                                                 <TaskCard key={task.id} task={task} />
                                             ))
-                                        ) : (
-                                            // Kanban Columns
-                                            <>
-                                                <KanbanColumn title="To Do" status="todo" tasks={tasks.filter(t => !t.completed)} />
-                                                <KanbanColumn title="Done" status="done" tasks={tasks.filter(t => t.completed)} />
-                                            </>
                                         )}
-                                    </div>
-                )}
+                                    </AnimatePresence>
                                 </div>
-
-                {/* Right: Calendar Sidebar */}
-                            <div className="lg:col-span-1 hidden lg:block">
-                                <div className="sticky top-24">
-                                    <TaskCalendar />
+                                <div className="hidden lg:block relative">
+                                    <div className="sticky top-24">
+                                        <TaskCalendarComponent tasks={tasks} />
+                                    </div>
                                 </div>
                             </div>
+                        )}
                     </div>
-    </main>
-            /* Kanban View */
-            <div className="grid md:grid-cols-3 gap-6">
-                <KanbanColumn
-                    title="To Do"
-                    tasks={todoTasks}
-                    color="gray"
-                    icon={Target}
-                />
-                <KanbanColumn
-                    title="In Progress"
-                    tasks={inProgressTasks}
-                    color="purple"
-                    icon={Clock}
-                />
-                <KanbanColumn
-                    title="Done"
-                    tasks={doneTasks}
-                    color="green"
-                    icon={CheckCircle}
-                />
-            </div>
-            )
-}
-    </main >
+                )}
+            </main>
 
-    {/* Quick Add FAB */ }
-    < TaskQuickAdd />
-        </div >
+            {/* Quick Add FAB */}
+            <TaskQuickAdd />
+        </div>
     );
 }
 
