@@ -24,6 +24,31 @@ export default function Home() {
   // MODE STATE (Global)
   const { mode } = useMode();
   const { user } = useUser();
+  const [streak, setStreak] = useState(0);
+
+  // Brick 9.5: Real Streak Logic
+  useEffect(() => {
+    const lastVisit = localStorage.getItem('last_visit_date');
+    const currentStreak = parseInt(localStorage.getItem('current_streak') || '0');
+    const today = new Date().toDateString();
+
+    if (lastVisit === today) {
+      setStreak(currentStreak);
+    } else {
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+
+      if (lastVisit === yesterday.toDateString()) {
+        const newStreak = currentStreak + 1;
+        setStreak(newStreak);
+        localStorage.setItem('current_streak', newStreak.toString());
+      } else {
+        setStreak(1); // Reset or Start
+        localStorage.setItem('current_streak', '1');
+      }
+      localStorage.setItem('last_visit_date', today);
+    }
+  }, []);
 
   const getModeData = () => {
     switch (mode) {
@@ -185,9 +210,9 @@ export default function Home() {
                   <div className="flex items-center gap-4">
                     {/* Brick 9: The Streak Flame */}
                     <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20">
-                      <Flame className="w-4 h-4 text-orange-500 fill-orange-500 animate-fire" />
+                      <Flame className={cn("w-4 h-4 text-orange-500 fill-orange-500", streak > 0 ? "animate-fire" : "opacity-50")} />
                       <span className="text-xs font-medium text-orange-200">
-                        1 Day Streak
+                        {streak} Day Streak
                       </span>
                     </div>
 
