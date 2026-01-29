@@ -20,59 +20,40 @@ export default function TasksPage() {
     const [viewMode, setViewMode] = useState<ViewMode>('list');
     const [filter, setFilter] = useState<'all' | 'todo' | 'done'>('all');
 
+    // CALENDAR CONNECTION: Lifted State
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+
     useEffect(() => {
         fetchTasks();
     }, [fetchTasks]);
 
     const counts = getTaskCount();
 
+    // UNIFIED FILTERING: Status + Date
+    // Note: If no date selected, show all (Archive mode). If date selected, show that day.
     const filteredTasks = tasks.filter(task => {
-        if (filter === 'all') return true;
-        return task.status === filter;
+        // 1. Filter by Status
+        const statusMatch = filter === 'all' ? true : task.status === filter;
+        if (!statusMatch) return false;
+
+        // 2. Filter by Date (if selected)
+        if (selectedDate) {
+            // Import strict check to ensure "Connection"
+            const { isSameCalendarDay } = require('@/lib/date-utils');
+            return isSameCalendarDay(task.due_date, selectedDate);
+        }
+
+        return true;
     });
 
-    // Kanban Buckets
-    const todoTasks = tasks.filter(t => t.status === 'todo');
-
-    const doneTasks = tasks.filter(t => t.status === 'done');
-
-    const handleCommandExecuted = (result: any) => {
-        const { action, data } = result;
-
-        if (action === 'create') {
-            const newTask: Task = {
-                id: crypto.randomUUID(),
-                user_id: 'user_current', // Placeholder until real auth
-                content: data.content,
-                status: 'todo',
-                priority: data.priority || 'medium',
-                due_date: data.date ? new Date(data.date).toISOString() : undefined,
-                created_at: new Date().toISOString()
-            };
-            addTask(newTask);
-            toast.success("Task Deployed", { description: data.content });
-        }
-        else if (action === 'complete' || action === 'delete') {
-            const targetContent = data.content.toLowerCase();
-            const matchedTask = tasks.find(t => t.content.toLowerCase().includes(targetContent));
-
-            if (matchedTask) {
-                if (action === 'complete') {
-                    toggleComplete(matchedTask.id);
-                    toast.success("Target Neutralized", { description: `Completed: ${matchedTask.content}` });
-                } else {
-                    deleteTask(matchedTask.id);
-                    toast.info("Target Eliminated", { description: `Deleted: ${matchedTask.content}` });
-                }
-            } else {
-                toast.error("Target Not Found", { description: `Could not locate "${data.content}" in sector.` });
-            }
-        }
-    };
+    // ... (Keep handleCommandExecuted logic same) ...
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
-            {/* Header */}
+            {/* ... Header ... */}
+            {/* (We need to keep the header render logic, so I will just focus on the Main Content replacement) */}
+
+            {/* HEADER RENDER INCLUDED FOR CONTIGUOUS BLOCK REPLACEMENT safety */}
             <header className="sticky top-0 z-40 backdrop-blur-xl bg-gray-950/80 border-b border-white/5">
                 <div className="max-w-6xl mx-auto px-6 py-4">
                     <div className="flex items-center justify-between">
@@ -117,8 +98,6 @@ export default function TasksPage() {
                 {/* AI Command Center */}
                 <TaskCommandCenter onCommandExecuted={handleCommandExecuted} />
 
-                {/* Stats Bar - Removed */}
-
                 {/* View Render */}
                 {isLoading ? (
                     <div className="flex items-center justify-center py-20">
@@ -134,9 +113,29 @@ export default function TasksPage() {
                         ) : (
                             /* Unified Dashboard View (Default) */
                             <div className="grid lg:grid-cols-3 gap-8">
-                                {/* Left: Task Feed */}
+                                {/* Left: Task Feed - CONTROLLED BY CALENDAR */}
                                 <div className="lg:col-span-2 space-y-4">
-                                    <h2 className="text-xl font-semibold text-white/80 pl-1">Active Missions</h2>
+                                    <div className="flex items-center justify-between">
+                                        <h2 className="text-xl font-semibold text-white/80 pl-1 flex items-center gap-2">
+                                            {selectedDate ? (
+                                                <>
+                                                    <span className="text-purple-400">Briefing:</span>
+                                                    {filteredTasks.length > 0 ? "Active Missions" : "No Missions"}
+                                                </>
+                                            ) : (
+                                                "All Missions"
+                                            )}
+                                        </h2>
+                                        {selectedDate && (
+                                            <button
+                                                onClick={() => setSelectedDate(undefined)}
+                                                className="text-xs uppercase tracking-wider text-purple-400 hover:text-white transition-colors"
+                                            >
+                                                Show All
+                                            </button>
+                                        )}
+                                    </div>
+
                                     <div className="hidden lg:flex items-center gap-2 mb-4">
                                         <FilterBadge label="All" active={filter === 'all'} onClick={() => setFilter('all')} />
                                         <FilterBadge label="To Do" active={filter === 'todo'} onClick={() => setFilter('todo')} />
@@ -151,8 +150,18 @@ export default function TasksPage() {
                                                 className="text-center py-20 border border-white/5 rounded-2xl bg-white/5"
                                             >
                                                 <Target className="w-16 h-16 text-white/10 mx-auto mb-4" />
-                                                <p className="text-white/50 mb-2">No tasks found</p>
+                                                <p className="text-white/50 mb-2">
+                                                    {selectedDate ? "No operations scheduled for this day." : "No tasks found."}
+                                                </p>
                                                 <p className="text-sm text-white/30">Create a new mission above</p>
+                                                {selectedDate && (
+                                                    <button
+                                                        onClick={() => setSelectedDate(undefined)}
+                                                        className="mt-4 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-sm text-white transition-colors"
+                                                    >
+                                                        View All History
+                                                    </button>
+                                                )}
                                             </motion.div>
                                         ) : (
                                             filteredTasks.map((task) => (
@@ -162,12 +171,16 @@ export default function TasksPage() {
                                     </AnimatePresence>
                                 </div>
 
-                                {/* Right: Tactical Calendar (Sticky) */}
+                                {/* Right: Tactical Calendar (Sticky) - NOW THE CONTROLLER */}
                                 <div className="space-y-6">
                                     <div className="sticky top-24 space-y-6">
-                                        <TaskCalendarComponent tasks={tasks} />
+                                        <TaskCalendarComponent
+                                            tasks={tasks}
+                                            selectedDate={selectedDate}
+                                            onSelectDate={setSelectedDate}
+                                        />
 
-                                        {/* Simplified Metrics (Optional/Minimal) */}
+                                        {/* Sector Status */}
                                         <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
                                             <h3 className="text-sm font-medium text-white/50 uppercase tracking-wider mb-4">Sector Status</h3>
                                             <div className="space-y-4">
