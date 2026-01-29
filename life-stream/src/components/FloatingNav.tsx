@@ -65,7 +65,7 @@ export default function FloatingNav() {
                                 </Link>
                             );
                         })}
-                    </nav>
+                    </motion.nav>
 
                     {/* User Action */}
                     <div className="flex items-center gap-4">
