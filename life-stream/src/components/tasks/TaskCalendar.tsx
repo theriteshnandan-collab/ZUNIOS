@@ -18,7 +18,6 @@ export default function TaskCalendar({ tasks }: TaskCalendarProps) {
     // Get tasks for selected date
     const selectedTasks = tasks.filter((task) => {
         if (!task.due_date || !date) return false;
-        // Handle both ISO strings and natural language that might be normalized
         try {
             return isSameDay(new Date(task.due_date), date);
         } catch (e) {
@@ -26,7 +25,10 @@ export default function TaskCalendar({ tasks }: TaskCalendarProps) {
         }
     });
 
-    // Function to determine modifiers (e.g., days with tasks)
+    const pendingTasks = selectedTasks.filter(t => t.status !== 'done');
+    const completedTasks = selectedTasks.filter(t => t.status === 'done');
+
+    // Function to determine modifiers
     const daysWithTasks = tasks.reduce((acc, task) => {
         if (task.due_date && task.status !== 'done') {
             try {
@@ -38,66 +40,99 @@ export default function TaskCalendar({ tasks }: TaskCalendarProps) {
     }, {} as Record<string, number>);
 
     return (
-        <div className="w-full max-w-xl mx-auto space-y-6">
-            <GlassCard className="p-6 flex items-center justify-center">
+        <div className="w-full h-full flex flex-col gap-6">
+            <GlassCard className="p-6 w-full">
                 <Calendar
                     mode="single"
                     selected={date}
                     onSelect={setDate}
-                    className="rounded-md border-0"
+                    className="w-full border-0"
                     classNames={{
-                        month: "space-y-4 w-full",
-                        caption: "flex justify-center pt-1 relative items-center mb-4",
-                        caption_label: "text-lg font-medium",
-                        head_row: "flex w-full justify-between mt-2",
-                        head_cell: "text-muted-foreground rounded-md w-12 font-normal text-[0.8rem] uppercase tracking-wider",
-                        row: "flex w-full justify-between mt-2",
-                        cell: "text-center text-sm p-0 relative [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
-                        day: "h-12 w-12 p-0 font-normal aria-selected:opacity-100 hover:bg-white/10 rounded-full transition-all",
-                        day_selected: "bg-purple-500 text-white hover:bg-purple-600 focus:bg-purple-600 focus:text-white",
-                        day_today: "bg-white/5 text-accent-foreground",
-                        day_outside: "text-muted-foreground opacity-50",
-                        day_disabled: "text-muted-foreground opacity-50",
-                        day_range_middle: "aria-selected:bg-accent aria-selected:text-accent-foreground",
+                        month: "w-full space-y-4",
+                        caption: "flex justify-center pt-2 relative items-center mb-6",
+                        caption_label: "text-2xl font-bold text-white",
+                        nav: "flex items-center gap-1",
+                        table: "w-full border-collapse space-y-1",
+                        head_row: "flex w-full justify-between mb-2",
+                        head_cell: "text-muted-foreground rounded-md w-full font-normal text-sm uppercase tracking-wider text-center",
+                        row: "flex w-full justify-between mt-2 gap-1",
+                        cell: "text-center p-0 relative w-full aspect-square focus-within:relative focus-within:z-20",
+                        day: "w-full h-full text-lg p-0 font-medium aria-selected:opacity-100 hover:bg-white/10 rounded-xl transition-all data-[selected]:shadow-xl",
+                        day_selected: "bg-purple-600 text-white hover:bg-purple-600 focus:bg-purple-600 focus:text-white shadow-[0_0_20px_rgba(147,51,234,0.3)]",
+                        day_today: "bg-white/5 text-accent-foreground border border-white/10",
+                        day_outside: "text-muted-foreground opacity-30",
+                        day_disabled: "text-muted-foreground opacity-30",
                         day_hidden: "invisible",
                     }}
                     modifiers={{
                         hasEntry: (d) => !!daysWithTasks[d.toDateString()]
                     }}
                     modifiersClassNames={{
-                        hasEntry: "relative after:absolute after:bottom-2 after:left-1/2 after:-translate-x-1/2 after:w-1.5 after:h-1.5 after:bg-emerald-400 after:rounded-full after:shadow-[0_0_8px_rgba(52,211,153,0.8)]"
+                        hasEntry: "relative after:absolute after:bottom-3 after:left-1/2 after:-translate-x-1/2 after:w-2 after:h-2 after:bg-emerald-400 after:rounded-full after:shadow-[0_0_8px_rgba(52,211,153,0.8)]"
                     }}
                 />
             </GlassCard>
 
-            {/* Daily Tasks List */}
+            {/* Daily Briefing - Split View */}
             <AnimatePresence mode="popLayout">
-                {date && selectedTasks.length > 0 && (
+                {date && (selectedTasks.length > 0 || pendingTasks.length === 0) && (
                     <motion.div
-                        initial={{ opacity: 0, y: 10 }}
+                        initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        className="space-y-3"
+                        exit={{ opacity: 0, y: 20 }}
+                        className="grid md:grid-cols-2 gap-6"
                     >
-                        <h3 className="text-sm font-medium text-white/50 pl-1 uppercase tracking-wider">
-                            {format(date, "MMMM do")}
-                        </h3>
-                        {selectedTasks.map((task) => (
-                            <motion.div
-                                key={task.id}
-                                layout
-                                className="bg-white/5 border border-white/10 rounded-xl p-4 flex items-center gap-4 hover:bg-white/10 transition-colors"
-                            >
-                                <div className={`p-2 rounded-full ${task.status === 'done' ? 'bg-green-500/20 text-green-400' : 'bg-white/5 text-white/40'}`}>
-                                    {task.status === 'done' ? <CheckCircle2 className="w-5 h-5" /> : <Circle className="w-5 h-5" />}
+                        {/* Pending Operations */}
+                        <div className="space-y-3">
+                            <h3 className="text-sm font-medium text-white/50 pl-1 uppercase tracking-wider flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-purple-500"></span>
+                                Pending Operations
+                            </h3>
+                            {pendingTasks.length > 0 ? (
+                                pendingTasks.map((task) => (
+                                    <motion.div
+                                        key={task.id}
+                                        layout
+                                        className="bg-white/5 border border-white/10 rounded-xl p-4 flex items-center gap-4 hover:border-purple-500/30 transition-colors"
+                                    >
+                                        <div className="p-2 rounded-full bg-white/5 text-purple-400">
+                                            <Circle className="w-5 h-5" />
+                                        </div>
+                                        <p className="text-white/90 font-medium">{task.content}</p>
+                                    </motion.div>
+                                ))
+                            ) : (
+                                <div className="p-8 rounded-xl border border-white/5 border-dashed text-center text-white/20">
+                                    <p>No pending operations</p>
                                 </div>
-                                <div className="flex-1 min-w-0">
-                                    <p className={`text-base font-medium truncate ${task.status === 'done' ? 'text-white/40 line-through' : 'text-white/90'}`}>
-                                        {task.content}
-                                    </p>
+                            )}
+                        </div>
+
+                        {/* Completed Log */}
+                        <div className="space-y-3">
+                            <h3 className="text-sm font-medium text-white/50 pl-1 uppercase tracking-wider flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                Completed Log
+                            </h3>
+                            {completedTasks.length > 0 ? (
+                                completedTasks.map((task) => (
+                                    <motion.div
+                                        key={task.id}
+                                        layout
+                                        className="bg-green-500/5 border border-green-500/10 rounded-xl p-4 flex items-center gap-4"
+                                    >
+                                        <div className="p-2 rounded-full bg-green-500/10 text-green-400">
+                                            <CheckCircle2 className="w-5 h-5" />
+                                        </div>
+                                        <p className="text-white/40 font-medium line-through">{task.content}</p>
+                                    </motion.div>
+                                ))
+                            ) : (
+                                <div className="p-8 rounded-xl border border-white/5 border-dashed text-center text-white/20">
+                                    <p>No completed tasks</p>
                                 </div>
-                            </motion.div>
-                        ))}
+                            )}
+                        </div>
                     </motion.div>
                 )}
             </AnimatePresence>
