@@ -25,6 +25,22 @@ export default function TasksPage() {
 
     // ... (filters)
 
+    const handleCommandExecuted = (result: any) => {
+        // Logic to handle the parsed command
+        if (result.action === 'create') {
+            const newTask: Task = {
+                id: crypto.randomUUID(),
+                content: result.data.content,
+                completed: false,
+                priority: result.data.priority || 'medium',
+                date: result.data.due_date, // AI might return 'tomorrow' string, needs parsing if we want strictly dates, but for now trusting string or handling in renderer
+                createdAt: new Date()
+            };
+            addTask(newTask); // Using addTask from the store
+        }
+        // TODO: Handle 'complete' and 'delete'
+    };
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
             {/* Header */}
