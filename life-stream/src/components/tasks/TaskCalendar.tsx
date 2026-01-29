@@ -39,73 +39,39 @@ export default function TaskCalendar({ tasks }: TaskCalendarProps) {
     }, {} as Record<string, number>);
 
     return (
-        <div className="grid md:grid-cols-12 gap-6">
-            {/* Calendar Side */}
-            <div className="md:col-span-5 lg:col-span-4">
-                <GlassCard className="p-4">
-                    <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        className="w-full"
-                        modifiers={{
-                            hasTask: (d) => !!daysWithTasks[d.toDateString()]
-                        }}
-                        modifiersClassNames={{
-                            hasTask: "relative after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-purple-500 after:rounded-full"
-                        }}
-                    />
-                </GlassCard>
-            </div>
+        <div className="w-full max-w-xl mx-auto">
+            <GlassCard className="p-6 flex items-center justify-center">
+                <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    className="rounded-md border-0"
+                    classNames={{
+                        month: "space-y-4 w-full",
+                        caption: "flex justify-center pt-1 relative items-center mb-4",
+                        caption_label: "text-lg font-medium",
+                        head_row: "flex w-full justify-between mt-2",
+                        head_cell: "text-muted-foreground rounded-md w-12 font-normal text-[0.8rem] uppercase tracking-wider",
+                        row: "flex w-full justify-between mt-2",
+                        cell: "text-center text-sm p-0 relative [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
+                        day: "h-12 w-12 p-0 font-normal aria-selected:opacity-100 hover:bg-white/10 rounded-full transition-all",
+                        day_selected: "bg-purple-500 text-white hover:bg-purple-600 focus:bg-purple-600 focus:text-white",
+                        day_today: "bg-white/5 text-accent-foreground",
+                        day_outside: "text-muted-foreground opacity-50",
+                        day_disabled: "text-muted-foreground opacity-50",
+                        day_range_middle: "aria-selected:bg-accent aria-selected:text-accent-foreground",
+                        day_hidden: "invisible",
+                    }}
+                    modifiers={{
+                        hasTask: (d) => !!daysWithTasks[d.toDateString()]
+                    }}
+                    modifiersClassNames={{
+                        hasTask: "relative after:absolute after:bottom-2 after:left-1/2 after:-translate-x-1/2 after:w-1.5 after:h-1.5 after:bg-emerald-400 after:rounded-full after:shadow-[0_0_8px_rgba(52,211,153,0.8)]"
+                    }}
+                />
+            </GlassCard>
 
-            {/* Agenda Side */}
-            <div className="md:col-span-7 lg:col-span-8">
-                <div className="space-y-4">
-                    <h3 className="text-xl font-serif text-white/80">
-                        {date ? format(date, "MMMM do, yyyy") : "Select a date"}
-                    </h3>
-
-                    <AnimatePresence mode="popLayout">
-                        {selectedTasks.length > 0 ? (
-                            selectedTasks.map((task) => (
-                                <motion.div
-                                    key={task.id}
-                                    initial={{ opacity: 0, x: -20 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: 20 }}
-                                    className="bg-white/5 border border-white/10 rounded-xl p-4 flex items-center gap-4 group hover:bg-white/10 transition-colors"
-                                >
-                                    <div className={`p-2 rounded-full ${task.priority === 'high' ? 'bg-red-500/20 text-red-400' : 'bg-white/5 text-white/40'}`}>
-                                        {task.completed ? <CheckCircle2 className="w-5 h-5" /> : <Circle className="w-5 h-5" />}
-                                    </div>
-
-                                    <div className="flex-1">
-                                        <p className={`text-base ${task.completed ? 'text-white/30 line-through' : 'text-white/90'}`}>
-                                            {task.content}
-                                        </p>
-                                        <div className="flex items-center gap-2 mt-1">
-                                            {task.priority === 'high' && (
-                                                <span className="text-xs text-red-400 font-medium px-2 py-0.5 rounded-full bg-red-500/10 border border-red-500/20">
-                                                    High Priority
-                                                </span>
-                                            )}
-                                            <span className="text-xs text-white/30 flex items-center gap-1">
-                                                <Clock className="w-3 h-3" />
-                                                Due {task.date ? format(new Date(task.date), "h:mm a") : "All Day"}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            ))
-                        ) : (
-                            <div className="text-center py-12 opacity-40">
-                                <Clock className="w-12 h-12 mx-auto mb-3 text-white/20" />
-                                <p>No operations scheduled for this sector.</p>
-                            </div>
-                        )}
-                    </AnimatePresence>
-                </div>
-            </div>
+            {/* Optional Summary Below - Removed per request "No operations scheduled thing" */}
         </div>
     );
 }
