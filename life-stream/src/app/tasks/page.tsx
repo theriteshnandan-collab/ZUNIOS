@@ -97,20 +97,16 @@ export default function TasksPage() {
                             <button
                                 onClick={() => setViewMode('list')}
                                 className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? 'bg-purple-500/30 text-purple-400' : 'text-white/40 hover:text-white'}`}
+                                title="Dashboard View"
                             >
                                 <ListTodo className="w-5 h-5" />
                             </button>
                             <button
                                 onClick={() => setViewMode('kanban')}
                                 className={`p-2 rounded-lg transition-colors ${viewMode === 'kanban' ? 'bg-purple-500/30 text-purple-400' : 'text-white/40 hover:text-white'}`}
+                                title="Kanban Board"
                             >
                                 <LayoutGrid className="w-5 h-5" />
-                            </button>
-                            <button
-                                onClick={() => setViewMode('calendar')}
-                                className={`p-2 rounded-lg transition-colors ${viewMode === 'calendar' ? 'bg-purple-500/30 text-purple-400' : 'text-white/40 hover:text-white'}`}
-                            >
-                                <CalendarIcon className="w-5 h-5" />
                             </button>
                         </div>
                     </div>
@@ -121,13 +117,7 @@ export default function TasksPage() {
                 {/* AI Command Center */}
                 <TaskCommandCenter onCommandExecuted={handleCommandExecuted} />
 
-                {/* Stats Bar */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
-                    <StatsCard label="Total" count={counts.total} icon={Target} color="purple" onClick={() => setFilter('all')} active={filter === 'all'} />
-                    <StatsCard label="To Do" count={counts.todo} icon={Target} color="gray" onClick={() => setFilter('todo')} active={filter === 'todo'} />
-                    <StatsCard label="In Progress" count={counts.inProgress} icon={Clock} color="purple" onClick={() => setFilter('in_progress')} active={filter === 'in_progress'} />
-                    <StatsCard label="Done" count={counts.done} icon={CheckCircle} color="green" onClick={() => setFilter('done')} active={filter === 'done'} />
-                </div>
+                {/* Stats Bar - Removed */}
 
                 {/* View Render */}
                 {isLoading ? (
@@ -136,31 +126,35 @@ export default function TasksPage() {
                     </div>
                 ) : (
                     <div className="min-h-[400px]">
-                        {viewMode === 'calendar' && (
-                            <TaskCalendarComponent tasks={tasks} />
-                        )}
-
-                        {viewMode === 'kanban' && (
+                        {viewMode === 'kanban' ? (
                             <div className="grid md:grid-cols-3 gap-6">
                                 <KanbanColumn title="To Do" tasks={todoTasks} color="gray" icon={Target} />
                                 <KanbanColumn title="In Progress" tasks={inProgressTasks} color="purple" icon={Clock} />
                                 <KanbanColumn title="Done" tasks={doneTasks} color="green" icon={CheckCircle} />
                             </div>
-                        )}
+                        ) : (
+                            /* Unified Dashboard View (Default) */
+                            <div className="grid lg:grid-cols-3 gap-8">
+                                {/* Left: Task Feed */}
+                                <div className="lg:col-span-2 space-y-4">
+                                    <h2 className="text-xl font-semibold text-white/80 pl-1">Active Missions</h2>
+                                    <div className="hidden lg:flex items-center gap-2 mb-4">
+                                        <FilterBadge label="All" active={filter === 'all'} onClick={() => setFilter('all')} />
+                                        <FilterBadge label="To Do" active={filter === 'todo'} onClick={() => setFilter('todo')} />
+                                        <FilterBadge label="In Progress" active={filter === 'in_progress'} onClick={() => setFilter('in_progress')} />
+                                        <FilterBadge label="Done" active={filter === 'done'} onClick={() => setFilter('done')} />
+                                    </div>
 
-                        {viewMode === 'list' && (
-                            <div className="grid lg:grid-cols-3 gap-6">
-                                <div className="lg:col-span-2 space-y-3">
                                     <AnimatePresence mode="popLayout">
                                         {filteredTasks.length === 0 ? (
                                             <motion.div
                                                 initial={{ opacity: 0 }}
                                                 animate={{ opacity: 1 }}
-                                                className="text-center py-20"
+                                                className="text-center py-20 border border-white/5 rounded-2xl bg-white/5"
                                             >
                                                 <Target className="w-16 h-16 text-white/10 mx-auto mb-4" />
-                                                <p className="text-white/50 mb-2">No tasks yet</p>
-                                                <p className="text-sm text-white/30">Type a command above or click +</p>
+                                                <p className="text-white/50 mb-2">No tasks found</p>
+                                                <p className="text-sm text-white/30">Create a new mission above</p>
                                             </motion.div>
                                         ) : (
                                             filteredTasks.map((task) => (
@@ -169,9 +163,27 @@ export default function TasksPage() {
                                         )}
                                     </AnimatePresence>
                                 </div>
-                                <div className="hidden lg:block relative">
-                                    <div className="sticky top-24">
+
+                                {/* Right: Tactical Calendar (Sticky) */}
+                                <div className="space-y-6">
+                                    <div className="sticky top-24 space-y-6">
                                         <TaskCalendarComponent tasks={tasks} />
+
+                                        {/* Simplified Metrics (Optional/Minimal) */}
+                                        <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
+                                            <h3 className="text-sm font-medium text-white/50 uppercase tracking-wider mb-4">Sector Status</h3>
+                                            <div className="space-y-4">
+                                                <MetricRow label="Pending" value={counts.todo} color="text-white" />
+                                                <MetricRow label="Active" value={counts.inProgress} color="text-purple-400" />
+                                                <MetricRow label="Complete" value={counts.done} color="text-emerald-400" />
+                                                <div className="pt-4 mt-4 border-t border-white/10 flex justify-between items-center">
+                                                    <span className="text-sm text-white/40">Total Efficiency</span>
+                                                    <span className="text-xl font-bold text-white">
+                                                        {counts.total > 0 ? Math.round((counts.done / counts.total) * 100) : 0}%
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -186,36 +198,27 @@ export default function TasksPage() {
     );
 }
 
-// Stats Card Component
-function StatsCard({ label, count, icon: Icon, color, onClick, active }: {
-    label: string;
-    count: number;
-    icon: LucideIcon;
-    color: 'purple' | 'green' | 'gray';
-    onClick: () => void;
-    active: boolean;
-}) {
-    const colorMap = {
-        purple: 'from-purple-500/20 to-pink-500/20 border-purple-500/30',
-        green: 'from-green-500/20 to-emerald-500/20 border-green-500/30',
-        gray: 'from-white/5 to-white/5 border-white/10'
-    };
-
+// Minimal Components
+function FilterBadge({ label, active, onClick }: { label: string, active: boolean, onClick: () => void }) {
     return (
-        <motion.button
+        <button
             onClick={onClick}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className={`
-                p-4 rounded-2xl bg-gradient-to-br border text-left transition-all
-                ${colorMap[color]}
-                ${active ? 'ring-2 ring-purple-500/50' : ''}
-            `}
+            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${active
+                ? 'bg-purple-500 text-white'
+                : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white'
+                }`}
         >
-            <Icon className={`w-5 h-5 mb-2 ${color === 'green' ? 'text-green-400' : color === 'purple' ? 'text-purple-400' : 'text-white/40'}`} />
-            <div className="text-2xl font-bold text-white">{count}</div>
-            <div className="text-sm text-white/50">{label}</div>
-        </motion.button>
+            {label}
+        </button>
+    );
+}
+
+function MetricRow({ label, value, color }: { label: string, value: number, color: string }) {
+    return (
+        <div className="flex items-center justify-between">
+            <span className="text-white/60 text-sm">{label}</span>
+            <span className={`font-mono font-bold ${color}`}>{value}</span>
+        </div>
     );
 }
 
