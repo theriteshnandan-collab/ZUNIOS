@@ -103,23 +103,26 @@ export default function JournalGrid({ dreams, onSelect, onDelete, deletingId }: 
                         </div>
                     </GlassCard>
                 </div>
-            ))}
-            );
+                </div>
+    ))
+}
+        </div >
+    );
 }
 
-            function JournalBadge({category}: {category ?: string}) {
+function JournalBadge({ category }: { category?: string }) {
     const config: any = {
-                dream: {label: 'Vision', color: 'bg-purple-500/10 text-purple-300 border-purple-500/20' },
-            idea: {label: 'Build', color: 'bg-amber-500/10 text-amber-300 border-amber-500/20' },
-            win: {label: 'Log', color: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20' },
-            thought: {label: 'Think', color: 'bg-blue-500/10 text-blue-300 border-blue-500/20' },
+        dream: { label: 'Vision', color: 'bg-purple-500/10 text-purple-300 border-purple-500/20' },
+        idea: { label: 'Build', color: 'bg-amber-500/10 text-amber-300 border-amber-500/20' },
+        win: { label: 'Log', color: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20' },
+        thought: { label: 'Think', color: 'bg-blue-500/10 text-blue-300 border-blue-500/20' },
     };
 
-            const style = config[category || 'thought'] || config.thought;
+    const style = config[category || 'thought'] || config.thought;
 
-            return (
-            <span className={cn("text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border font-medium", style.color)}>
-                {style.label}
-            </span>
-            );
+    return (
+        <span className={cn("text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border font-medium", style.color)}>
+            {style.label}
+        </span>
+    );
 }
