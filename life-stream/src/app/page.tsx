@@ -182,6 +182,19 @@ export default function Home() {
                   transition={{ delay: i * 0.1 }}
                   className="p-3 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors"
                 >
+                  <div className="flex items-center gap-4">
+                    {/* Brick 9: The Streak Flame */}
+                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20">
+                      <Flame className="w-4 h-4 text-orange-500 fill-orange-500 animate-fire" />
+                      <span className="text-xs font-medium text-orange-200">
+                        1 Day Streak
+                      </span>
+                    </div>
+
+                    <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10">
+                      <UserButton afterSignOutUrl="/" />
+                    </div>
+                  </div>
                   <p className="text-muted-foreground leading-relaxed text-base">{item}</p>
                 </motion.div>
               ))}

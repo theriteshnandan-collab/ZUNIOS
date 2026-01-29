@@ -26,6 +26,30 @@
   }
 }
 
+@keyframes fire-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+    filter: drop-shadow(0 0 0px rgba(249, 115, 22, 0));
+  }
+
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+    filter: drop-shadow(0 0 10px rgba(249, 115, 22, 0.5));
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+    filter: drop-shadow(0 0 0px rgba(249, 115, 22, 0));
+  }
+}
+
+.animate-fire {
+  animation: fire-pulse 2s ease-in-out infinite;
+}
+
 .animate-ken-burns {
   animation: ken-burns 20s ease-out infinite alternate;
   will-change: transform;
