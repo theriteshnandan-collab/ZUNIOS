@@ -15,6 +15,7 @@ import DreamImage from "@/components/DreamImage";
 import confetti from "canvas-confetti";
 import LandingSections from "@/components/marketing/LandingSections";
 import ZuniosLogo from "@/components/ZuniosLogo";
+import { useTaskStore } from "@/stores/taskStore";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,6 +25,7 @@ export default function Home() {
   // MODE STATE (Global)
   const { mode } = useMode();
   const { user } = useUser();
+  const { addTask } = useTaskStore();
   const [streak, setStreak] = useState(0);
 
   // Brick 9.5: Real Streak Logic
@@ -91,6 +93,15 @@ export default function Home() {
         const data = await response.json();
 
         if (data.error) throw new Error(data.error);
+
+        // ACTUALLY CREATE THE TASK
+        if (data.action === 'create' && data.data) {
+          await addTask({
+            content: data.data.content,
+            priority: (data.data.priority?.toLowerCase() as any) || 'medium',
+            due_date: data.data.due_date,
+          });
+        }
 
         // Success - Task Created
         confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
