@@ -97,6 +97,9 @@
   html {
     background-color: #0d0a12;
     color-scheme: dark;
+    touch-action: manipulation;
+    /* Zero-Lag Tap */
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
