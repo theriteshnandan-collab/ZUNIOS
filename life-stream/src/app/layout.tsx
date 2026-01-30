@@ -7,7 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import BackgroundLayout from "@/components/BackgroundLayout";
 import FloatingNav from "@/components/FloatingNav";
 import Footer from "@/components/Footer";
-import PrivacyShield from "@/components/layout/PrivacyShield";
+import Footer from "@/components/Footer";
 import NotificationManager from "@/components/NotificationManager";
 import { ModeProvider } from "@/components/ModeProvider";
 import OnboardingModal from "@/components/OnboardingModal";
