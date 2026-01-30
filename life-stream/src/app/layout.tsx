@@ -11,6 +11,7 @@ import PrivacyShield from "@/components/layout/PrivacyShield";
 import NotificationManager from "@/components/NotificationManager";
 import { ModeProvider } from "@/components/ModeProvider";
 import OnboardingModal from "@/components/OnboardingModal";
+import NeuralSearch from "@/components/NeuralSearch";
 import NoiseOverlay from "@/components/ui/NoiseOverlay";
 
 import { Inter, Crimson_Pro, JetBrains_Mono } from "next/font/google";
@@ -94,6 +95,7 @@ export default function RootLayout({
           <ModeProvider>
             <OnboardingModal />
             <NotificationManager />
+            <NeuralSearch />
             <PrivacyShield />
             <NoiseOverlay />
             <BackgroundLayout>

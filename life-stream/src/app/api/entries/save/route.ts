@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { generateEmbedding } from "@/lib/embeddings";
+import { generateEmbedding } from "@/lib/vector";
 
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60; // Allow up to 60 seconds for embedding generation

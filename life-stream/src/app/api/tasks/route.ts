@@ -3,6 +3,9 @@ import { createClient } from "@supabase/supabase-js";
 import { auth } from "@clerk/nextjs/server";
 import type { Task, CreateTaskInput, UpdateTaskInput } from "@/types/task";
 
+
+import { generateEmbedding } from "@/lib/vector";
+
 export const dynamic = 'force-dynamic';
 
 // Initialize Supabase
@@ -71,6 +74,16 @@ export async function POST(req: Request) {
 
         const supabase = getSupabase();
 
+        // Generate Embedding for Neural Recall
+        let embedding = null;
+        try {
+            if (body.content && body.content.trim().length > 0) {
+                embedding = await generateEmbedding(body.content.trim());
+            }
+        } catch (e) {
+            console.error("Vector generation failed:", e);
+        }
+
         const newTask = {
             user_id: guestId,
             content: body.content.trim(),
@@ -78,7 +91,8 @@ export async function POST(req: Request) {
             priority: body.priority || 'medium',
             due_date: body.due_date || null,
             source_entry_id: body.source_entry_id || null,
-            created_at: new Date().toISOString()
+            created_at: new Date().toISOString(),
+            embedding // Neural Slot
         };
 
         const { data, error } = await supabase

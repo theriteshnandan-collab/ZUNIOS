@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
 import { Moon, Sparkles, Lightbulb, Target, BrainCircuit, Zap } from "lucide-react";
 import OmniInput from "@/components/OmniInput";
@@ -21,7 +21,7 @@ import { useTaskStore } from "@/stores/taskStore";
 import { useAppBadge } from "@/hooks/useAppBadge";
 import { parseCommandLocally } from "@/lib/local-intelligence";
 
-export default function Home() {
+function HomeContent() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [result, setResult] = useState<any>(null);
@@ -441,5 +441,17 @@ export default function Home() {
         </motion.div>
       )}
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-[#050510]">
+        <div className="animate-pulse text-white/20">Initializing Core...</div>
+      </div>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Home, BookOpen, Target, Compass } from "lucide-react";
+import { Home, BookOpen, Target, Compass, Search } from "lucide-react";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from "@/lib/utils";
@@ -24,7 +24,14 @@ export default function FloatingNav() {
         { name: "Journal", icon: BookOpen, href: "/journal" },
         { name: "Tasks", icon: Target, href: "/tasks" },
         { name: "North Star", icon: Compass, href: "/manifesto" },
+        // Special item for Search (handled differently in render)
+        { name: "Search", icon: Search, href: "#search" },
     ];
+
+    const openSearch = (e: React.MouseEvent) => {
+        e.preventDefault();
+        window.dispatchEvent(new Event("open-neural-search"));
+    };
 
     return (
         <>
@@ -45,8 +52,15 @@ export default function FloatingNav() {
                     >
                         {navItems.map(link => {
                             const isActive = pathname === link.href;
+                            const isSearch = link.name === "Search";
+
                             return (
-                                <Link key={link.href} href={link.href} className="relative group">
+                                <Link
+                                    key={link.name}
+                                    href={link.href}
+                                    onClick={isSearch ? openSearch : undefined}
+                                    className="relative group"
+                                >
                                     <div className={cn(
                                         "relative z-10 p-4 rounded-full transition-all duration-300 touch-manipulation", // Hit Area 48px+ (p-4 + icon)
                                         isActive ? "text-purple-300 bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5",
@@ -118,10 +132,13 @@ export default function FloatingNav() {
                 <div className="flex items-center justify-around h-16 px-2">
                     {navItems.map((item) => {
                         const isActive = pathname === item.href;
+                        const isSearch = item.name === "Search";
+
                         return (
                             <Link
                                 key={item.name}
                                 href={item.href}
+                                onClick={isSearch ? openSearch : undefined}
                                 className={cn(
                                     "flex flex-col items-center justify-center gap-1 w-full h-full touch-target",
                                     isActive ? "text-white" : "text-white/40"
