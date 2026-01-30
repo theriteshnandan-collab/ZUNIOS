@@ -174,27 +174,17 @@ export default function DreamInsightModal({ dream, isOpen, onClose }: DreamInsig
                                                         dream.category === 'journal' ? 'Council Wisdom' :
                                                             'Dream Analysis'}
                                             </h3>
-                                            <div className="space-y-3">
+                                            <div className="space-y-4">
                                                 {insights.map((insight, index) => {
-                                                    // Parser logic embedded for simplicity
-                                                    const parts = insight.split(':');
-                                                    const title = parts.length > 1 ? parts[0].trim() : null;
-                                                    const content = parts.length > 1 ? parts.slice(1).join(':').trim() : insight;
-                                                    const isSpecial = title && (title.includes('CEO') || title.includes('CTO') || title.includes('CMO') || title.includes('Stoic') || title.includes('Zen') || title.includes('Leverage'));
+                                                    // Clean parser: just get the text, ignore "Title:" prefixes if they look like metadata
+                                                    const cleanText = insight.replace(/^(Streak|Level|Status|CEO|CTO|Stoic|Zen).*?:/i, "").trim();
 
                                                     return (
                                                         <div
                                                             key={index}
-                                                            className="bg-white/5 rounded-lg p-3 text-sm leading-relaxed font-serif text-base border border-white/5 flex flex-col gap-2"
+                                                            className="bg-white/5 rounded-2xl p-4 text-base leading-relaxed font-serif border border-white/5 hover:bg-white/10 transition-colors"
                                                         >
-                                                            {isSpecial && (
-                                                                <div className="w-fit">
-                                                                    <span className="bg-primary/20 text-primary-foreground/90 px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider border border-primary/20">
-                                                                        {title}
-                                                                    </span>
-                                                                </div>
-                                                            )}
-                                                            <span className="opacity-90">{content}</span>
+                                                            <p className="opacity-90">{cleanText || insight}</p>
                                                         </div>
                                                     );
                                                 })}
