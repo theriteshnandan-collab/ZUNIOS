@@ -40,5 +40,6 @@ export const PRIORITY_CONFIG = {
 // Status configuration with colors
 export const STATUS_CONFIG = {
     todo: { label: 'To Do', color: '#9CA3AF', icon: 'Circle' },
+    in_progress: { label: 'In Progress', color: '#3B82F6', icon: 'Clock' },
     done: { label: 'Done', color: '#10B981', icon: 'CheckCircle' }
 } as const;
