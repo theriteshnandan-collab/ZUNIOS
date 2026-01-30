@@ -64,14 +64,22 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Zunios | The OS for Your Mind",
     description: "Capture your consciousness. Record visions, builds, logs, and thoughts in a unified operating system for your potential.",
+    url: "https://zunios.codes",
+    siteName: "Zunios",
+    images: [{
+      url: "https://zunios.codes/og-image.jpg", // You need to add this image to public/ folder
+      width: 1200,
+      height: 630,
+      alt: "Zunios Dashboard Interface"
+    }],
     type: "website",
     locale: "en_US",
-    siteName: "Zunios",
   },
   twitter: {
     card: "summary_large_image",
     title: "Zunios | The OS for Your Mind",
     description: "Decode your subconscious with AI-powered analysis",
+    images: ["https://zunios.codes/og-image.jpg"],
   },
   robots: {
     index: true,
@@ -91,7 +99,6 @@ export default function RootLayout({
           className={`${inter.variable} ${crimsonPro.variable} ${jetbrainsMono.variable} antialiased bg-[#050510] text-[#E0E0E0] select-none`}
         >
           <ModeProvider>
-            <OnboardingModal />
             <OnboardingModal />
             <NotificationManager />
             {/* <NeuralSearch /> Removed as per user request */}
