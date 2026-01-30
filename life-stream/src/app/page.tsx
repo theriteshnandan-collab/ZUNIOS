@@ -262,7 +262,13 @@ function HomeContent() {
         })
       });
 
-      const data = await response.json();
+      let data;
+      const responseText = await response.text();
+      try {
+        data = JSON.parse(responseText);
+      } catch (e) {
+        throw new Error(`Server connection failed (${response.status}): ${responseText.substring(0, 100)}...`);
+      }
 
       if (data.error) throw new Error(data.error);
 

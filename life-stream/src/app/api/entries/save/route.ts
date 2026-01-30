@@ -30,7 +30,7 @@ export async function POST(req: Request) {
             // Add timeout to embedding generation
             const embeddingPromise = generateEmbedding(content);
             const timeoutPromise = new Promise((_, reject) =>
-                setTimeout(() => reject(new Error('Embedding timeout')), 30000)
+                setTimeout(() => reject(new Error('Embedding timeout')), 5000)
             );
             embedding = await Promise.race([embeddingPromise, timeoutPromise]);
         } catch (embeddingError: any) {
