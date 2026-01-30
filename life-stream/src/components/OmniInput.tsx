@@ -22,10 +22,11 @@ interface OmniInputProps {
     onAnalyze: (text: string, mode: EntryMode) => void;
     isAnalyzing: boolean;
     initialMode?: EntryMode;
+    initialValue?: string;
 }
 
-export default function OmniInput({ onAnalyze, isAnalyzing, initialMode = 'thought' }: OmniInputProps) {
-    const [text, setText] = useState("");
+export default function OmniInput({ onAnalyze, isAnalyzing, initialMode = 'thought', initialValue = '' }: OmniInputProps) {
+    const [text, setText] = useState(initialValue);
     const [predictedMode, setPredictedMode] = useState<EntryMode>(initialMode);
     const [showTemplates, setShowTemplates] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);

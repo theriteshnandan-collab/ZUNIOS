@@ -1,6 +1,6 @@
 // Task types for KOGITO Task System
 
-export type TaskStatus = 'todo' | 'done';
+export type TaskStatus = 'todo' | 'in_progress' | 'done';
 export type TaskPriority = 'low' | 'medium' | 'high';
 
 export interface Task {

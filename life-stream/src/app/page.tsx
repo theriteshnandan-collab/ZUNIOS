@@ -33,7 +33,7 @@ function HomeContent() {
   const { user } = useUser();
   const addTask = useTaskStore((state) => state.addTask);
   const tasks = useTaskStore((state) => state.tasks);
-  const incompleteCount = tasks.filter(t => t.status === 'todo' || t.status === 'in-progress').length;
+  const incompleteCount = tasks.filter(t => t.status === 'todo' || t.status === 'in_progress').length;
 
   // 🔴 BRICK W5: THE RED DOT
   useAppBadge(incompleteCount);
