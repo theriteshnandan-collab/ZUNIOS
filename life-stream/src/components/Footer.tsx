@@ -6,7 +6,7 @@ import ZuniosLogo from "@/components/ZuniosLogo";
 
 export default function Footer() {
     return (
-        <footer className="mt-32 pb-12 w-full px-4 bg-transparent">
+        <footer className="mt-32 pb-12 w-full px-4 bg-transparent hidden md:block">
             <div className="container mx-auto max-w-4xl">
                 {/* Manifesto / Philosophy Section */}
                 <div className="mb-20 text-center space-y-6">
