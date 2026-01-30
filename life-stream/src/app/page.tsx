@@ -293,12 +293,12 @@ function HomeContent() {
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="z-10 w-full max-w-4xl flex flex-col md:grid md:grid-cols-[280px_1fr] gap-6 items-start"
+          className="z-10 w-full max-w-6xl flex flex-col md:grid md:grid-cols-[450px_1fr] gap-8 items-start"
         >
-          {/* Image Side - Controlled Size */}
-          <div className="relative group w-full md:w-[280px] shrink-0">
-            <div className="absolute -inset-1 bg-gradient-to-r from-primary to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200" />
-            <div className="relative rounded-xl shadow-2xl w-full aspect-square md:aspect-auto md:h-[280px] overflow-hidden bg-black/50">
+          {/* Image Side - Cinematic Size */}
+          <div className="relative group w-full md:w-[450px] shrink-0">
+            <div className="absolute -inset-2 bg-gradient-to-r from-primary/30 to-purple-600/30 rounded-3xl blur-2xl opacity-20 group-hover:opacity-50 transition duration-1000" />
+            <div className="relative rounded-2xl shadow-2xl w-full aspect-square md:h-[450px] overflow-hidden bg-black/50 border border-white/10">
               <DreamImage
                 src={result.imageUrl}
                 alt="Visualization"
@@ -310,41 +310,28 @@ function HomeContent() {
           {/* Analysis Side */}
           <div className="space-y-6">
             <div className="space-y-2">
-              <h2 className="text-3xl font-bold font-serif tracking-tight">{result.theme}</h2>
-              <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
+              <h2 className="text-4xl font-bold font-serif tracking-tight leading-tight">{result.theme}</h2>
+              <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20">
                 {result.mood}
               </div>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-4">
               {(Array.isArray(result.interpretation) ? result.interpretation : [result.interpretation || "Analysis unavailable"]).map((item: string, i: number) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.1 }}
-                  className="p-3 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors"
+                  className="p-5 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors"
                 >
-                  <div className="flex items-center gap-4">
-                    {/* Brick 9: The Streak Zap (Lightning) - Stability Update */}
-                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20">
-                      <Zap className={cn("w-4 h-4 text-orange-500 fill-orange-500", streak > 0 ? "animate-fire" : "opacity-50")} />
-                      <span className="text-xs font-medium text-orange-200">
-                        {streak} Day Streak
-                      </span>
-                    </div>
-
-                    <div className="w-10 h-10 rounded-full overflow-hidden border border-white/10">
-                      <UserButton afterSignOutUrl="/" />
-                    </div>
-                  </div>
-                  <p className="text-muted-foreground leading-relaxed text-base">{item}</p>
+                  <p className="text-slate-300 leading-relaxed text-lg font-light">{item}</p>
                 </motion.div>
               ))}
 
               {/* ZUNIOS Signature */}
               <div className="text-right pt-2">
-                <span className="text-sm text-white/30 italic">— ZUNIOS</span>
+                <span className="text-sm text-white/30 italic tracking-widest">— ZUNIOS</span>
               </div>
             </div>
 
