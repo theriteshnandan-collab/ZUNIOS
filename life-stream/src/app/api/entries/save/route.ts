@@ -14,8 +14,13 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
         }
 
-        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-        const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+        if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+            console.error("Supabase Environment Variables Missing");
+            return NextResponse.json({ error: "Database configuration missing" }, { status: 500 });
+        }
+
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
         const supabase = createClient(supabaseUrl, supabaseKey);
 
         // 1. Generate Embedding (with timeout protection)
@@ -50,8 +55,8 @@ export async function POST(req: Request) {
             insertData.embedding = embedding;
         }
 
-        // 3. Insert into DB
-        const { data, error } = await supabase.from('dreams').insert(insertData).select();
+        // 3. Insert into DB - CORRECTION: Table is 'entries', not 'dreams'
+        const { data, error } = await supabase.from('entries').insert(insertData).select();
 
         if (error) {
             console.error("Supabase Insert Error:", error);
