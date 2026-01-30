@@ -60,7 +60,7 @@ export default function Home() {
   // Detects ?mode=X from PWA Shortcuts and sets the state.
   useEffect(() => {
     const shortcutMode = searchParams.get('mode');
-    if (shortcutMode && ['task', 'idea', 'journal', 'dream'].includes(shortcutMode)) {
+    if (shortcutMode && ['task', 'idea', 'journal', 'dream', 'thought'].includes(shortcutMode)) {
       // Map 'task' to appropriate internal mode if needed, or just set it.
       // Note: 'task' isn't a visual mode in EntryMode yet, but we treat it as specialized input.
       // For now, map 'task' to 'thought' but with a special flag, or just focus.
