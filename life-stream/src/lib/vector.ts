@@ -1,4 +1,4 @@
-import { pipeline } from '@xenova/transformers';
+// import { pipeline } from '@xenova/transformers'; // Removed static import
 
 /**
  * ZUNIOS VECTOR INTELLIGENCE
@@ -15,7 +15,14 @@ let pipelineInstance: any = null;
  */
 async function getPipeline() {
     if (!pipelineInstance) {
-        pipelineInstance = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+        try {
+            // Dynamic import to prevent build/runtime crashes if module is missing (e.g. sharp issue)
+            const { pipeline } = await import('@xenova/transformers');
+            pipelineInstance = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2');
+        } catch (error) {
+            console.error("Failed to load Transformer Pipeline:", error);
+            throw new Error("AI Model Load Failed");
+        }
     }
     return pipelineInstance;
 }
