@@ -20,6 +20,7 @@ import ZuniosLogo from "@/components/ZuniosLogo";
 import { useTaskStore } from "@/stores/taskStore";
 import { useAppBadge } from "@/hooks/useAppBadge";
 import { parseCommandLocally } from "@/lib/local-intelligence";
+import MobileDashboard from "@/components/mobile/MobileDashboard";
 
 function HomeContent() {
   const [isLoading, setIsLoading] = useState(false);
@@ -400,6 +401,10 @@ function HomeContent() {
             <ZuniosLogo size="xl" showText={true} className="flex-col !gap-4" />
           </div>
 
+          {/* 📱 MOBILE DASHBOARD (Tactical HUD) */}
+          <MobileDashboard />
+
+          {/* 💻 DESKTOP HERO TEXT */}
           <h1 className="text-4xl md:text-7xl font-bold font-serif tracking-tight bg-gradient-to-br from-white via-white to-white/50 bg-clip-text text-transparent pb-2 hidden sm:block">
             The OS for <br /> Your Mind
           </h1>
