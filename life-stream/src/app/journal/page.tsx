@@ -252,10 +252,19 @@ export default function JournalPage() {
             <main className="max-w-7xl mx-auto px-6 py-8">
                 <div className="max-w-7xl mx-auto space-y-8">
                     {/* 1. Stats Row & Calendar Dashboard */}
-                    {/* 1. Calendar Dashboard */}
-                    {/* Stats/Level removed per user request */}
-                    <div>
-                        <DateNavigator dreams={dreams} onDateSelect={handleDateSelect} />
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        {/* Level & Streak (Compact) */}
+                        <div className="md:col-span-1">
+                            <LevelProgress levelInfo={levelInfo} />
+                        </div>
+                        <div className="md:col-span-1">
+                            <JournalStreakCard stats={journalStats} />
+                        </div>
+
+                        {/* Calendar (Rectangular Dashboard Widget) */}
+                        <div className="md:col-span-2">
+                            <DateNavigator dreams={dreams} onDateSelect={handleDateSelect} />
+                        </div>
                     </div>
 
                     {/* 2. Search & Filter Row */}

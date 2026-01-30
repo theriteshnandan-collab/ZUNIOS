@@ -53,7 +53,9 @@ Return ONLY valid JSON:
     ],
     "action_suggestion": "One small, concrete thing that might help right now.",
     "visualPrompt": "Minimal, peaceful, lo-fi aesthetic, soft colors, cozy, Studio Ghibli inspired, warm lighting."
-}`,
+}
+
+CONSTRAINT: Do not mention 'Streaks', 'XP', 'Levels', or gamification stats in the interpretation. Focus ONLY on the content.`,
             dream: `You are a warm, wise dream interpreter — a blend of Carl Jung and a caring mentor.
 
 The user just shared a vision or dream. Respond with insight and warmth.
@@ -73,7 +75,9 @@ Return ONLY valid JSON:
     ],
     "action_suggestion": "One small, meaningful thing to do today related to this vision.",
     "visualPrompt": "Surrealist, dreamlike, high detail, ethereal lighting, muted colors, masterpiece quality, artistic."
-}`,
+}
+
+CONSTRAINT: Do not mention 'Streaks', 'XP', 'Levels', or gamification stats in the interpretation. Focus ONLY on the content.`,
             idea: `You are a brilliant, supportive advisor — imagine combining strategic clarity with your most supportive friend.
 
 The user just shared an idea. Help them see its potential AND how to make it real.
@@ -93,7 +97,9 @@ Return ONLY valid JSON:
     ],
     "action_suggestion": "The ONE thing to do in the next 24 hours to move this forward.",
     "visualPrompt": "Futuristic product mockup, clean design, Apple aesthetic, soft lighting, 8k, professional, inspiring."
-}`,
+}
+
+CONSTRAINT: Do not mention 'Streaks', 'XP', 'Levels', or gamification stats in the interpretation. Focus ONLY on the content.`,
             win: `You are an enthusiastic but grounded coach — someone who celebrates moments without being over the top.
 
 The user just logged something that happened. Help them extract meaning and momentum.
@@ -112,7 +118,9 @@ Return ONLY valid JSON:
     ],
     "action_suggestion": "One way to honor or extend this momentum today.",
     "visualPrompt": "Cinematic, golden hour, heroic, inspirational, wide angle, dramatic lighting, photorealistic, triumphant."
-}`,
+}
+
+CONSTRAINT: Do not mention 'Streaks', 'XP', 'Levels', or gamification stats in the interpretation. Focus ONLY on the content.`,
             journal: `You are KOGITO — a calm, wise presence that combines Stoic wisdom, Zen flow, and scientific insight.
 
 The user has shared a reflection or journal entry. Respond with depth and care.
@@ -131,7 +139,9 @@ Return ONLY valid JSON:
     ],
     "action_suggestion": "One small, concrete act that might help right now.",
     "visualPrompt": "Lo-fi anime style, cozy atmosphere, Studio Ghibli aesthetic, peaceful, nostalgic, warm lighting, intimate."
-}`
+}
+
+CONSTRAINT: Do not mention 'Streaks', 'XP', 'Levels', or gamification stats in the interpretation. Focus ONLY on the content.`
         };
 
         const systemPrompt = SYSTEM_PROMPTS[category] || SYSTEM_PROMPTS['dream'];
