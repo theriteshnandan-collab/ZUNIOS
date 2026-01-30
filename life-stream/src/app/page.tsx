@@ -364,17 +364,17 @@ export default function Home() {
         className="z-10 w-full max-w-2xl text-center space-y-8"
       >
 
-        {/* Header */}
+        {/* Header - Hide large text in sidebar mode */}
         <div className="space-y-4">
           <div className="flex items-center justify-center mb-6 scale-125">
             <ZuniosLogo size="xl" showText={true} className="flex-col !gap-4" />
           </div>
 
-          <h1 className="text-4xl md:text-7xl font-bold font-serif tracking-tight bg-gradient-to-br from-white via-white to-white/50 bg-clip-text text-transparent pb-2">
+          <h1 className="text-4xl md:text-7xl font-bold font-serif tracking-tight bg-gradient-to-br from-white via-white to-white/50 bg-clip-text text-transparent pb-2 hidden sm:block">
             The OS for <br /> Your Mind
           </h1>
 
-          <p className="text-xl text-muted-foreground max-w-lg mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-lg mx-auto leading-relaxed hidden sm:block">
             Capture visions. Build ideas. Log moments. Think deeply. <br />
             Your second brain, evolved.
           </p>
@@ -398,7 +398,7 @@ export default function Home() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1, duration: 1 }}
-          className="w-full"
+          className="w-full hidden sm:block" // Brick W9: Hide landing page in sidebar mode
         >
           <LandingSections />
         </motion.div>
