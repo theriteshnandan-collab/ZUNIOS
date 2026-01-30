@@ -24,8 +24,6 @@ export default function FloatingNav() {
         { name: "Journal", icon: BookOpen, href: "/journal" },
         { name: "Tasks", icon: Target, href: "/tasks" },
         { name: "North Star", icon: Compass, href: "/manifesto" },
-        // Special item for Search (handled differently in render)
-        { name: "Search", icon: Search, href: "#search" },
     ];
 
     const openSearch = (e: React.MouseEvent) => {

@@ -94,8 +94,9 @@ export default function RootLayout({
         >
           <ModeProvider>
             <OnboardingModal />
+            <OnboardingModal />
             <NotificationManager />
-            <NeuralSearch />
+            {/* <NeuralSearch /> Removed as per user request */}
             <PrivacyShield />
             <NoiseOverlay />
             <BackgroundLayout>
