@@ -107,7 +107,7 @@ export default function RootLayout({
             <BackgroundLayout>
               <FloatingNav />
               <div className="flex flex-col min-h-screen pt-16">
-                <main className="flex-1">
+                <main className="flex-1 pb-32 md:pb-0">
                   {children}
                 </main>
                 <Footer />
