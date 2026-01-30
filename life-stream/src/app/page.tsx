@@ -387,7 +387,7 @@ function HomeContent() {
   // INPUT VIEW
   return (
     <div className="min-h-screen bg-transparent text-foreground flex flex-col items-center justify-center p-4 relative">
-      {/* 🌌 PROJECT AURA: THE LIVING CORE */}
+      {/* 🌌 PROJECT AURA: THE LIVING CORE (Restored) */}
       <AuraCore mode={mode as any} />
 
       {isLoading && <DreamLoader mode={mode} />}
@@ -405,8 +405,6 @@ function HomeContent() {
             <ZuniosLogo size="xl" showText={true} className="flex-col !gap-4" />
           </div>
 
-          {/* 📱 MOBILE DASHBOARD (Tactical HUD) */}
-          <MobileDashboard />
 
           {/* 💻 DESKTOP HERO TEXT */}
           <h1 className="text-4xl md:text-7xl font-bold font-serif tracking-tight bg-gradient-to-br from-white via-white to-white/50 bg-clip-text text-transparent pb-2 hidden sm:block">
