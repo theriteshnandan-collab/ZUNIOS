@@ -21,6 +21,7 @@ import { useTaskStore } from "@/stores/taskStore";
 import { useAppBadge } from "@/hooks/useAppBadge";
 import { parseCommandLocally } from "@/lib/local-intelligence";
 import MobileDashboard from "@/components/mobile/MobileDashboard";
+import AuraCore from "@/components/AuraCore";
 
 function HomeContent() {
   const [isLoading, setIsLoading] = useState(false);
@@ -386,6 +387,9 @@ function HomeContent() {
   // INPUT VIEW
   return (
     <div className="min-h-screen bg-transparent text-foreground flex flex-col items-center justify-center p-4 relative">
+      {/* 🌌 PROJECT AURA: THE LIVING CORE */}
+      <AuraCore mode={mode as any} />
+
       {isLoading && <DreamLoader mode={mode} />}
 
       <motion.div
