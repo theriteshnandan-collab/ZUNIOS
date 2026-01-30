@@ -386,6 +386,7 @@ export default function Home() {
             onAnalyze={handleAnalyze}
             isAnalyzing={isLoading}
             initialMode={mode}
+            initialValue={searchParams.get('content') || ''}
           />
         </div>
 

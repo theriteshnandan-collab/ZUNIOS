@@ -29,22 +29,10 @@
             ]
         },
         {
-            "name": "Log Dream",
-            "short_name": "Dream",
-            "description": "Record a vision",
-            "url": "/?mode=journal",
-            "icons": [
-                {
-                    "src": "/icon.svg",
-                    "sizes": "192x192"
-                }
-            ]
-        },
-        {
-            "name": "New Idea",
-            "short_name": "Idea",
-            "description": "Capture a thought",
-            "url": "/?mode=idea",
+            "name": "Think",
+            "short_name": "Think",
+            "description": "Log a thought",
+            "url": "/?mode=thought",
             "icons": [
                 {
                     "src": "/icon.svg",
@@ -52,5 +40,14 @@
                 }
             ]
         }
-    ]
+    ],
+    "share_target": {
+        "action": "/share-target",
+        "method": "GET",
+        "params": {
+            "title": "title",
+            "text": "text",
+            "url": "url"
+        }
+    }
 }
