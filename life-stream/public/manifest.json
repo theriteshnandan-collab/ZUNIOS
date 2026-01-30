@@ -14,5 +14,43 @@
             "type": "image/svg+xml",
             "purpose": "any maskable"
         }
+    ],
+    "shortcuts": [
+        {
+            "name": "New Mission",
+            "short_name": "Task",
+            "description": "Deploy a new objective",
+            "url": "/?mode=task",
+            "icons": [
+                {
+                    "src": "/icon.svg",
+                    "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "Log Dream",
+            "short_name": "Dream",
+            "description": "Record a vision",
+            "url": "/?mode=journal",
+            "icons": [
+                {
+                    "src": "/icon.svg",
+                    "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "New Idea",
+            "short_name": "Idea",
+            "description": "Capture a thought",
+            "url": "/?mode=idea",
+            "icons": [
+                {
+                    "src": "/icon.svg",
+                    "sizes": "192x192"
+                }
+            ]
+        }
     ]
 }

@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { useMode } from "@/components/ModeProvider";
 import { EntryMode } from "@/lib/theme-config";
 import { Button } from "@/components/ui/button";
+import { useSearchParams, useRouter } from "next/navigation";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { useUser, SignInButton, UserButton } from "@clerk/nextjs";
 import { toast } from "sonner";
@@ -24,7 +25,9 @@ export default function Home() {
   const [result, setResult] = useState<any>(null);
 
   // MODE STATE (Global)
-  const { mode } = useMode();
+  const { mode, setMode } = useMode();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const { user } = useUser();
   const addTask = useTaskStore((state) => state.addTask);
   const [streak, setStreak] = useState(0);
@@ -52,6 +55,28 @@ export default function Home() {
       localStorage.setItem('last_visit_date', today);
     }
   }, []);
+
+  // 🔗 BRICK W3: SHORTCUT ROUTER
+  // Detects ?mode=X from PWA Shortcuts and sets the state.
+  useEffect(() => {
+    const shortcutMode = searchParams.get('mode');
+    if (shortcutMode && ['task', 'idea', 'journal', 'dream'].includes(shortcutMode)) {
+      // Map 'task' to appropriate internal mode if needed, or just set it.
+      // Note: 'task' isn't a visual mode in EntryMode yet, but we treat it as specialized input.
+      // For now, map 'task' to 'thought' but with a special flag, or just focus.
+
+      const targetMode = shortcutMode === 'task' ? 'thought' : (shortcutMode as EntryMode);
+      setMode(targetMode);
+
+      // Auto-focus logic can be handled by OmniInput observing mode changes
+      // or we can pass a 'autoFocus' prop. 
+      // For now, setting mode is the key step.
+
+      // Clean URL
+      router.replace('/', { scroll: false });
+      toast.info(`Mode set to: ${shortcutMode.toUpperCase()}`);
+    }
+  }, [searchParams, setMode, router]);
 
   const getModeData = () => {
     switch (mode) {
