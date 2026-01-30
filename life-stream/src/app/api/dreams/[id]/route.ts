@@ -28,7 +28,7 @@ export async function DELETE(
 
         // Delete the dream (only if it belongs to the user)
         const { error } = await supabase
-            .from('dreams')
+            .from('entries')
             .delete()
             .eq('id', dreamId)
             .eq('user_id', userId);

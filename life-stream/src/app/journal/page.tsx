@@ -93,7 +93,7 @@ export default function JournalPage() {
                 return;
             }
             const { data, error } = await supabase
-                .from('dreams')
+                .from('entries')
                 .select('*')
                 .eq('user_id', 'guest')
                 .order('created_at', { ascending: false });
@@ -115,7 +115,7 @@ export default function JournalPage() {
             return;
         }
         const { data, error } = await supabase
-            .from('dreams')
+            .from('entries')
             .select('*')
             .eq('user_id', user.id)
             .order('created_at', { ascending: false });
@@ -152,7 +152,7 @@ export default function JournalPage() {
         // GUEST MODE DELETE
         if (!user) {
             const res = await supabase
-                .from('dreams')
+                .from('entries')
                 .delete()
                 .eq('id', id)
                 .eq('user_id', 'guest');
@@ -160,7 +160,7 @@ export default function JournalPage() {
         } else {
             // AUTH MODE DELETE
             const res = await supabase
-                .from('dreams')
+                .from('entries')
                 .delete()
                 .eq('id', id)
                 .eq('user_id', user.id);
