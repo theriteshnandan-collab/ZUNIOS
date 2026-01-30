@@ -60,7 +60,7 @@ export function TaskQuickAdd({ onAdd }: TaskQuickAddProps) {
             {/* Floating Add Button */}
             <motion.button
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-24 right-4 md:bottom-8 md:right-8 w-14 h-14 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-lg shadow-black/20 flex items-center justify-center hover:bg-white/20 hover:scale-110 transition-all z-50"
+                className="fixed bottom-24 right-4 md:bottom-8 md:right-8 w-14 h-14 rounded-full bg-white/5 backdrop-blur-[0.5px] border border-white/10 text-white shadow-lg shadow-black/10 flex items-center justify-center hover:bg-white/10 hover:scale-110 transition-all z-50"
                 whileHover={{ rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
             >
