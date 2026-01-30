@@ -28,7 +28,7 @@ export default function MobileDashboard() {
     }, []);
 
     return (
-        <div className="w-full px-4 mb-8 space-y-6 md:hidden">
+        <div className="w-full px-4 mb-8 space-y-6 md:hidden relative z-10">
 
             {/* 1. TOP STATUS BAR (HUD) */}
             <div className="flex items-center justify-between text-xs font-mono text-white/40 uppercase tracking-widest">
@@ -68,7 +68,7 @@ export default function MobileDashboard() {
                             </span>
                             {topTask && (
                                 <span className={`text-[10px] px-2 py-0.5 rounded-full border ${topTask.priority === 'high' ? 'border-red-500/30 text-red-400 bg-red-500/10' :
-                                        'border-white/10 text-white/40'
+                                    'border-white/10 text-white/40'
                                     }`}>
                                     {topTask.priority.toUpperCase()}
                                 </span>
