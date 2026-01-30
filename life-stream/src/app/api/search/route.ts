@@ -12,13 +12,18 @@ export async function POST(req: Request) {
             return NextResponse.json({ results: [] });
         }
 
-        // 1. Generate Vector for the Query
+        // 1. Generate Vector for the Query (with timeout protection)
         let queryVector;
         try {
-            queryVector = await generateEmbedding(query);
-        } catch (e) {
-            console.error("Vector generation failed:", e);
-            return NextResponse.json({ error: "Failed to vectorize query" }, { status: 500 });
+            const embeddingPromise = generateEmbedding(query);
+            const timeoutPromise = new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('Embedding timeout')), 5000)
+            );
+            queryVector = await Promise.race([embeddingPromise, timeoutPromise]);
+        } catch (e: any) {
+            console.error("Vector generation failed:", e.message);
+            // Graceful degradation: Return empty results instead of crashing
+            return NextResponse.json({ results: [], message: "Search currently limited (AI Busy)" });
         }
 
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
