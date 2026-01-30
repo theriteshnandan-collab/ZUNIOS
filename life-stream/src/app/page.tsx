@@ -19,6 +19,7 @@ import LandingSections from "@/components/marketing/LandingSections";
 import ZuniosLogo from "@/components/ZuniosLogo";
 import { useTaskStore } from "@/stores/taskStore";
 import { useAppBadge } from "@/hooks/useAppBadge";
+import { parseCommandLocally } from "@/lib/local-intelligence";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
@@ -117,30 +118,45 @@ export default function Home() {
       if (commandRegex.test(text)) {
         console.log("🚀 Command Detected: Routing to Task Engine");
 
-        const response = await fetch('/api/analyze-task', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ command: text })
-        });
+        let taskData;
 
-        const data = await response.json();
+        try {
+          // ☁️ TRY CLOUD INTELLIGENCE
+          const response = await fetch('/api/analyze-task', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ command: text })
+          });
 
-        if (data.error) throw new Error(data.error);
+          if (!response.ok) throw new Error("API Error");
+          const data = await response.json();
+          if (data.error) throw new Error(data.error);
+          taskData = data;
+
+        } catch (err) {
+          // 🛡️ CIRCUIT BREAKER: FALLBACK TO LOCAL
+          console.warn("Cloud Intelligence Failed. Engaging Local Protocols.", err);
+          taskData = parseCommandLocally(text);
+          toast("Offline Intelligence Active", {
+            description: "Cloud unreachable. Processed locally.",
+            icon: <Zap className="w-4 h-4 text-amber-400" />
+          });
+        }
 
         // ACTUALLY CREATE THE TASK
-        if (data.action === 'create' && data.data) {
+        if (taskData.action === 'create' && taskData.data) {
           await addTask({
-            content: data.data.content,
-            priority: (data.data.priority?.toLowerCase() as any) || 'medium',
-            due_date: data.data.due_date,
+            content: taskData.data.content,
+            priority: (taskData.data.priority?.toLowerCase() as any) || 'medium',
+            due_date: taskData.data.due_date,
           });
         }
 
         // Success - Task Created
         confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
         toast.success(
-          data.action === 'create' ? "Mission Deployed" : "Command Executed",
-          { description: data.data?.content || "Operation successful" }
+          taskData.action === 'create' ? "Mission Deployed" : "Command Executed",
+          { description: taskData.data?.content || "Operation successful" }
         );
 
         // Do NOT show revelation view for tasks. 
