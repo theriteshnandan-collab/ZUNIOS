@@ -166,20 +166,41 @@ export default function Home() {
       }
 
       // 🔮 STANDARD ANALYSIS (Dream/Journal)
-      const response = await fetch('/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ dream: text, category: analysisMode })
-      });
+      let analysisResult;
 
-      const data = await response.json();
-      if (data.error) throw new Error(data.error);
+      try {
+        const response = await fetch('/api/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ dream: text, category: analysisMode })
+        });
+
+        if (!response.ok) throw new Error("API Error");
+        const data = await response.json();
+        if (data.error) throw new Error(data.error);
+        analysisResult = data;
+
+      } catch (err) {
+        // 🛡️ CIRCUIT BREAKER: DREAM FALLBACK
+        console.warn("Dream Analysis Failed. Engaging Local Save.", err);
+        analysisResult = {
+          theme: "Raw Entry",
+          mood: "Neutral",
+          imageUrl: "/placeholder-dream.jpg", // Needs a valid fallback or handling
+          interpretation: ["Cloud analysis unavailable. Entry saved safely."],
+          content: text
+        };
+        toast("Offline Save Active", {
+          description: "Analysis skipped. Content preserved.",
+          icon: <Zap className="w-4 h-4 text-amber-400" />
+        });
+      }
 
       // Merge original text content so it can be saved later
-      setResult({ ...data, content: text });
+      setResult({ ...analysisResult, content: text });
     } catch (error: any) {
-      console.error("Analysis failed:", error);
-      toast.error("Failed to analyze. Please try again.");
+      console.error("Critical Failure:", error);
+      toast.error("System Error. Please try again.");
     } finally {
       setIsLoading(false);
     }
