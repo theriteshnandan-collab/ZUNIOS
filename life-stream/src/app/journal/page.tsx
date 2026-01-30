@@ -226,6 +226,31 @@ export default function JournalPage() {
                             <Download className="w-4 h-4 mr-2" />
                             Export Data
                         </Button>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={async () => {
+                                const toastId = toast.loading("Restoring old memories...");
+                                try {
+                                    const res = await fetch('/api/migrate', { method: 'POST' });
+                                    const data = await res.json();
+                                    if (res.ok) {
+                                        toast.success(data.message || "Restoration Complete");
+                                        window.location.reload();
+                                    } else {
+                                        toast.error(data.error || "Restoration Failed");
+                                    }
+                                } catch (e) {
+                                    toast.error("Restoration Failed");
+                                } finally {
+                                    toast.dismiss(toastId);
+                                }
+                            }}
+                            className="bg-purple-500/10 border-purple-500/20 hover:bg-purple-500/20 text-purple-300"
+                        >
+                            <Sparkles className="w-4 h-4 mr-2" />
+                            Restore Old Data
+                        </Button>
                         <div className="h-8 w-[1px] bg-white/10 mx-2" />
                         <UserButton afterSignOutUrl="/" />
                     </div>
