@@ -7,11 +7,9 @@ import { Toaster } from "@/components/ui/sonner";
 import BackgroundLayout from "@/components/BackgroundLayout";
 import FloatingNav from "@/components/FloatingNav";
 import Footer from "@/components/Footer";
-import Footer from "@/components/Footer";
 import NotificationManager from "@/components/NotificationManager";
 import { ModeProvider } from "@/components/ModeProvider";
 import OnboardingModal from "@/components/OnboardingModal";
-import NeuralSearch from "@/components/NeuralSearch";
 import NoiseOverlay from "@/components/ui/NoiseOverlay";
 
 import { Inter, Crimson_Pro, JetBrains_Mono } from "next/font/google";
