@@ -129,6 +129,25 @@ export default function JournalPage() {
         setIsLoading(false);
     };
 
+    // Auto-Migrate Old Data on Mount
+    useEffect(() => {
+        if (isLoaded && user) {
+            const hasMigrated = localStorage.getItem('zunios_migrated_v1');
+            if (!hasMigrated) {
+                fetch('/api/migrate', { method: 'POST' })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success && data.count > 0) {
+                            toast.success(`Recovered ${data.count} old memories`);
+                            fetchDreams(); // Refresh list
+                        }
+                        localStorage.setItem('zunios_migrated_v1', 'true');
+                    })
+                    .catch(err => console.error("Auto-migration failed", err));
+            }
+        }
+    }, [isLoaded, user]);
+
     // Fetch entries on mount
     useEffect(() => {
         if (isLoaded) {
@@ -226,33 +245,6 @@ export default function JournalPage() {
                             <Download className="w-4 h-4 mr-2" />
                             Export Data
                         </Button>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={async () => {
-                                const toastId = toast.loading("Restoring old memories...");
-                                try {
-                                    const res = await fetch('/api/migrate', { method: 'POST' });
-                                    const data = await res.json();
-                                    if (res.ok) {
-                                        toast.success(data.message || "Restoration Complete");
-                                        window.location.reload();
-                                    } else {
-                                        toast.error(data.error || "Restoration Failed");
-                                    }
-                                } catch (e) {
-                                    toast.error("Restoration Failed");
-                                } finally {
-                                    toast.dismiss(toastId);
-                                }
-                            }}
-                            className="bg-purple-500/10 border-purple-500/20 hover:bg-purple-500/20 text-purple-300"
-                        >
-                            <Sparkles className="w-4 h-4 mr-2" />
-                            Restore Old Data
-                        </Button>
-                        <div className="h-8 w-[1px] bg-white/10 mx-2" />
-                        <UserButton afterSignOutUrl="/" />
                     </div>
                 </div>
             </header>
@@ -260,19 +252,10 @@ export default function JournalPage() {
             <main className="max-w-7xl mx-auto px-6 py-8">
                 <div className="max-w-7xl mx-auto space-y-8">
                     {/* 1. Stats Row & Calendar Dashboard */}
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        {/* Level & Streak (Compact) */}
-                        <div className="md:col-span-1">
-                            <LevelProgress levelInfo={levelInfo} />
-                        </div>
-                        <div className="md:col-span-1">
-                            <JournalStreakCard stats={journalStats} />
-                        </div>
-
-                        {/* Calendar (Rectangular Dashboard Widget) */}
-                        <div className="md:col-span-2">
-                            <DateNavigator dreams={dreams} onDateSelect={handleDateSelect} />
-                        </div>
+                    {/* 1. Calendar Dashboard */}
+                    {/* Stats/Level removed per user request */}
+                    <div>
+                        <DateNavigator dreams={dreams} onDateSelect={handleDateSelect} />
                     </div>
 
                     {/* 2. Search & Filter Row */}
