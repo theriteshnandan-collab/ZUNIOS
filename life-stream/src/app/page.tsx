@@ -18,6 +18,7 @@ import confetti from "canvas-confetti";
 import LandingSections from "@/components/marketing/LandingSections";
 import ZuniosLogo from "@/components/ZuniosLogo";
 import { useTaskStore } from "@/stores/taskStore";
+import { useAppBadge } from "@/hooks/useAppBadge";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,6 +31,12 @@ export default function Home() {
   const router = useRouter();
   const { user } = useUser();
   const addTask = useTaskStore((state) => state.addTask);
+  const tasks = useTaskStore((state) => state.tasks);
+  const incompleteCount = tasks.filter(t => t.status === 'todo' || t.status === 'in-progress').length;
+
+  // 🔴 BRICK W5: THE RED DOT
+  useAppBadge(incompleteCount);
+
   const [streak, setStreak] = useState(0);
 
   // Brick 9.5: Real Streak Logic
