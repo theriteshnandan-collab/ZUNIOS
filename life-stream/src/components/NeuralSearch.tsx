@@ -18,7 +18,7 @@ interface SearchResult {
     similarity: number;
 }
 
-export function NeuralSearch() {
+export default function NeuralSearch() {
     const [isOpen, setIsOpen] = useState(false);
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<SearchResult[]>([]);
