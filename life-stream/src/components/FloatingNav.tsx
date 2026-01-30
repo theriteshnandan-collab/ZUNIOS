@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Home, BookOpen, Target } from "lucide-react";
+import { Home, BookOpen, Target, Compass } from "lucide-react";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from "@/lib/utils";
@@ -23,6 +23,7 @@ export default function FloatingNav() {
         { name: "Vision", icon: Home, href: "/" },
         { name: "Journal", icon: BookOpen, href: "/journal" },
         { name: "Tasks", icon: Target, href: "/tasks" },
+        { name: "North Star", icon: Compass, href: "/manifesto" },
     ];
 
     return (
