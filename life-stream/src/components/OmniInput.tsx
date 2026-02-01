@@ -114,10 +114,10 @@ export default function OmniInput({ onAnalyze, isAnalyzing, initialMode = 'thoug
 
     return (
         <div className="w-full relative z-50">
-            {/* Input Card Container - With Overflow Hidden for clean corners */}
+            {/* TITAN INPUT - The Super Pill with Lamp Glow */}
             <div className={cn(
-                "relative bg-white/5 border border-white/10 rounded-[28px] overflow-hidden transition-all duration-300 backdrop-blur-sm",
-                "focus-within:bg-white/10 focus-within:border-white/20 focus-within:ring-1 focus-within:ring-white/10",
+                "titan-input-container titan-glow transition-all duration-300",
+                "focus-within:border-white/15",
                 isAnalyzing && "opacity-50 pointer-events-none"
             )}>
                 <textarea

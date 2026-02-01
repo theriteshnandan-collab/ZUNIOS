@@ -70,7 +70,97 @@
   background-image: radial-gradient(var(--tw-gradient-stops));
 }
 
-@plugin "tailwindcss-animate";
+/* ============================================
+   🏆 TITAN DESIGN SYSTEM (Lovable/DeepSeek)
+   ============================================ */
+
+/* The Void Background - Pure Darkness */
+.bg-void {
+  background: #050505;
+  position: relative;
+}
+
+.bg-void::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+/* Titan Input Container - The Super Pill */
+.titan-input-container {
+  position: relative;
+  background: rgba(25, 25, 30, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  backdrop-filter: blur(20px);
+  overflow: visible;
+}
+
+/* The Signature "Lamp Glow" Effect */
+.titan-glow::before {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 60px;
+  background: linear-gradient(90deg,
+      rgba(255, 100, 50, 0.4) 0%,
+      rgba(180, 80, 255, 0.3) 50%,
+      rgba(50, 150, 255, 0.4) 100%);
+  filter: blur(30px);
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: -1;
+  border-radius: 50%;
+}
+
+/* Alternative: Orange/Red Lamp (like DeepSeek) */
+.titan-glow-warm::before {
+  background: linear-gradient(90deg,
+      rgba(255, 80, 30, 0.5) 0%,
+      rgba(255, 120, 50, 0.4) 50%,
+      rgba(200, 60, 30, 0.5) 100%);
+}
+
+/* Alternative: Blue/Cyan Lamp (like Grok) */
+.titan-glow-cool::before {
+  background: linear-gradient(90deg,
+      rgba(30, 100, 255, 0.4) 0%,
+      rgba(100, 200, 255, 0.3) 50%,
+      rgba(50, 150, 255, 0.4) 100%);
+}
+
+/* Mode Toggle Pills */
+.titan-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.titan-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.titan-toggle.active {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.15);
+}
 
 @custom-variant dark (&:is(.dark *));
 
