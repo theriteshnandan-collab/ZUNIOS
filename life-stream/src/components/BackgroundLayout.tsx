@@ -5,8 +5,8 @@ export default function BackgroundLayout({
 }) {
     return (
         <>
-            {/* Brick W9: Hide Aurora in Sidebar Mode */}
-            <div className="bg-aurora hidden sm:block" />
+            {/* TITAN: The Void Background */}
+            <div className="bg-void fixed inset-0 -z-50" />
             <div className="relative min-h-screen w-full">
                 {children}
             </div>

@@ -135,11 +135,11 @@ export default function OmniInput({ onAnalyze, isAnalyzing, initialMode = 'thoug
                     {/* Mode Indicator & Tools */}
                     <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
                         <div className={cn(
-                            "flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/20 border border-white/5 transition-colors shrink-0",
+                            "titan-toggle",
                             activeModeConfig.color
                         )}>
                             <activeModeConfig.icon className="w-3.5 h-3.5" />
-                            <span className="text-xs font-medium uppercase tracking-wider">{activeModeConfig.label}</span>
+                            <span className="uppercase tracking-wider">{activeModeConfig.label}</span>
                         </div>
 
                         {/* Template Trigger */}
