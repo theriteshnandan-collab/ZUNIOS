@@ -1,63 +1,54 @@
-import { cn } from "@/lib/utils";
-import { HTMLAttributes, forwardRef } from "react";
+"use client";
 
-interface GlassCardProps extends HTMLAttributes<HTMLDivElement> {
-    gradient?: boolean;
-    glow?: boolean;
+import { cn } from "@/lib/utils";
+
+interface GlassCardProps {
+    children: React.ReactNode;
+    className?: string;
+    /** Enables the "Inner Light" 1px top edge highlight */
+    innerLight?: boolean;
+    /** Intensity of the noise overlay (0-1) */
+    noiseOpacity?: number;
 }
 
-const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
-    ({ className, gradient = false, glow = false, children, ...props }, ref) => {
-        return (
+/**
+ * GlassCard (Titan System)
+ * 
+ * A "Scrubbed Glass" card with:
+ * - Blur backdrop
+ * - Noise texture overlay
+ * - Inner light edge (top highlight)
+ * - No solid borders (light simulation only)
+ */
+export function GlassCard({
+    children,
+    className = "",
+    innerLight = true,
+    noiseOpacity = 0.04
+}: GlassCardProps) {
+    return (
+        <div
+            className={cn(
+                "relative overflow-hidden rounded-2xl",
+                "bg-white/[0.03] backdrop-blur-xl",
+                innerLight && "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]",
+                "transition-all duration-300",
+                "hover:bg-white/[0.05] hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]",
+                className
+            )}
+        >
+            {/* Noise Texture Overlay */}
             <div
-                ref={ref}
-                className={cn(
-                    // Base glass effect
-                    "relative overflow-hidden rounded-2xl",
-                    "border border-white/5 bg-white/5 backdrop-blur-xl", // Reduced border opacity, moving to specular ring
-                    // Smooth transitions
-                    "transition-all duration-300 ease-out",
-                    // Hover effects
-                    "hover:bg-white/[0.08]",
-                    "hover:shadow-2xl hover:shadow-purple-500/10",
-                    "hover:-translate-y-0.5",
-                    // Active Physics (Brick 4)
-                    "active:scale-[0.98] active:duration-100",
-                    // Specular Highlight (Inner Ring 1px)
-                    "after:absolute after:inset-0 after:rounded-2xl after:border after:border-white/10 after:pointer-events-none",
-                    // Group for child animations
-                    "group",
-                    className
-                )}
-                {...props}
-            >
-                {/* Inner glow on hover */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-
-                {/* Noise Texture */}
-                <div
-                    className="absolute inset-0 opacity-[0.02] pointer-events-none mix-blend-overlay z-0"
-                    style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")` }}
-                />
-
-                {/* Gradient Border Glow (optional) */}
-                {gradient && (
-                    <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-r from-purple-500/30 via-primary/30 to-indigo-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm -z-10" />
-                )}
-
-                {/* Persistent Glow (optional) */}
-                {glow && (
-                    <div className="absolute -inset-1 rounded-2xl bg-gradient-to-r from-purple-500/20 to-indigo-500/20 blur-xl -z-10" />
-                )}
-
-                {/* Content */}
-                <div className="relative z-10 h-full">
-                    {children}
-                </div>
+                className="pointer-events-none absolute inset-0 z-0"
+                style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+                    opacity: noiseOpacity
+                }}
+            />
+            {/* Content */}
+            <div className="relative z-10">
+                {children}
             </div>
-        );
-    }
-);
-GlassCard.displayName = "GlassCard";
-
-export { GlassCard };
+        </div>
+    );
+}

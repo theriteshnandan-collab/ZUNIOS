@@ -50,6 +50,21 @@
   animation: fire-pulse 2s ease-in-out infinite;
 }
 
+/* TITAN DESIGN SYSTEM: Breathing Glow Animation */
+@keyframes titan-breathe {
+
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+}
+
 .animate-ken-burns {
   animation: ken-burns 20s ease-out infinite alternate;
   will-change: transform;
