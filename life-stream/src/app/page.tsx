@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
 import { Moon, Sparkles, Lightbulb, Target, BrainCircuit, Zap } from "lucide-react";
-import OmniInput from "@/components/OmniInput";
+import TitanInput from "@/components/TitanInput";
 import { cn } from "@/lib/utils";
 import { useMode } from "@/components/ModeProvider";
 import { EntryMode } from "@/lib/theme-config";
@@ -417,9 +417,9 @@ function HomeContent() {
           </p>
         </div>
 
-        {/* Input Card - Replaced by Omnibar */}
+        {/* Input Card - Titan Design System V2 */}
         <div className="w-full max-w-2xl mx-auto">
-          <OmniInput
+          <TitanInput
             onAnalyze={handleAnalyze}
             isAnalyzing={isLoading}
             initialMode={mode}
