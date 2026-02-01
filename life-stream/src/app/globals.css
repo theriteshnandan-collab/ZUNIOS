@@ -92,11 +92,11 @@
 /* Titan Input Container - The Super Pill */
 .titan-input-container {
   position: relative;
-  background: rgba(25, 25, 30, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 24px;
-  backdrop-filter: blur(20px);
-  overflow: visible;
+  background: rgba(25, 25, 30, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 28px;
+  backdrop-filter: blur(24px);
+  overflow: hidden;
 }
 
 /* The Signature "Lamp Glow" Effect */
