@@ -157,9 +157,9 @@ export default function TitanJournalGrid({
                                     </div>
 
                                     {/* Theme/Title */}
-                                    {dream.analysis?.theme && (
+                                    {dream.theme && (
                                         <h3 className="text-lg font-medium text-zinc-200 group-hover:text-white transition-colors mb-2 line-clamp-2">
-                                            {dream.analysis.theme}
+                                            {dream.theme}
                                         </h3>
                                     )}
 
@@ -169,20 +169,21 @@ export default function TitanJournalGrid({
                                     </p>
 
                                     {/* Image (if available) */}
-                                    {dream.image_url && isLarge && (
+                                    {dream.image_url && (isLarge || isWide) && (
                                         <div className="mt-4 rounded-xl overflow-hidden">
                                             <DreamImage
-                                                prompt={dream.analysis?.visualPrompt || dream.content}
+                                                src={dream.image_url}
+                                                alt={dream.theme || dream.content}
                                                 className="w-full h-40 object-cover"
                                             />
                                         </div>
                                     )}
 
                                     {/* Mood Badge */}
-                                    {dream.analysis?.mood && (
+                                    {dream.mood && (
                                         <div className="mt-4 pt-3 border-t border-white/[0.05]">
                                             <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-white/[0.05] text-xs text-zinc-400">
-                                                {dream.analysis.mood}
+                                                {dream.mood}
                                             </span>
                                         </div>
                                     )}

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/lib/supabase"; // Note: We might want to switch to the new client utils later, but keeping existing for now if compatible.
+import { createClient } from "@/utils/supabase/client"; // Use standard client for sessions
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -59,6 +59,7 @@ export default function JournalPage() {
     const [deletingId, setDeletingId] = useState<string | null>(null);
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
     const [selectedDream, setSelectedDream] = useState<Dream | null>(null);
+    const supabase = createClient(); // Initialize standard client
     const [selectedTab, setSelectedTab] = useState('all');
     const [isExportOpen, setIsExportOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState(""); // Added missing state
@@ -85,19 +86,11 @@ export default function JournalPage() {
     const fetchDreams = async () => {
         setIsLoading(true);
 
+        const stored = localStorage.getItem('guest_dreams');
+        const localEntries = stored ? JSON.parse(stored) : [];
+
         // GUEST MODE FETCH
         if (!user) {
-            // Get offline entries from localStorage
-            const stored = localStorage.getItem('guest_dreams');
-            const localEntries = stored ? JSON.parse(stored) : [];
-
-            if (!supabase) {
-                console.warn("Supabase client not initialized, showing local only");
-                setDreams(localEntries);
-                setIsLoading(false);
-                return;
-            }
-
             const { data, error } = await supabase
                 .from('entries')
                 .select('*')
@@ -106,9 +99,8 @@ export default function JournalPage() {
 
             if (error) {
                 console.error("Fetch error:", error);
-                setDreams(localEntries); // Fallback to local
+                setDreams(localEntries);
             } else {
-                // Merge and remove duplicates by content/ID if needed
                 const dbEntries = data || [];
                 const merged = [...localEntries, ...dbEntries].sort((a, b) =>
                     new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
@@ -120,11 +112,6 @@ export default function JournalPage() {
         }
 
         // AUTH MODE FETCH
-        if (!supabase) {
-            console.error("Supabase client not initialized");
-            setIsLoading(false);
-            return;
-        }
         const { data, error } = await supabase
             .from('entries')
             .select('*')
@@ -134,8 +121,13 @@ export default function JournalPage() {
         if (error) {
             console.error("Fetch error:", error);
             toast.error("Failed to load entries");
+            setDreams(localEntries);
         } else {
-            setDreams(data || []);
+            const dbEntries = data || [];
+            const merged = [...localEntries, ...dbEntries].sort((a, b) =>
+                new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+            );
+            setDreams(merged);
         }
         setIsLoading(false);
     };
@@ -167,20 +159,22 @@ export default function JournalPage() {
         }
     }, [isLoaded, user]);
 
-    const handleDelete = async (id: string, e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (!confirm("Are you sure you want to delete this memory?")) return;
-
-        if (!supabase) {
-            toast.error("Database not available");
-            return;
-        }
+    const handleDelete = async (id: string, e?: React.MouseEvent) => {
+        if (e) e.stopPropagation();
+        if (!confirm("Are you sure you want to want to delete this memory?")) return;
 
         setDeletingId(id);
 
         let error;
         // GUEST MODE DELETE
         if (!user) {
+            // Remove from local storage first
+            const stored = localStorage.getItem('guest_dreams');
+            if (stored) {
+                const localEntries = JSON.parse(stored);
+                localStorage.setItem('guest_dreams', JSON.stringify(localEntries.filter((d: any) => d.id !== id)));
+            }
+
             const res = await supabase
                 .from('entries')
                 .delete()
@@ -198,7 +192,7 @@ export default function JournalPage() {
         }
 
         if (error) {
-            toast.error("Failed to delete");
+            toast.error("Failed to delete from cloud");
         } else {
             setDreams(prev => prev.filter(d => d.id !== id));
             toast.success("Memory erased");
