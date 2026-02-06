@@ -150,7 +150,7 @@ Return JSON:
                     }
                     // 3. Attempt parse
                     return JSON.parse(cleaned);
-                } catch (e) {
+                } catch (e: any) {
                     // 4. Retry: Escape unescaped newlines inside strings (simple heuristic)
                     try {
                         let sanitized = input
@@ -166,7 +166,7 @@ Return JSON:
                         // Aggressive escape of newlines that might be unescaped
                         const reSanitized = sanitized.replace(/\n/g, "\\n").replace(/\r/g, "");
                         return JSON.parse(reSanitized);
-                    } catch (e2) {
+                    } catch (e2: any) {
                         throw new Error("Failed to parse JSON response: " + e.message);
                     }
                 }
