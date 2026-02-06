@@ -93,31 +93,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en" className="dark">
-        <body
-          className={`${inter.variable} ${crimsonPro.variable} ${jetbrainsMono.variable} antialiased bg-[#050510] text-[#E0E0E0] select-none`}
-        >
-          <ModeProvider>
-            <OnboardingModal />
-            <NotificationManager />
-            {/* <NeuralSearch /> Removed as per user request */}
-            {/* <PrivacyShield /> Removed as per user request */}
-            <NoiseOverlay />
-            <BackgroundLayout>
-              <FloatingNav />
-              <div className="flex flex-col min-h-screen pt-16">
-                <main className="flex-1 pb-32 md:pb-0">
-                  {children}
-                </main>
-                <Footer />
-              </div>
-            </BackgroundLayout>
-          </ModeProvider>
-          <Toaster richColors position="top-center" />
-          <Analytics />
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en" className="dark">
+      <body
+        className={`${inter.variable} ${crimsonPro.variable} ${jetbrainsMono.variable} antialiased bg-[#050510] text-[#E0E0E0] select-none`}
+      >
+        <ModeProvider>
+          <OnboardingModal />
+          <NotificationManager />
+          {/* <NeuralSearch /> Removed as per user request */}
+          {/* <PrivacyShield /> Removed as per user request */}
+          <NoiseOverlay />
+          <BackgroundLayout>
+            <FloatingNav />
+            <div className="flex flex-col min-h-screen pt-16">
+              <main className="flex-1 pb-32 md:pb-0">
+                {children}
+              </main>
+              <Footer />
+            </div>
+          </BackgroundLayout>
+        </ModeProvider>
+        <Toaster richColors position="top-center" />
+        <Analytics />
+      </body>
+    </html>
   );
 }

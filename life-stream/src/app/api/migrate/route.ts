@@ -1,13 +1,18 @@
-import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { supabase } from "@/lib/supabase";
+import { NextResponse } from 'next/server';
+import { createClient } from '@/utils/supabase/server';
+import { supabase } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 
-export async function POST(req: Request) {
+export async function POST() {
     try {
-        const { userId } = await auth();
-        if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        const supabaseServer = await createClient();
+        const { data: { user } } = await supabaseServer.auth.getUser();
+        const userId = user?.id;
+
+        if (!userId) {
+            return new NextResponse("Unauthorized", { status: 401 });
+        }
 
         if (!supabase) return NextResponse.json({ error: "Database not connected" }, { status: 500 });
 

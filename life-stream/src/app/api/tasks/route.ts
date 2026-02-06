@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { auth } from "@clerk/nextjs/server";
+
 import type { Task, CreateTaskInput, UpdateTaskInput } from "@/types/task";
 
 
@@ -186,9 +186,17 @@ export async function PATCH(req: Request) {
 // DELETE: Remove task
 export async function DELETE(req: Request) {
     try {
-        const { userId } = await auth();
-        const guestId = userId || '00000000-0000-0000-0000-000000000000';
+        const supabaseServer = getSupabase();
+        const { data: { user } } = await supabaseServer.auth.getUser();
+        const userId = user?.id;
 
+        if (!userId) {
+            return new NextResponse("Unauthorized", { status: 401 });
+        }
+
+        // Get ID from URL query or body? 
+        // Standard delete usually has ID in URL or body. 
+        // The previous code used searchParams.
         const { searchParams } = new URL(req.url);
         const id = searchParams.get('id');
 

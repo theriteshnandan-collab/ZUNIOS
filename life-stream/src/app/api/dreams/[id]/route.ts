@@ -1,20 +1,20 @@
-import { NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs/server";
-import { supabase } from "@/lib/supabase";
+import { NextResponse } from 'next/server';
+import { createClient } from '@/utils/supabase/server';
+import { supabase } from '@/lib/supabase'; // Using admin client for data ops, but verifying auth first
 
 // DELETE /api/dreams/[id] - Delete a dream
 export async function DELETE(
-    req: Request,
-    { params }: { params: Promise<{ id: string }> }
+    request: Request,
+    { params }: { params: Promise<{ id: string }> } // Params is a promise in Next.js 15
 ) {
     try {
-        const { userId } = await auth(); // await auth() too in newer versions, though not strictly required if not using it yet, but good practice. Actually auth() is sync in some versions but moving to async. Let's check imports. It's @clerk/nextjs/server. 
+        const resolvedParams = await params; // Await params first
+        const supabaseServer = await createClient();
+        const { data: { user } } = await supabaseServer.auth.getUser();
+        const userId = user?.id;
 
         if (!userId) {
-            return NextResponse.json(
-                { error: "Unauthorized" },
-                { status: 401 }
-            );
+            return new NextResponse("Unauthorized", { status: 401 });
         }
 
         if (!supabase) {

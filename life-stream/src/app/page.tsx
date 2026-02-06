@@ -10,7 +10,7 @@ import { EntryMode } from "@/lib/theme-config";
 import { Button } from "@/components/ui/button";
 import { useSearchParams, useRouter } from "next/navigation";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { useUser, SignInButton, UserButton } from "@clerk/nextjs";
+import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import DreamLoader from "@/components/DreamLoader";
 import DreamImage from "@/components/DreamImage";
@@ -32,7 +32,7 @@ function HomeContent() {
   const { mode, setMode } = useMode();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { user } = useUser();
+  const { user } = useAuth();
   const addTask = useTaskStore((state) => state.addTask);
   const tasks = useTaskStore((state) => state.tasks);
   const incompleteCount = tasks.filter(t => t.status === 'todo' || t.status === 'in_progress').length;
@@ -348,11 +348,20 @@ function HomeContent() {
                   <p className="text-xs text-amber-200/60">
                     Create a free account to keep a permanent record.
                   </p>
-                  <SignInButton mode="modal">
-                    <Button variant="secondary" className="w-full bg-amber-500/10 hover:bg-amber-500/20 text-amber-100 border border-amber-500/20">
-                      Sign In Now
-                    </Button>
-                  </SignInButton>
+                  <Button
+                    variant="secondary"
+                    className="w-full bg-amber-500/10 hover:bg-amber-500/20 text-amber-100 border border-amber-500/20"
+                    onClick={async () => {
+                      const { createClient } = await import("@/utils/supabase/client");
+                      const supabase = createClient();
+                      await supabase.auth.signInWithOAuth({
+                        provider: "google",
+                        options: { redirectTo: `${window.location.origin}/auth/callback` }
+                      });
+                    }}
+                  >
+                    Sign In Now
+                  </Button>
                 </div>
               </GlassCard>
             )}

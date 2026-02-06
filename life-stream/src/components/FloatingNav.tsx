@@ -1,11 +1,9 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { Home, BookOpen, Target, Compass, Search } from "lucide-react";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from "@/lib/utils";
-import { UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+import { AuthButton } from "@/components/auth/AuthButton";
 import ZuniosLogo from "@/components/ZuniosLogo";
 import { motion } from "framer-motion";
 
@@ -13,7 +11,7 @@ export default function FloatingNav() {
     const pathname = usePathname();
     const [mounted, setMounted] = useState(false);
 
-    // Only render Clerk components after hydration
+    // Only render components after hydration
     useEffect(() => {
         setMounted(true);
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,18 +81,7 @@ export default function FloatingNav() {
                     {/* User Action */}
                     <div className="flex items-center gap-4">
                         {mounted ? (
-                            <>
-                                <SignedIn>
-                                    <UserButton afterSignOutUrl="/" />
-                                </SignedIn>
-                                <SignedOut>
-                                    <SignInButton mode="modal">
-                                        <button className="text-sm font-medium text-muted-foreground hover:text-white transition-colors">
-                                            Sign In
-                                        </button>
-                                    </SignInButton>
-                                </SignedOut>
-                            </>
+                            <AuthButton />
                         ) : (
                             <div className="w-8 h-8 rounded-full bg-white/10 animate-pulse" />
                         )}
@@ -109,18 +96,7 @@ export default function FloatingNav() {
                 </Link>
                 <div className="flex items-center gap-2">
                     {mounted ? (
-                        <>
-                            <SignedIn>
-                                <UserButton afterSignOutUrl="/" />
-                            </SignedIn>
-                            <SignedOut>
-                                <SignInButton mode="modal">
-                                    <button className="text-xs font-medium text-white/70 border border-white/10 rounded-full px-3 py-1">
-                                        Sign In
-                                    </button>
-                                </SignInButton>
-                            </SignedOut>
-                        </>
+                        <AuthButton />
                     ) : null}
                 </div>
             </header>

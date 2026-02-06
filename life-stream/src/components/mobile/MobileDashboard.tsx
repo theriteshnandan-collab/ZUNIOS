@@ -4,14 +4,14 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useTaskStore } from "@/stores/taskStore";
-import { useUser } from "@clerk/nextjs";
+import { useAuth } from "@/hooks/useAuth";
 import { Battery, Zap, Target, BrainCircuit, ArrowRight, LayoutGrid } from "lucide-react";
 import Link from "next/link";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { useAppBadge } from "@/hooks/useAppBadge";
 
 export default function MobileDashboard() {
-    const { user } = useUser();
+    const { user } = useAuth();
     const { tasks, getTodoTasks } = useTaskStore();
     const activeTasks = getTodoTasks();
     const topTask = activeTasks.length > 0 ? activeTasks[0] : null; // Assume sorted by priority/date
@@ -46,7 +46,7 @@ export default function MobileDashboard() {
             <div className="space-y-1">
                 <h2 className="text-xl font-light text-white/60">{greeting},</h2>
                 <h1 className="text-3xl font-bold text-white tracking-tight">
-                    {user?.firstName || "Traveler"}
+                    {user?.user_metadata?.full_name?.split(' ')[0] || "Traveler"}
                 </h1>
             </div>
 

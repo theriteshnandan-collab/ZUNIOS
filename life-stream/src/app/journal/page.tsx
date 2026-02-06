@@ -1,8 +1,6 @@
-"use client";
-
 import { useState, useEffect } from "react";
-import { useUser, UserButton } from "@clerk/nextjs";
-import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/lib/supabase"; // Note: We might want to switch to the new client utils later, but keeping existing for now if compatible.
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -53,7 +51,7 @@ import { format } from "date-fns";
 
 
 export default function JournalPage() {
-    const { user, isLoaded } = useUser();
+    const { user, loading: isLoaded } = useAuth();
     const [dreams, setDreams] = useState<Dream[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [deletingId, setDeletingId] = useState<string | null>(null);
