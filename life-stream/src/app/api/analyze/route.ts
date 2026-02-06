@@ -119,7 +119,7 @@ Return JSON:
                     "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
                 },
                 body: JSON.stringify({
-                    model: "llama-3.3-70b-versatile",
+                    model: "llama3-70b-8192", // Switched to stable production model
                     messages: [
                         { role: "system", content: systemPrompt },
                         { role: "user", content: `Analyze: "${dream}"` }
@@ -129,7 +129,10 @@ Return JSON:
                 })
             });
 
-            if (!response.ok) throw new Error(`Groq API Error: ${response.status}`);
+            if (!response.ok) {
+                const errorBody = await response.text();
+                throw new Error(`Groq API Error: ${response.status} - ${errorBody}`);
+            }
             const data = await response.json();
             const rawText = data.choices[0]?.message?.content || "";
             // Clean markdown code blocks from the JSON response
@@ -137,10 +140,11 @@ Return JSON:
 
         } catch (groqError: any) {
             console.warn("Cloud Intelligence Failed:", groqError.message);
-            // If it's a configuration error, we might want to let the user know, 
-            // but for now we fall back to local mode with a special flag if needed?
-            // Actually, let's stick to "Safe Mode" but maybe visualPrompt can be better.
+
+            // FALLBACK TO LOCAL + ERROR INFO
             analysis = analyzeLocally(dream, category);
+            // Append the error to the interpretation so the user can see it in the UI
+            analysis.interpretation += `\n\n[SYSTEM NOTE: Cloud Analysis Failed. Using Local Neural Net. Reason: ${groqError.message.substring(0, 100)}...]`;
         }
 
         // 3. VISUALIZATION (Pollinations Unlimited)
