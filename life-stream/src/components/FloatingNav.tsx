@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { Home, BookOpen, Target, Compass, Search } from "lucide-react";
 import Link from 'next/link';
