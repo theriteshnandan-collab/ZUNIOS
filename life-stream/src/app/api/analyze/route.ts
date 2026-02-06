@@ -108,6 +108,10 @@ Return JSON:
 
         let analysis;
         try {
+            if (!process.env.GROQ_API_KEY) {
+                throw new Error("GROQ_API_KEY is not set in environment variables.");
+            }
+
             const response = await fetch(GROQ_API_URL, {
                 method: "POST",
                 headers: {
@@ -131,19 +135,24 @@ Return JSON:
             // Clean markdown code blocks from the JSON response
             analysis = JSON.parse(rawText.replace(/```json/g, "").replace(/```/g, "").trim());
 
-        } catch (groqError) {
-            console.warn("Cloud Intelligence Failed. Switching to Local Neural Net.", groqError);
+        } catch (groqError: any) {
+            console.warn("Cloud Intelligence Failed:", groqError.message);
+            // If it's a configuration error, we might want to let the user know, 
+            // but for now we fall back to local mode with a special flag if needed?
+            // Actually, let's stick to "Safe Mode" but maybe visualPrompt can be better.
             analysis = analyzeLocally(dream, category);
         }
 
         // 3. VISUALIZATION (Pollinations Unlimited)
         // Always use the best available prompt (AI's or the raw text)
         const imagePrompt = analysis.visualPrompt || `${dream}, cinematic, 8k`;
-        const cleanPrompt = imagePrompt.substring(0, 200).replace(/[^a-zA-Z0-9 ,]/g, "");
+        // Encode properly to handle special characters
+        const cleanPrompt = encodeURIComponent(imagePrompt.substring(0, 300));
         const seed = Math.floor(Math.random() * 1000000);
 
         // Direct URL for client-side rendering (Fastest, No Server Load)
-        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(cleanPrompt)}?model=flux&width=1024&height=1024&nologo=true&seed=${seed}`;
+        // FLUX model is best for this
+        const imageUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?model=flux&width=1024&height=1024&nologo=true&seed=${seed}`;
 
         return NextResponse.json({
             theme: analysis.theme,
