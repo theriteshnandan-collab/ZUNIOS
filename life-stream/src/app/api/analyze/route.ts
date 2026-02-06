@@ -119,7 +119,7 @@ Return JSON:
                     "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
                 },
                 body: JSON.stringify({
-                    model: "llama3-70b-8192", // Switched to stable production model
+                    model: "llama-3.3-70b-versatile", // Current active flagship model
                     messages: [
                         { role: "system", content: systemPrompt },
                         { role: "user", content: `Analyze: "${dream}"` }
