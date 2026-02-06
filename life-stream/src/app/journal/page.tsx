@@ -53,7 +53,7 @@ import { format } from "date-fns";
 
 
 export default function JournalPage() {
-    const { user, loading: isLoaded } = useAuth();
+    const { user, loading: authLoading } = useAuth();
     const [dreams, setDreams] = useState<Dream[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -133,9 +133,18 @@ export default function JournalPage() {
         setIsLoading(false);
     };
 
-    // Auto-Migrate Old Data on Mount
+    // Fetch entries once Auth state is determined
     useEffect(() => {
-        if (isLoaded && user) {
+        if (!authLoading) {
+            console.log("Auth determined. User:", user?.id || 'guest');
+            fetchDreams();
+            fetchTasks();
+        }
+    }, [authLoading, user?.id]);
+
+    // Auto-Migrate Old Data
+    useEffect(() => {
+        if (!authLoading && user) {
             const hasMigrated = localStorage.getItem('zunios_migrated_v1');
             if (!hasMigrated) {
                 fetch('/api/migrate', { method: 'POST' })
@@ -150,15 +159,7 @@ export default function JournalPage() {
                     .catch(err => console.error("Auto-migration failed", err));
             }
         }
-    }, [isLoaded, user]);
-
-    // Fetch entries on mount
-    useEffect(() => {
-        if (isLoaded) {
-            fetchDreams();
-            fetchTasks(); // Fetch tasks for XP calculation
-        }
-    }, [isLoaded, user]);
+    }, [authLoading, user?.id]);
 
     const handleDelete = async (id: string, e?: React.MouseEvent) => {
         if (e) e.stopPropagation();

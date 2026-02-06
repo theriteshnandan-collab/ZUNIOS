@@ -185,9 +185,16 @@ Return JSON:
 
         // 3. VISUALIZATION (Pollinations Unlimited)
         // Always use the best available prompt (AI's or the raw text)
-        const imagePrompt = analysis.visualPrompt || `${dream}, cinematic, 8k`;
+        const basePrompt = analysis.visualPrompt || `${dream}, cinematic, 8k`;
+        const categoryModifier = category === 'dream' ? "surreal, ethereal, dreamlike" :
+            category === 'idea' ? "futuristic, blueprint, technical" :
+                category === 'win' ? "triumphant, epic, glowing" :
+                    "hyper-realistic, detailed, atmospheric";
+
+        const imagePrompt = `${categoryModifier}, ${basePrompt}, digital art masterpiece, cinematic lighting, 8k, trending on artstation`;
+
         // Encode properly to handle special characters
-        const cleanPrompt = encodeURIComponent(imagePrompt.substring(0, 300));
+        const cleanPrompt = encodeURIComponent(imagePrompt.substring(0, 400));
         const seed = Math.floor(Math.random() * 1000000);
 
         // Direct URL for client-side rendering (Fastest, No Server Load)

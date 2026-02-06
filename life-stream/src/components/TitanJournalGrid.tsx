@@ -168,13 +168,13 @@ export default function TitanJournalGrid({
                                         {dream.content}
                                     </p>
 
-                                    {/* Image (if available) */}
-                                    {dream.image_url && (isLarge || isWide) && (
-                                        <div className="mt-4 rounded-xl overflow-hidden">
+                                    {/* Image (if available) - SHOWN ON ALL CARDS (Brick 8 Fix) */}
+                                    {dream.image_url && (
+                                        <div className="mt-4 rounded-xl overflow-hidden aspect-video">
                                             <DreamImage
                                                 src={dream.image_url}
                                                 alt={dream.theme || dream.content}
-                                                className="w-full h-40 object-cover"
+                                                className="w-full h-full object-cover"
                                             />
                                         </div>
                                     )}

@@ -19,7 +19,8 @@ export async function POST(req: Request) {
         const { content, theme, mood, image_url, category, interpretation } = body;
 
         // Enforce User ID from session
-        const user_id = user.id;
+        const userId = user.id;
+        console.log(`Analyzing Save Request for User: ${userId}`);
 
         if (!content) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -44,7 +45,7 @@ export async function POST(req: Request) {
             mood,
             image_url,
             category,
-            user_id,
+            user_id: userId, // Use the determined userId
             interpretation: Array.isArray(interpretation) ? JSON.stringify(interpretation) : interpretation,
             created_at: new Date().toISOString()
         };
@@ -62,7 +63,10 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: error.message }, { status: 500 });
         }
 
-        return NextResponse.json({ success: true, data });
+        const savedEntry = data[0];
+        console.log(`Successfully saved entry ${savedEntry?.id} for user ${userId}`);
+
+        return NextResponse.json({ success: true, entry: savedEntry });
 
     } catch (error: any) {
         console.error("Save API Error:", error);
