@@ -191,15 +191,14 @@ Return JSON:
                 category === 'win' ? "triumphant, epic, glowing" :
                     "hyper-realistic, detailed, atmospheric";
 
-        const imagePrompt = `${categoryModifier}, ${basePrompt}, digital art masterpiece, cinematic lighting, 8k, trending on artstation`;
+        const imagePrompt = `${categoryModifier}, ${basePrompt}, digital art, cinematic, 8k`;
 
-        // Encode properly to handle special characters
-        const cleanPrompt = encodeURIComponent(imagePrompt.substring(0, 400));
+        // Encode properly to handle special characters (Strict 200 char limit for reliability)
+        const cleanPrompt = encodeURIComponent(imagePrompt.substring(0, 200));
         const seed = Math.floor(Math.random() * 1000000);
 
-        // Direct URL for client-side rendering (Fastest, No Server Load)
-        // FLUX model is best for this
-        const imageUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?model=flux&width=1024&height=1024&nologo=true&seed=${seed}`;
+        // Standard Pollinations Endpoint (Bulletproof)
+        const imageUrl = `https://pollinations.ai/p/${cleanPrompt}?width=1024&height=1024&seed=${seed}&model=flux`;
 
         return NextResponse.json({
             theme: analysis.theme,
@@ -215,7 +214,7 @@ Return JSON:
         console.error("Critical Analysis Error:", criticalError);
         const fallback = analyzeLocally(dream, category);
         const seed = Math.floor(Math.random() * 1000000);
-        const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(dream.substring(0, 100))}?model=flux&width=1024&height=1024&nologo=true&seed=${seed}`;
+        const imageUrl = `https://pollinations.ai/p/${encodeURIComponent(dream.substring(0, 100))}?width=1024&height=1024&seed=${seed}&model=flux`;
 
         return NextResponse.json({
             theme: fallback.theme,

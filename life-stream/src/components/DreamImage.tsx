@@ -16,7 +16,7 @@ export default function DreamImage({ src, alt, className }: DreamImageProps) {
 
     // If it's a base64 data URL, we can't use next/image optimization easily
     const isBase64 = src.startsWith('data:');
-    const fallbackSrc = "https://placehold.co/800x600/1a1a2e/666?text=Dream";
+    const fallbackSrc = "https://placehold.co/800x600/050510/666?text=Capturing+Vision...";
 
     return (
         <div className={cn("relative overflow-hidden bg-white/5", className)}>
