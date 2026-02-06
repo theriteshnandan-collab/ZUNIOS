@@ -119,11 +119,12 @@ export default function JournalPage() {
             .order('created_at', { ascending: false });
 
         if (error) {
-            console.error("Fetch error:", error);
-            toast.error("Failed to load entries");
+            console.error("Supabase Fetch Error:", error);
+            toast.error("Failed to load entries: " + error.message);
             setDreams(localEntries);
         } else {
             const dbEntries = data || [];
+            console.log(`Fetched ${dbEntries.length} entries from Cloud, ${localEntries.length} from Local.`);
             const merged = [...localEntries, ...dbEntries].sort((a, b) =>
                 new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
             );
@@ -201,10 +202,15 @@ export default function JournalPage() {
         setDeletingId(null);
     };
 
-    // Filter dreams based on tab
+    // Unified "Think" filter
     const filteredDreams = selectedTab === 'all'
         ? dreams
-        : dreams.filter(d => d.category === selectedTab || (selectedTab === 'journal' ? !d.category : false));
+        : dreams.filter(d => {
+            if (selectedTab === 'thought') {
+                return d.category === 'thought' || d.category === 'journal' || !d.category;
+            }
+            return d.category === selectedTab;
+        });
 
     const handleDateSelect = (date: Date) => {
         // Toggle: if clicking the same date, clear it. Else set it.
