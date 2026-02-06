@@ -28,7 +28,7 @@ export async function POST(req: Request) {
         // 1. Generate Embedding (with timeout protection)
         let embedding = null;
         // 1. Generate Embedding (DISABLED FOR STABILITY - User requested FIX)
-        let embedding = null;
+
         /*
         if (process.env.OPENAI_API_KEY) { 
             try {
