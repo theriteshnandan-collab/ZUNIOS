@@ -191,14 +191,14 @@ Return JSON:
                 category === 'win' ? "triumphant, epic, glowing" :
                     "hyper-realistic, detailed, atmospheric";
 
-        const imagePrompt = `${categoryModifier}, ${basePrompt}, digital art, cinematic, 8k`;
+        const imagePrompt = `${categoryModifier}, ${basePrompt}, digital art, cinematic, 8k`.substring(0, 200);
 
-        // Encode properly to handle special characters (Strict 200 char limit for reliability)
-        const cleanPrompt = encodeURIComponent(imagePrompt.substring(0, 200));
+        // Use the most compatible hostname for Next/Image
+        const cleanPrompt = encodeURIComponent(imagePrompt);
         const seed = Math.floor(Math.random() * 1000000);
 
         // Standard Pollinations Endpoint (Bulletproof)
-        const imageUrl = `https://pollinations.ai/p/${cleanPrompt}?width=1024&height=1024&seed=${seed}&model=flux`;
+        const imageUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1024&height=1024&seed=${seed}&nologo=true`;
 
         return NextResponse.json({
             theme: analysis.theme,
