@@ -14,8 +14,9 @@ export default function DreamImage({ src, alt, className }: DreamImageProps) {
     const [isLoading, setIsLoading] = useState(true);
     const [hasError, setHasError] = useState(false);
 
-    // If it's a base64 data URL, we can't use next/image optimization easily
+    // If it's a base64 data URL or Pollinations, we'll use standard img to bypass optimization issues
     const isBase64 = src.startsWith('data:');
+    const isPollinations = src.includes('pollinations.ai');
     const fallbackSrc = "https://placehold.co/800x600/050510/666?text=Capturing+Vision...";
 
     return (
@@ -25,8 +26,8 @@ export default function DreamImage({ src, alt, className }: DreamImageProps) {
                 <div className="absolute inset-0 animate-pulse bg-gradient-to-r from-white/5 via-white/10 to-white/5 z-10" />
             )}
 
-            {/* Use standard img for base64 or fallback to avoid config issues */}
-            {isBase64 || hasError ? (
+            {/* Use standard img for base64, pollinations, or fallback to avoid optimization/proxy issues */}
+            {isBase64 || isPollinations || hasError ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                     src={hasError ? fallbackSrc : src}
