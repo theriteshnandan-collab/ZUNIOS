@@ -87,11 +87,17 @@ export default function JournalPage() {
 
         // GUEST MODE FETCH
         if (!user) {
+            // Get offline entries from localStorage
+            const stored = localStorage.getItem('guest_dreams');
+            const localEntries = stored ? JSON.parse(stored) : [];
+
             if (!supabase) {
-                console.error("Supabase client not initialized");
+                console.warn("Supabase client not initialized, showing local only");
+                setDreams(localEntries);
                 setIsLoading(false);
                 return;
             }
+
             const { data, error } = await supabase
                 .from('entries')
                 .select('*')
@@ -100,9 +106,14 @@ export default function JournalPage() {
 
             if (error) {
                 console.error("Fetch error:", error);
-                toast.error("Failed to load entries");
+                setDreams(localEntries); // Fallback to local
             } else {
-                setDreams(data || []);
+                // Merge and remove duplicates by content/ID if needed
+                const dbEntries = data || [];
+                const merged = [...localEntries, ...dbEntries].sort((a, b) =>
+                    new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+                );
+                setDreams(merged);
             }
             setIsLoading(false);
             return;
