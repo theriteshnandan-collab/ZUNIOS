@@ -47,7 +47,7 @@ export default function TitanInput({
     const [showTemplates, setShowTemplates] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-    const typingTimeoutRef = useRef<NodeJS.Timeout>();
+    const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     // Voice Input Integration
     const { isListening, transcript, startListening, stopListening, resetTranscript, hasSupport } = useVoiceInput();
@@ -300,8 +300,8 @@ export default function TitanInput({
 
                     {/* Action Buttons */}
                     <div className="flex items-center gap-2">
-                        {/* Voice Button (VOX) */}
-                        {hasSupport && (
+                        {/* Voice Button (Sidelines/Disabled per user request) */}
+                        {/* {hasSupport && (
                             <Button
                                 size="icon"
                                 variant="ghost"
@@ -309,7 +309,6 @@ export default function TitanInput({
                                     if (isListening) {
                                         stopListening();
                                     } else {
-                                        // Clear previous transcript so we don't append old text
                                         resetTranscript();
                                         startListening();
                                     }
@@ -323,7 +322,7 @@ export default function TitanInput({
                             >
                                 {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
                             </Button>
-                        )}
+                        )} */}
 
                         {/* Submit Button */}
                         <Button

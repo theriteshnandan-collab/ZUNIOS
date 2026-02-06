@@ -41,12 +41,12 @@ export default function TaskCalendar({ tasks, selectedDate, onSelectDate }: Task
                         head_cell: "text-muted-foreground w-full font-medium text-xs uppercase tracking-widest text-center",
                         row: "flex w-full justify-between mt-2 gap-2",
 
-                        // Individual Cells - MAXIMIZED TOUCH TARGETS
+                        // Individual Cells - OPTIMIZED TOUCH TARGETS (Aether Sizing)
                         cell: "text-center p-0 relative w-full aspect-square focus-within:relative focus-within:z-20",
-                        day: "w-full h-full text-lg p-0 font-medium text-white/70 hover:bg-white/10 rounded-2xl transition-all data-[selected]:shadow-2xl",
+                        day: "w-full h-full text-sm p-0 font-medium text-white/70 hover:bg-white/10 rounded-full transition-all data-[selected]:shadow-none",
 
-                        // States
-                        day_selected: "bg-purple-600 text-white hover:bg-purple-500 hover:text-white focus:bg-purple-600 focus:text-white shadow-[0_0_25px_rgba(147,51,234,0.5)] scale-105 z-10",
+                        // States (Aether Theme: Cyan/Teal)
+                        day_selected: "bg-cyan-500 text-black font-bold hover:bg-cyan-400 focus:bg-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.6)] scale-90 z-10 rounded-full",
                         day_today: "bg-white/5 text-white border border-white/20",
                         day_outside: "text-muted-foreground/20 opacity-20",
                         day_disabled: "text-muted-foreground opacity-20",
@@ -56,7 +56,7 @@ export default function TaskCalendar({ tasks, selectedDate, onSelectDate }: Task
                         hasEntry: (d) => !!taskDayMap[normalizeDateKey(d) || '']
                     }}
                     modifiersClassNames={{
-                        hasEntry: "relative after:absolute after:bottom-2 after:left-1/2 after:-translate-x-1/2 after:w-1.5 after:h-1.5 after:bg-emerald-400 after:rounded-full after:shadow-[0_0_10px_rgba(52,211,153,0.8)]"
+                        hasEntry: "relative after:absolute after:bottom-1.5 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-emerald-400 after:rounded-full after:shadow-[0_0_5px_rgba(52,211,153,0.8)]"
                     }}
                 />
             </GlassCard>

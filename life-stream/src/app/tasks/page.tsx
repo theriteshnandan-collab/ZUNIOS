@@ -97,7 +97,7 @@ export default function TasksPage() {
                             </Link>
                             <div>
                                 <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-                                    <Target className="w-6 h-6 text-purple-500" />
+                                    <Target className="w-6 h-6 text-cyan-500" />
                                     Mission Control
                                 </h1>
                                 <p className="text-sm text-white/50">Turn thoughts into action</p>
@@ -108,14 +108,14 @@ export default function TasksPage() {
                         <div className="flex items-center gap-2 bg-white/5 rounded-xl p-1">
                             <button
                                 onClick={() => setViewMode('kanban')}
-                                className={`p-2 rounded-lg transition-colors ${viewMode === 'kanban' ? 'bg-purple-500/30 text-purple-400' : 'text-white/40 hover:text-white'}`}
+                                className={`p-2 rounded-lg transition-colors ${viewMode === 'kanban' ? 'bg-cyan-500/20 text-cyan-400' : 'text-white/40 hover:text-white'}`}
                                 title="Board View"
                             >
                                 <LayoutGrid className="w-5 h-5" />
                             </button>
                             <button
                                 onClick={() => setViewMode('calendar')}
-                                className={`p-2 rounded-lg transition-colors ${viewMode === 'calendar' ? 'bg-purple-500/30 text-purple-400' : 'text-white/40 hover:text-white'}`}
+                                className={`p-2 rounded-lg transition-colors ${viewMode === 'calendar' ? 'bg-cyan-500/20 text-cyan-400' : 'text-white/40 hover:text-white'}`}
                                 title="Calendar View"
                             >
                                 <CalendarIcon className="w-5 h-5" />
@@ -132,7 +132,7 @@ export default function TasksPage() {
                 {/* View Render */}
                 {isLoading ? (
                     <div className="flex items-center justify-center py-20">
-                        <div className="animate-spin w-8 h-8 border-2 border-purple-500 border-t-transparent rounded-full" />
+                        <div className="animate-spin w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full" />
                     </div>
                 ) : (
                     <div className="min-h-[400px]">
@@ -150,7 +150,7 @@ export default function TasksPage() {
                                         <h2 className="text-xl font-semibold text-white/80 pl-1 flex items-center gap-2">
                                             {selectedDate ? (
                                                 <>
-                                                    <span className="text-purple-400">Briefing:</span>
+                                                    <span className="text-cyan-400">Briefing:</span>
                                                     {filteredTasks.length > 0 ? "Active Missions" : "No Missions"}
                                                 </>
                                             ) : (
@@ -160,7 +160,7 @@ export default function TasksPage() {
                                         {selectedDate && (
                                             <button
                                                 onClick={() => setSelectedDate(undefined)}
-                                                className="text-xs uppercase tracking-wider text-purple-400 hover:text-white transition-colors"
+                                                className="text-xs uppercase tracking-wider text-cyan-400 hover:text-white transition-colors"
                                             >
                                                 Show All
                                             </button>
@@ -246,7 +246,7 @@ function FilterBadge({ label, active, onClick }: { label: string, active: boolea
         <button
             onClick={onClick}
             className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${active
-                ? 'bg-purple-500 text-white'
+                ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/50'
                 : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white'
                 }`}
         >

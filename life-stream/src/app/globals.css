@@ -65,6 +65,22 @@
   }
 }
 
+/* PROJECT AETHER: Animation Tokens */
+@keyframes aurora {
+  from {
+    background-position: 50% 50%, 50% 50%;
+  }
+
+  to {
+    background-position: 350% 50%, 350% 50%;
+  }
+}
+
+.animate-aurora {
+  animation: aurora 60s linear infinite;
+}
+
+
 .animate-ken-burns {
   animation: ken-burns 20s ease-out infinite alternate;
   will-change: transform;

@@ -27,19 +27,15 @@ export async function POST(req: Request) {
 
         // 1. Generate Embedding (with timeout protection)
         let embedding = null;
-        if (process.env.OPENAI_API_KEY) { // Only try if key exists
+        // 1. Generate Embedding (DISABLED FOR STABILITY - User requested FIX)
+        let embedding = null;
+        /*
+        if (process.env.OPENAI_API_KEY) { 
             try {
-                // console.log("Generating embedding for:", content.substring(0, 50));
-                const embeddingPromise = generateEmbedding(content);
-                const timeoutPromise = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error('Embedding timeout')), 5000)
-                );
-                // @ts-ignore
-                embedding = await Promise.race([embeddingPromise, timeoutPromise]);
-            } catch (embeddingError: any) {
-                console.warn("Embedding generation failed (continuing without):", embeddingError.message);
-            }
-        }
+                // ... logic ...
+            } catch (embeddingError: any) { ... }
+        } 
+        */
 
         // 2. Build insert data
         const insertData: any = {
@@ -49,7 +45,7 @@ export async function POST(req: Request) {
             image_url,
             category,
             user_id,
-            interpretation,
+            interpretation: Array.isArray(interpretation) ? JSON.stringify(interpretation) : interpretation,
             created_at: new Date().toISOString()
         };
 

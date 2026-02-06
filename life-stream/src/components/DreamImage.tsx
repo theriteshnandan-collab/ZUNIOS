@@ -51,7 +51,8 @@ export default function DreamImage({ src, alt, className }: DreamImageProps) {
                         "object-cover transition-opacity duration-500",
                         isLoading ? "opacity-0" : "opacity-100"
                     )}
-                    onLoadingComplete={() => setIsLoading(false)}
+                    unoptimized
+                    onLoad={() => setIsLoading(false)}
                     onError={() => {
                         setHasError(true);
                         setIsLoading(false);

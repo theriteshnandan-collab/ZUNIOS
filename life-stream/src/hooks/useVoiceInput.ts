@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { toast } from 'sonner';
 
 export interface UseVoiceInputReturn {
     isListening: boolean;
@@ -42,6 +43,16 @@ export function useVoiceInput(): UseVoiceInputReturn {
 
                 recognitionInstance.onerror = (event: any) => {
                     console.error("Speech recognition error", event.error);
+                    if (event.error === 'not-allowed') {
+                        toast.error("Microphone Access Denied", {
+                            description: "Please allow microphone access in your browser settings to use Voice Command.",
+                            duration: 5000,
+                        });
+                    } else if (event.error === 'no-speech') {
+                        // Ignore no-speech
+                    } else {
+                        toast.error("Voice Command Error", { description: event.error });
+                    }
                     setIsListening(false);
                 };
 

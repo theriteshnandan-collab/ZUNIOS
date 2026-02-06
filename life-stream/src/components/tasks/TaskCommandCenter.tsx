@@ -53,8 +53,8 @@ export default function TaskCommandCenter({ onCommandExecuted }: TaskCommandCent
     return (
         <div className="w-full max-w-2xl mx-auto mb-8 relative z-20">
             <div className="relative group">
-                {/* Glow Effect */}
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500" />
+                {/* Glow Effect (Aether: Cyan/Blue) */}
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500/30 to-blue-600/30 rounded-2xl blur opacity-30 group-hover:opacity-50 transition-opacity duration-500" />
 
                 <form
                     onSubmit={handleCommand}

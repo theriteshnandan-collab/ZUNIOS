@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
-import { motion } from "framer-motion";
-import { Moon, Sparkles, Lightbulb, Target, BrainCircuit, Zap } from "lucide-react";
+import { useState, useEffect, Suspense, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { Moon, Sparkles, Lightbulb, Target, BrainCircuit } from "lucide-react";
 import TitanInput from "@/components/TitanInput";
 import { cn } from "@/lib/utils";
 import { useMode } from "@/components/ModeProvider";
@@ -22,8 +22,182 @@ import { useAppBadge } from "@/hooks/useAppBadge";
 import { parseCommandLocally } from "@/lib/local-intelligence";
 import MobileDashboard from "@/components/mobile/MobileDashboard";
 import AuraCore from "@/components/AuraCore";
+import { ParticleBackground } from "@/components/ui/ParticleBackground";
+import { ShinyButton } from "@/components/ui/ShinyButton";
+import { BentoGrid, EliteBentoCard } from "@/components/ui/BentoGrid";
+import { NeuralVisual, SyncVisual, CaptureVisual, VaultVisual } from "@/components/ui/BentoVisuals";
+import { Activity, Disc, Zap, Brain, Calendar, Shield, Share2, Hexagon, Database } from "lucide-react";
+
+// --- SMALL FEATURE GRID COMPONENT ---
+const FeatureItem = ({ icon: Icon, label, desc }: { icon: any, label: string, desc: string }) => (
+  <div className="flex flex-col items-center text-center space-y-2 group cursor-default">
+    <div className="p-3 rounded-2xl bg-white/5 border border-white/10 group-hover:bg-cyan-500/10 group-hover:border-cyan-500/30 transition-all duration-300">
+      <Icon className="w-5 h-5 text-gray-400 group-hover:text-cyan-400 transition-colors" />
+    </div>
+    <div className="space-y-0.5">
+      <div className="text-sm font-medium text-gray-300 group-hover:text-white transition-colors">{label}</div>
+      <div className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">{desc}</div>
+    </div>
+  </div>
+);
+
+// --- ZIG-ZAG FEATURE COMPONENT ---
+const FeatureSection = ({
+  visual: Visual,
+  title,
+  description,
+  align = "left",
+  delay = 0
+}: {
+  visual: any,
+  title: string,
+  description: string,
+  align?: "left" | "right",
+  delay?: number
+}) => {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, delay }}
+      className={cn(
+        "relative flex flex-col md:flex-row items-center gap-8 md:gap-20 py-16 max-w-6xl mx-auto px-6 group/section",
+        align === "right" ? "md:flex-row-reverse" : ""
+      )}
+    >
+
+      {/* CONNECTED SCROLL LINE NODE */}
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-[120%] bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent hidden md:block -z-10" />
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-cyan-950 border border-cyan-500/50 rounded-full hidden md:block z-0 shadow-[0_0_10px_rgba(6,182,212,0.5)]" />
+
+      {/* VISUAL SIDE */}
+      <div className="w-full md:w-1/2">
+        {/* PREMIUM VISUAL CONTAINER */}
+        <div className="relative w-full h-[220px] md:h-[280px] rounded-[2rem] overflow-hidden border border-white/10 bg-[#0a0a0a]/40 backdrop-blur-xl shadow-[0_0_40px_-10px_rgba(0,0,0,0.5)] group-hover/section:border-cyan-500/30 group-hover/section:shadow-[0_0_60px_-15px_rgba(6,182,212,0.2)] transition-all duration-700">
+
+          {/* Elite Visual Wrapper */}
+          <div className="absolute inset-0 z-0">
+            <Visual />
+          </div>
+
+          {/* Premium Glass Overlays */}
+          <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-black/20 pointer-events-none z-10" />
+          <div className="absolute inset-0 ring-1 ring-inset ring-white/5 rounded-[2rem] pointer-events-none z-20" />
+        </div>
+      </div>
+
+      {/* TEXT SIDE */}
+      <div className="w-full md:w-1/2 space-y-6 text-center md:text-left relative z-10">
+        <h2 className="text-3xl md:text-5xl font-serif font-bold text-white tracking-tight leading-tight drop-shadow-lg">
+          {title}
+        </h2>
+        <p className="text-lg md:text-xl text-blue-100/60 font-light leading-relaxed max-w-md mx-auto md:mx-0">
+          {description}
+        </p>
+        <div className="pt-4 flex justify-center md:justify-start">
+          <div className="h-0.5 w-16 bg-gradient-to-r from-cyan-500 to-transparent rounded-full" />
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+// WRAPPER COMPONENT TO HANDLE SCROLL LOGIC
+const NarrativeFlowLines = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start center", "end center"]
+  });
+
+  const scaleY = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]);
+
+  return (
+    <div className="w-full mt-8 space-y-0 pb-12 hidden sm:block">
+
+      {/* 1. CONNECTED FEATURES CONTAINER (Line exists only here) */}
+      <div ref={containerRef} className="relative pb-20">
+        {/* DYNAMIC SCROLL LINE */}
+        <motion.div
+          className="absolute left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-cyan-500/0 via-cyan-500/50 to-cyan-500/0 -translate-x-1/2 origin-top z-0"
+          style={{ scaleY, opacity }}
+        />
+
+        {/* 1. NEURAL CORE */}
+        <FeatureSection
+          visual={NeuralVisual}
+          title="The Neural Core"
+          description="An advanced AI engine that maps your thoughts into a living constellation. Patterns emerge automatically."
+          align="left"
+        />
+
+        {/* 2. MEMORY BANK */}
+        <FeatureSection
+          visual={SyncVisual}
+          title="Daily Sync"
+          description="Your biological rhythm, visualized. Track your cognitive peak and ensure your system is optimal every day."
+          align="right"
+        />
+
+        {/* 3. QUICK CAPTURE */}
+        <FeatureSection
+          visual={CaptureVisual}
+          title="Voice Command"
+          description="Speak to the machine. The Arc Reactor core processes natural language instantly into structured data."
+          align="left"
+        />
+
+        {/* 4. VAULT SECURITY */}
+        <FeatureSection
+          visual={VaultVisual}
+          title="Zero-Knowledge Vault"
+          description="Your mind is private property. Military-grade encryption ensures only you hold the keys to your thoughts."
+          align="right"
+        />
+      </div>
+
+      {/* 2. CAPABILITIES GRID (Outside the line flow) */}
+      <div className="pt-16 px-6 max-w-6xl mx-auto border-t border-white/5">
+        <div className="text-center space-y-4 mb-16">
+          <h3 className="text-2xl md:text-3xl font-serif text-white/90">System Capabilities</h3>
+          <div className="h-1 w-20 bg-cyan-900/50 mx-auto rounded-full" />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+          {[
+            { title: "Neural Input", desc: "Natural language processing that understands context, intent, and emotion.", icon: Brain },
+            { title: "Quantum Sync", desc: "Real-time state synchronization across all your logged-in neural interfaces.", icon: Share2 },
+            { title: "Task Matrices", desc: "Auto-prioritization of objectives based on urgency and your cognitive load.", icon: Target },
+            { title: "Visual Recall", desc: "Vector-embedded image storage for instant photographic memory retrieval.", icon: Sparkles },
+            { title: "Time Distortion", desc: "Focus modes that warp your perception of time to induce flow states.", icon: Activity },
+            { title: "Secure Core", desc: "Local-first encryption. Your thoughts never leave the secure enclave unencrypted.", icon: Shield },
+          ].map((item, i) => (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1 }}
+              viewport={{ once: true }}
+              key={i}
+              className="p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-cyan-500/20 transition-all duration-300 group"
+            >
+              <div className="w-10 h-10 rounded-lg bg-black/50 border border-white/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <item.icon className="w-5 h-5 text-cyan-400" />
+              </div>
+              <h4 className="text-lg font-bold text-white mb-2">{item.title}</h4>
+              <p className="text-blue-100/60 text-sm leading-relaxed">{item.desc}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+    </div>
+  );
+};
 
 function HomeContent() {
+  // ... existing state ... (Lines 105-180 preserved via context usually, but here we replace the render)
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [result, setResult] = useState<any>(null);
@@ -37,7 +211,6 @@ function HomeContent() {
   const tasks = useTaskStore((state) => state.tasks);
   const incompleteCount = tasks.filter(t => t.status === 'todo' || t.status === 'in_progress').length;
 
-  // 🔴 BRICK W5: THE RED DOT
   useAppBadge(incompleteCount);
 
   const [streak, setStreak] = useState(0);
@@ -67,46 +240,74 @@ function HomeContent() {
   }, []);
 
   // 🔗 BRICK W3: SHORTCUT ROUTER
-  // Detects ?mode=X from PWA Shortcuts and sets the state.
   useEffect(() => {
     const shortcutMode = searchParams.get('mode');
     if (shortcutMode && ['task', 'idea', 'journal', 'dream', 'thought'].includes(shortcutMode)) {
-      // Map 'task' to appropriate internal mode if needed, or just set it.
-      // Note: 'task' isn't a visual mode in EntryMode yet, but we treat it as specialized input.
-      // For now, map 'task' to 'thought' but with a special flag, or just focus.
-
       const targetMode = shortcutMode === 'task' ? 'thought' : (shortcutMode as EntryMode);
       setMode(targetMode);
-
-      // Auto-focus logic can be handled by OmniInput observing mode changes
-      // or we can pass a 'autoFocus' prop. 
-      // For now, setting mode is the key step.
-
-      // Clean URL
       router.replace('/', { scroll: false });
       toast.info(`Mode set to: ${shortcutMode.toUpperCase()}`);
     }
   }, [searchParams, setMode, router]);
 
+  // ♻️ BRICK: GUEST SYNC
+  useEffect(() => {
+    const syncGuestEntries = async () => {
+      if (!user) return; // Only run if logged in
+
+      const stored = localStorage.getItem('guest_dreams');
+      if (!stored) return;
+
+      const guestEntries = JSON.parse(stored);
+      if (guestEntries.length === 0) return;
+
+      toast.loading(`Syncing ${guestEntries.length} offline thoughts...`, { id: 'sync-toast' });
+
+      let syncedCount = 0;
+      const remainingEntries = [];
+
+      for (const entry of guestEntries) {
+        try {
+          await fetch('/api/entries/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              content: entry.content,
+              theme: entry.theme,
+              mood: entry.mood,
+              image_url: entry.image_url,
+              category: entry.category,
+              interpretation: entry.interpretation,
+              user_id: user.id
+            })
+          });
+          syncedCount++;
+        } catch (err) {
+          console.error("Sync failed for entry", entry);
+          remainingEntries.push(entry);
+        }
+      }
+
+      if (remainingEntries.length > 0) {
+        localStorage.setItem('guest_dreams', JSON.stringify(remainingEntries));
+        toast.error(`Sync partial: ${syncedCount}/${guestEntries.length} uploaded`, { id: 'sync-toast' });
+      } else {
+        localStorage.removeItem('guest_dreams');
+        toast.success("Memory Core Synchronized", { description: "All offline entries secured.", id: 'sync-toast' });
+        confetti({ particleCount: 30, spread: 50 });
+      }
+    };
+
+    syncGuestEntries();
+  }, [user]);
+
   const getModeData = () => {
     switch (mode) {
-      case 'idea': return {
-        title: "Build Something Great",
-        icon: Lightbulb
-      };
-      case 'win': return {
-        title: "Log Your Moment",
-        icon: Sparkles
-      };
+      case 'idea': return { title: "Build Something Great", icon: Lightbulb };
+      case 'win': return { title: "Log Your Moment", icon: Sparkles };
       case 'journal':
-      case 'thought': return {
-        title: "Think It Through",
-        icon: BrainCircuit
-      };
-      default: return {
-        title: "Explore Your Vision",
-        icon: Moon
-      };
+      case 'thought': return { title: "Think It Through", icon: BrainCircuit };
+      default: return { title: "Explore Your Vision", icon: Moon };
     }
   };
 
@@ -114,38 +315,27 @@ function HomeContent() {
     setIsLoading(true);
     try {
       // 🔀 COMMAND ROUTER (THE "EAR" OF ZUNIOS)
-      // Detects intent to create a task via specific keywords or phrasings.
       const commandRegex = /^\s*(?:(add|create|new|plus|log|record|setup|schedule|deploy|execute|start)\s+(?:a\s+)?(task|todo|to-do|mission|reminder|op|operation|objective|entry)|(?:task|todo|to-do|mission|remind|reminder|op|operation|objective)|(?:remind|remember|don't\s+forget)(?:\s+me)?\s+to|(?:urgent|priority|important|p[1-3]):|i\s+(?:need|have|must)\s+to)\b/i;
 
       if (commandRegex.test(text)) {
         console.log("🚀 Command Detected: Routing to Task Engine");
-
         let taskData;
-
         try {
-          // ☁️ TRY CLOUD INTELLIGENCE
           const response = await fetch('/api/analyze-task', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ command: text })
           });
-
           if (!response.ok) throw new Error("API Error");
           const data = await response.json();
           if (data.error) throw new Error(data.error);
           taskData = data;
-
         } catch (err) {
-          // 🛡️ CIRCUIT BREAKER: FALLBACK TO LOCAL
           console.warn("Cloud Intelligence Failed. Engaging Local Protocols.", err);
           taskData = parseCommandLocally(text);
-          toast("Offline Intelligence Active", {
-            description: "Cloud unreachable. Processed locally.",
-            icon: <Zap className="w-4 h-4 text-amber-400" />
-          });
+          toast("Offline Intelligence Active", { description: "Cloud unreachable. Processed locally.", icon: <Zap className="w-4 h-4 text-amber-400" /> });
         }
 
-        // ACTUALLY CREATE THE TASK
         if (taskData.action === 'create' && taskData.data) {
           await addTask({
             content: taskData.data.content,
@@ -153,56 +343,36 @@ function HomeContent() {
             due_date: taskData.data.due_date,
           });
         }
-
-        // Success - Task Created
         confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
-        toast.success(
-          taskData.action === 'create' ? "Mission Deployed" : "Command Executed",
-          { description: taskData.data?.content || "Operation successful" }
-        );
-
-        // Do NOT show revelation view for tasks. 
-        // Just clear loading state.
+        toast.success(taskData.action === 'create' ? "Mission Deployed" : "Command Executed", { description: taskData.data?.content || "Operation successful" });
         setIsLoading(false);
         return;
       }
 
-      // 🔮 STANDARD ANALYSIS (Dream/Journal)
+      // 🔮 STANDARD ANALYSIS
       let analysisResult;
-
       try {
         const response = await fetch('/api/analyze', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ dream: text, category: analysisMode })
         });
-
-        if (!response.ok) throw new Error("API Error");
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`API Error ${response.status}: ${response.statusText} - ${errorText.substring(0, 100)}`);
+        }
         const data = await response.json();
         if (data.error) throw new Error(data.error);
         analysisResult = data;
-
-      } catch (err) {
-        // 🛡️ CIRCUIT BREAKER: DREAM FALLBACK
+      } catch (err: any) {
         console.warn("Dream Analysis Failed. Engaging Local Save.", err);
-        analysisResult = {
-          theme: "Raw Entry",
-          mood: "Neutral",
-          imageUrl: "/placeholder-dream.jpg", // Needs a valid fallback or handling
-          interpretation: ["Cloud analysis unavailable. Entry saved safely."],
-          content: text
-        };
-        toast("Offline Save Active", {
-          description: "Analysis skipped. Content preserved.",
-          icon: <Zap className="w-4 h-4 text-amber-400" />
-        });
+        analysisResult = { theme: "Raw Entry", mood: "Neutral", imageUrl: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1000&auto=format&fit=crop", interpretation: [`Cloud analysis unavailable: ${err.message || 'Unknown Error'}. Entry saved safely.`], content: text };
+        toast("Offline Save Active", { description: `Analysis skipped: ${err.message}`, icon: <Zap className="w-4 h-4 text-amber-400" /> });
       }
-
-      // Merge original text content so it can be saved later
       setResult({ ...analysisResult, content: text });
     } catch (error: any) {
       console.error("Critical Failure:", error);
-      toast.error("System Error. Please try again.");
+      toast.error(`System Error: ${error.message}`);
     } finally {
       setIsLoading(false);
     }
@@ -210,58 +380,37 @@ function HomeContent() {
 
   const handleSave = async () => {
     const modeData = getModeData();
-
-    // GUEST HANDLING
     if (!user) {
       try {
-        const guestDream = {
-          id: crypto.randomUUID(),
-          content: result.content,
-          theme: result.theme,
-          mood: result.mood,
-          image_url: result.imageUrl,
-          category: mode,
-          created_at: new Date().toISOString(),
-          is_guest: true,
-          interpretation: result.interpretation // Persist interpretation
-        };
-
+        const guestDream = { id: crypto.randomUUID(), content: result.content, theme: result.theme, mood: result.mood, image_url: result.imageUrl, category: mode, created_at: new Date().toISOString(), is_guest: true, interpretation: result.interpretation };
         const existing = JSON.parse(localStorage.getItem('guest_dreams') || '[]');
         const updated = [guestDream, ...existing];
         localStorage.setItem('guest_dreams', JSON.stringify(updated));
-
         confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-
-        toast.success(`Saved to Temporary Notebook! 📝`, {
-          description: "Sign in to save permanently.",
-          duration: 5000,
-        });
-
+        toast.success(`Saved to Temporary Notebook! 📝`, { description: "Sign in to save permanently.", duration: 5000 });
         setResult(null);
-      } catch (error) {
-        console.error("Guest save failed:", error);
-        toast.error("Failed to save locally.");
-      } finally {
-        setIsSaving(false);
-      }
+      } catch (error) { console.error("Guest save failed:", error); toast.error("Failed to save locally."); } finally { setIsSaving(false); }
       return;
     }
-
-    // AUTH MODE SAVE
+    setIsSaving(true);
     setIsSaving(true);
     try {
+      const payload = {
+        content: result.content,
+        theme: result.theme,
+        mood: result.mood,
+        image_url: result.imageUrl,
+        category: mode,
+        user_id: user.id,
+        interpretation: result.interpretation
+      };
+
+      console.log("Saving Entry Payload:", payload);
+
       const response = await fetch('/api/entries/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          content: result.content,
-          theme: result.theme,
-          mood: result.mood,
-          image_url: result.imageUrl,
-          category: mode,
-          user_id: user.id,
-          interpretation: result.interpretation
-        })
+        body: JSON.stringify(payload)
       });
 
       let data;
@@ -269,14 +418,14 @@ function HomeContent() {
       try {
         data = JSON.parse(responseText);
       } catch (e) {
-        throw new Error(`Server connection failed (${response.status}): ${responseText.substring(0, 100)}...`);
+        console.error("Server Response (Non-JSON):", responseText);
+        throw new Error(`Server connection failed: ${responseText.substring(0, 50)}`);
       }
 
       if (data.error) throw new Error(data.error);
 
       confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
       toast.success(`${modeData.title} saved to Memory Core!`);
-
       setResult(null);
     } catch (error: any) {
       console.error("Error saving:", error);
@@ -286,172 +435,170 @@ function HomeContent() {
     }
   };
 
-  // REVELATION VIEW
+  // REVELATION VIEW (PRO DESIGN) - Immersive Split Layout
   if (result) {
     return (
-      <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4 relative overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-primary/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="fixed inset-0 z-50 bg-[#050510] text-white overflow-y-auto">
+        {/* Close/Back Button */}
+        <div className="absolute top-6 left-6 z-50">
+          <Button
+            variant="ghost"
+            onClick={() => setResult(null)}
+            className="text-white/50 hover:text-white hover:bg-white/10"
+          >
+            ← Back to Input
+          </Button>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="z-10 w-full max-w-6xl flex flex-col md:grid md:grid-cols-[450px_1fr] gap-8 items-start"
-        >
-          {/* Image Side - Cinematic Size */}
-          <div className="relative group w-full md:w-[450px] shrink-0">
-            <div className="absolute -inset-2 bg-gradient-to-r from-primary/30 to-purple-600/30 rounded-3xl blur-2xl opacity-20 group-hover:opacity-50 transition duration-1000" />
-            <div className="relative rounded-2xl shadow-2xl w-full aspect-square md:h-[450px] overflow-hidden bg-black/50 border border-white/10">
-              <DreamImage
-                src={result.imageUrl}
-                alt="Visualization"
-                className="w-full h-full object-cover"
-              />
-            </div>
+        <div className="min-h-screen w-full flex flex-col lg:flex-row">
+
+          {/* LEFT: VISUAL IMMERSION (50% Width) */}
+          <div className="w-full lg:w-1/2 relative h-[50vh] lg:h-screen bg-black">
+            <DreamImage
+              src={result.imageUrl}
+              alt={result.theme}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050510] to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-[#050510]" />
           </div>
 
-          {/* Analysis Side */}
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <h2 className="text-4xl font-bold font-serif tracking-tight leading-tight">{result.theme}</h2>
-              <div className="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20">
-                {result.mood}
+          {/* RIGHT: INTELLECTUAL CORE (Text) */}
+          <div className="w-full lg:w-1/2 flex flex-col justify-center p-8 lg:p-20 space-y-8 bg-[#050510]">
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="space-y-4"
+            >
+              <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-950/30 text-cyan-400 text-xs font-medium tracking-wide border border-cyan-500/20 uppercase">
+                {result.mood || "ANALYSIS COMPLETE"}
               </div>
-            </div>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-serif tracking-tight text-white leading-[1.1]">
+                {result.theme || "Your Vision"}
+              </h2>
+            </motion.div>
 
-            <div className="space-y-4">
-              {(Array.isArray(result.interpretation) ? result.interpretation : [result.interpretation || "Analysis unavailable"]).map((item: string, i: number) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  className="p-5 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-sm hover:bg-white/10 transition-colors"
-                >
-                  <p className="text-slate-300 leading-relaxed text-lg font-light">{item}</p>
-                </motion.div>
-              ))}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="w-full h-px bg-gradient-to-r from-white/20 to-transparent"
+            />
 
-              {/* ZUNIOS Signature */}
-              <div className="text-right pt-2">
-                <span className="text-sm text-white/30 italic tracking-widest">— ZUNIOS</span>
-              </div>
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="prose prose-invert prose-lg max-w-none"
+            >
+              {/* Handling the new Paragraph format or fallback Array */}
+              {Array.isArray(result.interpretation) ? (
+                result.interpretation.map((item: string, i: number) => (
+                  <p key={i} className="text-gray-300 leading-relaxed text-lg">{item}</p>
+                ))
+              ) : (
+                <p className="text-gray-300 leading-8 text-xl font-light whitespace-pre-wrap">
+                  {result.interpretation}
+                </p>
+              )}
+            </motion.div>
 
-            {/* Guest Warning */}
-            {!user && (
-              <GlassCard className="p-4 mb-6 border-amber-500/30 bg-amber-500/5">
-                <div className="flex flex-col gap-3 text-center">
-                  <div className="flex items-center justify-center gap-2 text-amber-200/90 font-medium">
-                    <Sparkles className="w-4 h-4" />
-                    <span>Sign in to save this</span>
-                  </div>
-                  <p className="text-xs text-amber-200/60">
-                    Create a free account to keep a permanent record.
-                  </p>
-                  <Button
-                    variant="secondary"
-                    className="w-full bg-amber-500/10 hover:bg-amber-500/20 text-amber-100 border border-amber-500/20"
-                    onClick={async () => {
-                      const { createClient } = await import("@/utils/supabase/client");
-                      const supabase = createClient();
-                      await supabase.auth.signInWithOAuth({
-                        provider: "google",
-                        options: { redirectTo: `${window.location.origin}/auth/callback` }
-                      });
-                    }}
-                  >
-                    Sign In Now
-                  </Button>
-                </div>
-              </GlassCard>
-            )}
-
-            <div className="flex gap-4 mt-8">
-              <Button
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+              className="pt-8 flex gap-4"
+            >
+              <ShinyButton
                 onClick={handleSave}
                 disabled={isSaving}
-                className="flex-1 bg-primary hover:bg-primary/90 text-white shadow-lg shadow-primary/20"
+                className="px-8 py-4 text-base min-w-[180px]"
               >
-                {isSaving ? (
-                  <Sparkles className="w-4 h-4 mr-2 animate-spin" />
-                ) : (
-                  <Sparkles className="w-4 h-4 mr-2" />
-                )}
-                {isSaving ? "Saving..." : "Save to Zunios"}
-              </Button>
+                {isSaving ? "Saving..." : "Save to Core"}
+              </ShinyButton>
+
               <Button
                 variant="outline"
                 onClick={() => setResult(null)}
-                className="flex-1 hover:bg-white/5"
+                className="px-8 py-4 h-auto text-base border-white/10 hover:bg-white/5"
               >
                 Discard
               </Button>
-            </div>
+            </motion.div>
+
           </div>
-        </motion.div >
-      </div >
+        </div>
+      </div>
     );
   }
 
-  // INPUT VIEW
+  // INPUT VIEW (Particle Background)
   return (
-    <div className="min-h-screen bg-transparent text-foreground flex flex-col items-center justify-center p-4 relative">
-      {/* 🌌 PROJECT AURA: THE LIVING CORE (Restored) */}
-      <AuraCore mode={mode as any} />
+    <ParticleBackground>
+      <div className="min-h-screen flex flex-col items-center justify-center p-4 relative z-10 py-20">
 
-      {isLoading && <DreamLoader mode={mode} />}
+        {isLoading && <DreamLoader mode={mode} />}
 
-      <motion.div
-        initial={{ opacity: 1, y: 0 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="z-10 w-full max-w-2xl text-center space-y-8"
-      >
+        <motion.div
+          initial={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="z-10 w-full max-w-2xl text-center space-y-10"
+        >
 
-        {/* Header - Hide large text in sidebar mode */}
-        <div className="space-y-4">
-          <div className="flex items-center justify-center mb-6 scale-125">
-            <ZuniosLogo size="xl" showText={true} className="flex-col !gap-4" />
+          {/* Header */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-center mb-6 scale-125">
+              <ZuniosLogo size="xl" showText={true} className="flex-col !gap-4" />
+            </div>
+
+            {/* 💻 DESKTOP HERO TEXT */}
+            <h1 className="text-4xl md:text-6xl font-bold font-serif tracking-tight bg-gradient-to-br from-white via-white to-gray-400 bg-clip-text text-transparent pb-2 hidden sm:block">
+              The OS for <br /> Your Mind
+            </h1>
+
+            <p className="text-lg text-gray-400 max-w-lg mx-auto leading-relaxed hidden sm:block font-light">
+              Capture visions. Build ideas. Log moments. Think deeply.
+            </p>
           </div>
 
+          {/* Input Card - Titan Design System V2 */}
+          <div className="w-full max-w-2xl mx-auto">
+            <TitanInput
+              onAnalyze={handleAnalyze}
+              isAnalyzing={isLoading}
+              initialMode={mode}
+              initialValue={searchParams.get('content') || ''}
+            />
+          </div>
 
-          {/* 💻 DESKTOP HERO TEXT */}
-          <h1 className="text-4xl md:text-7xl font-bold font-serif tracking-tight bg-gradient-to-br from-white via-white to-white/50 bg-clip-text text-transparent pb-2 hidden sm:block">
-            The OS for <br /> Your Mind
-          </h1>
+          {/* ✨ NEW FEATURE STRIP (Compact) */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            className="grid grid-cols-4 gap-4 w-full max-w-2xl mx-auto pt-4 border-t border-white/5"
+          >
+            <FeatureItem icon={Brain} label="Neural Core" desc="AI Processing" />
+            <FeatureItem icon={Database} label="Memory Bank" desc="Vector Recall" />
+            <FeatureItem icon={Hexagon} label="Task Engine" desc="Auto-Organize" />
+            <FeatureItem icon={Share2} label="Sync Link" desc="Cross-Device" />
+          </motion.div>
 
-          <p className="text-xl text-muted-foreground max-w-lg mx-auto leading-relaxed hidden sm:block">
-            Capture visions. Build ideas. Log moments. Think deeply. <br />
-            Your second brain, evolved.
-          </p>
-        </div>
-
-        {/* Input Card - Titan Design System V2 */}
-        <div className="w-full max-w-2xl mx-auto">
-          <TitanInput
-            onAnalyze={handleAnalyze}
-            isAnalyzing={isLoading}
-            initialMode={mode}
-            initialValue={searchParams.get('content') || ''}
-          />
-        </div>
-
-
-      </motion.div>
-
-      {!user && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 1 }}
-          className="w-full hidden sm:block" // Brick W9: Hide landing page in sidebar mode
-        >
-          <LandingSections />
         </motion.div>
-      )}
-    </div>
+
+
+
+
+
+        {/* 💻 DESKTOP: NARRATIVE FLOW description -> diagram */}
+        {!user && <NarrativeFlowLines />}
+      </div>
+    </ParticleBackground >
   );
 }
+
 
 export default function Home() {
   return (

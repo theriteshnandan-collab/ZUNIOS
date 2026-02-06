@@ -120,7 +120,7 @@ function Calendar({
                             <button
                                 onClick={() => onSelect?.(day)}
                                 className={cn(
-                                    "h-8 w-8 md:h-6 md:w-6 rounded-full flex items-center justify-center text-xs md:text-[10px] transition-all relative z-10 touch-target",
+                                    "h-7 w-7 md:h-6 md:w-6 rounded-full flex items-center justify-center text-xs md:text-[10px] transition-all relative z-10 touch-target",
 
                                     // Normal State (Current Month)
                                     !isOutside && "text-white hover:bg-white/10",
@@ -131,8 +131,8 @@ function Calendar({
                                     // Today's Date
                                     isToday && !isSelected && "bg-blue-600/20 text-blue-200 ring-1 ring-blue-500",
 
-                                    // Selected State (Overrides everything)
-                                    isSelected && "bg-purple-600 text-white shadow-lg shadow-purple-500/30 hover:bg-purple-500",
+                                    // Selected State (Overrides everything) - Aether Cyan
+                                    isSelected && "bg-cyan-500 text-black font-bold shadow-lg shadow-cyan-500/30 hover:bg-cyan-400",
                                 )}
                             >
                                 {format(day, "d")}
@@ -141,8 +141,8 @@ function Calendar({
                             {/* Modifiers (Has Entry Dot) */}
                             {hasEntry && !isSelected && (
                                 <div className={cn(
-                                    "absolute bottom-1 w-1 h-1 rounded-full bg-purple-400",
-                                    modifiersClassNames?.hasEntry // Allow external styling if needed, though we hardcode position
+                                    "absolute bottom-1 w-1 h-1 rounded-full bg-cyan-400",
+                                    modifiersClassNames?.hasEntry
                                 )} />
                             )}
                         </div>
