@@ -53,6 +53,7 @@ export async function POST(req: Request) {
             thought: `You are a wise, warm mentor. Your name is Zunios.
             
 Analyze this thought in DEPTH. Do not be brief. The user wants a detailed, immersive breakdown.
+CRITICAL: Return valid JSON. Escape all newlines within strings as \\n.
 
 Return JSON:
 {
@@ -135,8 +136,43 @@ Return JSON:
             }
             const data = await response.json();
             const rawText = data.choices[0]?.message?.content || "";
-            // Clean markdown code blocks from the JSON response
-            analysis = JSON.parse(rawText.replace(/```json/g, "").replace(/```/g, "").trim());
+
+            // Robust JSON Parsing Helper
+            const cleanAndParse = (input: string) => {
+                try {
+                    // 1. Remove Markdown
+                    let cleaned = input.replace(/```json/g, "").replace(/```/g, "").trim();
+                    // 2. Find the first '{' and last '}' to strip external text
+                    const firstBrace = cleaned.indexOf('{');
+                    const lastBrace = cleaned.lastIndexOf('}');
+                    if (firstBrace !== -1 && lastBrace !== -1) {
+                        cleaned = cleaned.substring(firstBrace, lastBrace + 1);
+                    }
+                    // 3. Attempt parse
+                    return JSON.parse(cleaned);
+                } catch (e) {
+                    // 4. Retry: Escape unescaped newlines inside strings (simple heuristic)
+                    try {
+                        let sanitized = input
+                            .replace(/```json/g, "")
+                            .replace(/```/g, "")
+                            .trim();
+                        // Find bounds again
+                        const first = sanitized.indexOf('{');
+                        const last = sanitized.lastIndexOf('}');
+                        if (first !== -1 && last !== -1) {
+                            sanitized = sanitized.substring(first, last + 1);
+                        }
+                        // Aggressive escape of newlines that might be unescaped
+                        const reSanitized = sanitized.replace(/\n/g, "\\n").replace(/\r/g, "");
+                        return JSON.parse(reSanitized);
+                    } catch (e2) {
+                        throw new Error("Failed to parse JSON response: " + e.message);
+                    }
+                }
+            };
+
+            analysis = cleanAndParse(rawText);
 
         } catch (groqError: any) {
             console.warn("Cloud Intelligence Failed:", groqError.message);
