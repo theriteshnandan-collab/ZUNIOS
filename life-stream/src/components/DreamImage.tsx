@@ -32,6 +32,7 @@ export default function DreamImage({ src, alt, className }: DreamImageProps) {
                 <img
                     src={hasError ? fallbackSrc : src}
                     alt={alt}
+                    referrerPolicy="no-referrer"
                     className={cn(
                         "w-full h-full object-cover transition-opacity duration-500",
                         isLoading ? "opacity-0" : "opacity-100"
