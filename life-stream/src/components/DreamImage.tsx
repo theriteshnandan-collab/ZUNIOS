@@ -16,7 +16,7 @@ export default function DreamImage({ src, alt, className }: DreamImageProps) {
 
     // If it's a base64 data URL or Pollinations, we'll use standard img to bypass optimization issues
     const isBase64 = src.startsWith('data:');
-    const isPollinations = src.includes('pollinations.ai');
+    const isPollinations = src.includes('pollinations.ai') || src.includes('prompt/');
     const fallbackSrc = "https://placehold.co/800x600/050510/666?text=Capturing+Vision...";
 
     return (

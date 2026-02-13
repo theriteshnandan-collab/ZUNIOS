@@ -185,14 +185,13 @@ Return JSON:
                 category === 'win' ? "triumphant, epic, glowing" :
                     "hyper-realistic, detailed, atmospheric";
 
-        const imagePrompt = `${categoryModifier}, ${basePrompt}, digital art, 8k`.substring(0, 150);
+        const imagePrompt = `${categoryModifier}, ${basePrompt}, digital art, 8k`.substring(0, 120);
 
-        // Final Bulletproof Endpoint: Standard pollinations.ai/p/
+        // Direct URL: Use image.pollinations.ai/prompt/ for synchronous image delivery (No redirects)
         const cleanPrompt = encodeURIComponent(imagePrompt);
-        const seed = Math.floor(Math.random() * 1000000) + Date.now();
+        const seed = Math.floor(Math.random() * 1000) + Date.now(); // Smaller seed, easier to cache correctly
 
-        // This is the most compatible URL format across all regions/browsers
-        const imageUrl = `https://pollinations.ai/p/${cleanPrompt}?width=1024&height=1024&seed=${seed}&model=flux`;
+        const imageUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1024&height=1024&seed=${seed}&model=flux&nologo=true`;
 
         return NextResponse.json({
             theme: analysis.theme,
