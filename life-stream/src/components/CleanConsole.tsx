@@ -12,34 +12,45 @@ import { useEffect } from "react";
  */
 export default function CleanConsole() {
     useEffect(() => {
-        if (process.env.NODE_ENV !== "production") return;
-
+        // We run this always for the "Mind OS" experience
         const suppressedWarnings = [
             "preloaded using link preload but not used",
             "Manifest: Enctype should be set",
-            "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT" // Vercel Analytics vs AdBlock
+            "Failed to load script from /_vercel/insights/script.js",
+            "Vercel Web Analytics",
+            "Failed to load resource: net::ERR_BLOCKED_BY_CLIENT"
         ];
 
         const originalWarn = console.warn;
         const originalError = console.error;
+        const originalLog = console.log;
+
+        const silenceFilter = (...args: any[]) => {
+            if (typeof args[0] === "string" && suppressedWarnings.some(sw => args[0].includes(sw))) {
+                return true; // Silence it
+            }
+            return false;
+        };
 
         console.warn = (...args: any[]) => {
-            if (typeof args[0] === "string" && suppressedWarnings.some(sw => args[0].includes(sw))) {
-                return;
-            }
+            if (silenceFilter(...args)) return;
             originalWarn.apply(console, args);
         };
 
         console.error = (...args: any[]) => {
-            if (typeof args[0] === "string" && suppressedWarnings.some(sw => args[0].includes(sw))) {
-                return;
-            }
+            if (silenceFilter(...args)) return;
             originalError.apply(console, args);
+        };
+
+        console.log = (...args: any[]) => {
+            if (silenceFilter(...args)) return;
+            originalLog.apply(console, args);
         };
 
         return () => {
             console.warn = originalWarn;
             console.error = originalError;
+            console.log = originalLog;
         };
     }, []);
 
