@@ -13,6 +13,7 @@ import NoiseOverlay from "@/components/ui/NoiseOverlay";
 import dynamic from "next/dynamic";
 
 const OnboardingModal = dynamic(() => import("@/components/OnboardingModal"), { ssr: false });
+import CleanConsole from "@/components/CleanConsole";
 import { Inter, Crimson_Pro, JetBrains_Mono } from "next/font/google";
 
 // 1. The Machine (System Interface)
@@ -98,6 +99,7 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${crimsonPro.variable} ${jetbrainsMono.variable} antialiased bg-[#050510] text-[#E0E0E0] select-none`}
       >
+        <CleanConsole />
         <ModeProvider>
           <OnboardingModal />
           <NotificationManager />
