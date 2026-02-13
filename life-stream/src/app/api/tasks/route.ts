@@ -1,12 +1,15 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
-import type { Task, CreateTaskInput, UpdateTaskInput } from "@/types/task";
+import type { CreateTaskInput, UpdateTaskInput, TaskPriority, TaskStatus } from "@/types/task";
 
 
 import { generateEmbedding } from "@/lib/vector";
 
 export const dynamic = 'force-dynamic';
+const GUEST_USER_ID = '00000000-0000-0000-0000-000000000000';
+const VALID_STATUS: TaskStatus[] = ['todo', 'in_progress', 'done'];
+const VALID_PRIORITY: TaskPriority[] = ['low', 'medium', 'high'];
 
 // Initialize Supabase
 function getSupabase() {
@@ -15,13 +18,15 @@ function getSupabase() {
     return createClient(url, key);
 }
 
+function getTaskOwnerId(req: Request) {
+    const headerUserId = req.headers.get('x-user-id')?.trim();
+    return headerUserId || GUEST_USER_ID;
+}
+
 // GET: Fetch all tasks for user
 export async function GET(req: Request) {
     try {
-        const { userId } = await auth();
-        // FLIGHT FIX: DB expects UUID, so 'guest' string fails.
-        // We use a NIL UUID for guest tasks
-        const guestId = userId || '00000000-0000-0000-0000-000000000000';
+        const ownerId = getTaskOwnerId(req);
 
         const supabase = getSupabase();
 
@@ -31,11 +36,11 @@ export async function GET(req: Request) {
         let query = supabase
             .from('tasks')
             .select('*')
-            .eq('user_id', guestId)
+            .eq('user_id', ownerId)
             .order('created_at', { ascending: false });
 
         // Filter by status if provided
-        if (status && ['todo', 'in_progress', 'done'].includes(status)) {
+        if (status && VALID_STATUS.includes(status as TaskStatus)) {
             query = query.eq('status', status);
         }
 
@@ -57,17 +62,20 @@ export async function GET(req: Request) {
 // POST: Create new task
 export async function POST(req: Request) {
     try {
-        const { userId } = await auth();
-        // FLIGHT FIX: DB expects UUID, so 'guest' string fails.
-        // We use a NIL UUID for guest tasks or a specific guest UUID if needed.
-        // For now, let's use the Nil UUID: 00000000-0000-0000-0000-000000000000
-        const guestId = userId || '00000000-0000-0000-0000-000000000000';
+        const ownerId = getTaskOwnerId(req);
 
         const body: CreateTaskInput = await req.json();
 
         if (!body.content || body.content.trim().length === 0) {
             return NextResponse.json(
                 { error: "Task content is required" },
+                { status: 400 }
+            );
+        }
+
+        if (body.priority && !VALID_PRIORITY.includes(body.priority)) {
+            return NextResponse.json(
+                { error: "Invalid task priority" },
                 { status: 400 }
             );
         }
@@ -85,7 +93,7 @@ export async function POST(req: Request) {
         }
 
         const newTask = {
-            user_id: guestId,
+            user_id: ownerId,
             content: body.content.trim(),
             status: 'todo',
             priority: body.priority || 'medium',
@@ -131,10 +139,7 @@ export async function POST(req: Request) {
 // PATCH: Update task
 export async function PATCH(req: Request) {
     try {
-        const { userId } = await auth();
-        // FLIGHT FIX: DB expects UUID, so 'guest' string fails.
-        // We use a NIL UUID for guest tasks
-        const guestId = userId || '00000000-0000-0000-0000-000000000000';
+        const ownerId = getTaskOwnerId(req);
 
         const { id, ...updates }: { id: string } & UpdateTaskInput = await req.json();
 
@@ -143,6 +148,14 @@ export async function PATCH(req: Request) {
                 { error: "Task ID is required" },
                 { status: 400 }
             );
+        }
+
+        if (updates.status && !VALID_STATUS.includes(updates.status)) {
+            return NextResponse.json({ error: "Invalid task status" }, { status: 400 });
+        }
+
+        if (updates.priority && !VALID_PRIORITY.includes(updates.priority)) {
+            return NextResponse.json({ error: "Invalid task priority" }, { status: 400 });
         }
 
         const supabase = getSupabase();
@@ -160,7 +173,7 @@ export async function PATCH(req: Request) {
             .from('tasks')
             .update(updateData)
             .eq('id', id)
-            .eq('user_id', guestId)
+            .eq('user_id', ownerId)
             .select()
             .single();
 
@@ -186,13 +199,7 @@ export async function PATCH(req: Request) {
 // DELETE: Remove task
 export async function DELETE(req: Request) {
     try {
-        const supabaseServer = getSupabase();
-        const { data: { user } } = await supabaseServer.auth.getUser();
-        const userId = user?.id;
-
-        if (!userId) {
-            return new NextResponse("Unauthorized", { status: 401 });
-        }
+        const ownerId = getTaskOwnerId(req);
 
         // Get ID from URL query or body? 
         // Standard delete usually has ID in URL or body. 
@@ -213,7 +220,7 @@ export async function DELETE(req: Request) {
             .from('tasks')
             .delete()
             .eq('id', id)
-            .eq('user_id', guestId);
+            .eq('user_id', ownerId);
 
         if (error) {
             console.error("Delete task error:", error);

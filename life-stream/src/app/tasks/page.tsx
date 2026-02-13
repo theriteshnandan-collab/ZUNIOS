@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Target, Clock, CheckCircle, ArrowLeft, ListTodo, LayoutGrid, LucideIcon, Calendar as CalendarIcon } from 'lucide-react';
+import { Target, CheckCircle, ArrowLeft, LayoutGrid, LucideIcon, Calendar as CalendarIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useTaskStore } from '@/stores/taskStore';
 import { TaskCard } from '@/components/tasks/TaskCard';
@@ -14,6 +14,33 @@ import { toast } from 'sonner';
 import { isSameCalendarDay } from '@/lib/date-utils';
 
 type ViewMode = 'list' | 'kanban' | 'calendar';
+
+function parseDueDateValue(value?: string) {
+    if (!value || typeof value !== 'string') return undefined;
+
+    const normalized = value.trim().toLowerCase();
+    const now = new Date();
+
+    if (normalized === 'tomorrow') {
+        const date = new Date(now);
+        date.setDate(date.getDate() + 1);
+        return date.toISOString();
+    }
+
+    if (normalized === 'next friday') {
+        const date = new Date(now);
+        const dayOfWeek = date.getDay();
+        const target = 5;
+        let delta = (target - dayOfWeek + 7) % 7;
+        if (delta === 0) delta = 7;
+        date.setDate(date.getDate() + delta);
+        return date.toISOString();
+    }
+
+    const parsed = new Date(value);
+    return Number.isNaN(parsed.getTime()) ? undefined : parsed.toISOString();
+}
+
 
 export default function TasksPage() {
     const { tasks, isLoading, fetchTasks, getTaskCount, addTask, toggleComplete, deleteTask } = useTaskStore();
@@ -52,16 +79,12 @@ export default function TasksPage() {
         const { action, data } = result;
 
         if (action === 'create') {
-            const newTask: Task = {
-                id: crypto.randomUUID(),
-                user_id: 'user_current', // Placeholder until real auth
+            const parsedDueDate = parseDueDateValue(data.due_date);
+            addTask({
                 content: data.content,
-                status: 'todo',
                 priority: data.priority || 'medium',
-                due_date: data.date ? new Date(data.date).toISOString() : undefined,
-                created_at: new Date().toISOString()
-            };
-            addTask(newTask);
+                due_date: parsedDueDate
+            });
             toast.success("Task Deployed", { description: data.content });
         }
         else if (action === 'complete' || action === 'delete') {

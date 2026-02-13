@@ -28,6 +28,9 @@ export const useTaskStore = create<TaskState>((set, get) => ({
         set({ isLoading: true, error: null });
         try {
             const res = await fetch('/api/tasks');
+            if (!res.ok) {
+                throw new Error(`Failed to fetch tasks (${res.status})`);
+            }
             const data = await res.json();
             set({ tasks: data.tasks || [], isLoading: false });
         } catch (err: any) {
@@ -71,6 +74,12 @@ export const useTaskStore = create<TaskState>((set, get) => ({
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id, ...updates })
             });
+
+            if (!res.ok) {
+                const errorData = await res.json().catch(() => ({}));
+                throw new Error(errorData.error || `Failed to update task (${res.status})`);
+            }
+
             const data = await res.json();
 
             if (data.task) {
@@ -86,7 +95,13 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
     deleteTask: async (id: string) => {
         try {
-            await fetch(`/api/tasks?id=${id}`, { method: 'DELETE' });
+            const res = await fetch(`/api/tasks?id=${id}`, { method: 'DELETE' });
+
+            if (!res.ok) {
+                const errorData = await res.json().catch(() => ({}));
+                throw new Error(errorData.error || `Failed to delete task (${res.status})`);
+            }
+
             set(state => ({
                 tasks: state.tasks.filter(t => t.id !== id)
             }));
