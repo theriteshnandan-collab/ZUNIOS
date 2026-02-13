@@ -187,11 +187,11 @@ Return JSON:
 
         const imagePrompt = `${categoryModifier}, ${basePrompt}, digital art, 8k`.substring(0, 350);
 
-        // Direct URL: Use image.pollinations.ai/prompt/ for synchronous image delivery (No redirects)
+        // Primary URL: Using pollinations.ai/p/ for maximum stability as the main load balancer
         const cleanPrompt = encodeURIComponent(imagePrompt);
-        const seed = Math.floor(Math.random() * 1000) + Date.now(); // Smaller seed, easier to cache correctly
+        const seed = Math.floor(Math.random() * 999999); // Simple 6-digit seed
 
-        const imageUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1024&height=1024&seed=${seed}&model=flux&nologo=true`;
+        const imageUrl = `https://pollinations.ai/p/${cleanPrompt}?width=1024&height=1024&seed=${seed}&model=flux`;
 
         return NextResponse.json({
             theme: analysis.theme,

@@ -373,8 +373,8 @@ function HomeContent() {
             img.src = analysisResult.imageUrl;
             img.onload = resolve;
             img.onerror = resolve; // Continue even if image fails
-            // Timeout safety
-            setTimeout(resolve, 15000);
+            // Timeout safety (Allow 30s for high-fidelity generation)
+            setTimeout(resolve, 30000);
           });
         }
 
