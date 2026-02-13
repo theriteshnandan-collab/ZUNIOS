@@ -9,9 +9,10 @@ import FloatingNav from "@/components/FloatingNav";
 import Footer from "@/components/Footer";
 import NotificationManager from "@/components/NotificationManager";
 import { ModeProvider } from "@/components/ModeProvider";
-import OnboardingModal from "@/components/OnboardingModal";
 import NoiseOverlay from "@/components/ui/NoiseOverlay";
+import dynamic from "next/dynamic";
 
+const OnboardingModal = dynamic(() => import("@/components/OnboardingModal"), { ssr: false });
 import { Inter, Crimson_Pro, JetBrains_Mono } from "next/font/google";
 
 // 1. The Machine (System Interface)

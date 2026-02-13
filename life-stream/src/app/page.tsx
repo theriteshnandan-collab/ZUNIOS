@@ -15,19 +15,21 @@ import { toast } from "sonner";
 import DreamLoader from "@/components/DreamLoader";
 import DreamImage from "@/components/DreamImage";
 import confetti from "canvas-confetti";
-import LandingSections from "@/components/marketing/LandingSections";
 import ZuniosLogo from "@/components/ZuniosLogo";
 import { useTaskStore } from "@/stores/taskStore";
 import { useAppBadge } from "@/hooks/useAppBadge";
 import { parseCommandLocally } from "@/lib/local-intelligence";
-import MobileDashboard from "@/components/mobile/MobileDashboard";
-import AuraCore from "@/components/AuraCore";
 import { ParticleBackground } from "@/components/ui/ParticleBackground";
 import { ShinyButton } from "@/components/ui/ShinyButton";
 import { BentoGrid, EliteBentoCard } from "@/components/ui/BentoGrid";
 import { NeuralVisual, SyncVisual, CaptureVisual, VaultVisual } from "@/components/ui/BentoVisuals";
-import { Activity, Disc, Zap, Brain, Calendar, Shield, Share2, Hexagon, Database } from "lucide-react";
+
 import dynamic from "next/dynamic";
+
+const LandingSections = dynamic(() => import("@/components/marketing/LandingSections"), { ssr: false });
+const MobileDashboard = dynamic(() => import("@/components/mobile/MobileDashboard"), { ssr: false });
+const AuraCore = dynamic(() => import("@/components/AuraCore"), { ssr: false });
+import { Activity, Disc, Zap, Brain, Calendar, Shield, Share2, Hexagon, Database } from "lucide-react";
 
 const RevelationView = dynamic(() => import("@/components/RevelationView"), {
   ssr: false,
