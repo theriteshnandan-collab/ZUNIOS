@@ -370,27 +370,48 @@ function HomeContent() {
         if (data.error) throw new Error(data.error);
         analysisResult = data;
 
-        // 🔗 TRACEABILITY LOG (Tracing Tool for User)
+        // 🖼️ HARDWARE-LEVEL SYNC & AUTO-RETRY (Resiliency 3.0)
         if (analysisResult.imageUrl) {
-          console.log("%c🔗 Vision Trace:", "color: #22d3ee; font-weight: bold; font-size: 12px;", analysisResult.imageUrl);
-        }
+          let currentUrl = analysisResult.imageUrl;
+          let attempts = 0;
+          const maxAttempts = 3;
+          let isOk = false;
 
-        // 🖼️ NETWORK-LAYER CACHE WARMING (Deep Sync)
-        // We use fetch() to force the browser to pull the bytes into the cache
-        // while the loading screen is still active, bypassing "Lazy Load" interventions.
-        if (analysisResult.imageUrl) {
-          await new Promise((resolve) => {
-            const timeoutId = setTimeout(resolve, 45000); // Max patience: 45s
-            fetch(analysisResult.imageUrl, { mode: 'no-cors' })
-              .then(() => {
-                clearTimeout(timeoutId);
-                resolve(null);
-              })
-              .catch(() => {
-                clearTimeout(timeoutId);
-                resolve(null);
-              });
-          });
+          while (attempts < maxAttempts && !isOk) {
+            attempts++;
+            console.log(`%c[ZUNIOS] Vision Probe ${attempts}/${maxAttempts}:`, "color: #22d3ee; font-weight: bold;", currentUrl);
+
+            try {
+              // We use a HEAD or GET request to probe the status
+              // Note: Pollinations allows CORS for status checks
+              const probe = await fetch(currentUrl, { method: 'GET', cache: 'no-cache' });
+
+              if (probe.status === 200) {
+                isOk = true;
+                console.log("%c[ZUNIOS] Vision Status: 200 OK", "color: #10b981; font-weight: bold;");
+              } else if (probe.status === 530 || probe.status >= 500) {
+                console.warn(`[ZUNIOS] Vision Probe Failed (${probe.status}). Retrying with new seed...`);
+                // Generate a new seed to target a different art worker/cache
+                const newSeed = Math.floor(Math.random() * 999999);
+                const url = new URL(currentUrl);
+                url.searchParams.set('seed', newSeed.toString());
+                url.searchParams.set('v', Date.now().toString());
+                currentUrl = url.toString();
+                if (attempts < maxAttempts) await new Promise(r => setTimeout(r, 1500));
+              } else {
+                // Other error? Try anyway or break
+                isOk = true;
+              }
+            } catch (e) {
+              console.error("[ZUNIOS] Probe Error:", e);
+              isOk = true; // Fallback to normal loading if fetch itself fails
+            }
+          }
+
+          analysisResult.imageUrl = currentUrl;
+
+          // Final Cache Warm (no-cors for standard img tag compatibility)
+          await fetch(currentUrl, { mode: 'no-cors' }).catch(() => { });
         }
 
       } catch (err: any) {

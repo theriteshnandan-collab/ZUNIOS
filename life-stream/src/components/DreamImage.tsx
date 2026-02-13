@@ -13,6 +13,7 @@ interface DreamImageProps {
 export default function DreamImage({ src, alt, className }: DreamImageProps) {
     const [isLoading, setIsLoading] = useState(true);
     const [hasError, setHasError] = useState(false);
+    const [isStalled, setIsStalled] = useState(false);
     const imgRef = useRef<HTMLImageElement>(null);
 
     // If it's a base64 data URL or Pollinations, we'll use standard img to bypass optimization issues
@@ -27,17 +28,51 @@ export default function DreamImage({ src, alt, className }: DreamImageProps) {
         }
     }, [src]);
 
+    // Stalled Timer: If image takes > 12s, show a "Reveal anyway" option
+    useEffect(() => {
+        if (!isLoading) {
+            setIsStalled(false);
+            return;
+        }
+        const timer = setTimeout(() => {
+            if (isLoading) setIsStalled(true);
+        }, 12000);
+        return () => clearTimeout(timer);
+    }, [isLoading, src]);
+
     return (
         <div className={cn("relative overflow-hidden bg-white/5", className)}>
             {/* Loading skeleton */}
             {isLoading && !hasError && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#050510] to-[#0a0a20] z-10">
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#050510] to-[#0a0a20] z-10 p-6 text-center">
                     <div className="flex flex-col items-center space-y-4">
                         <div className="w-12 h-12 border-2 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin" />
                         <span className="text-cyan-400/50 text-xs tracking-[0.2em] uppercase font-light animate-pulse">
                             Visualizing Vision...
                         </span>
                     </div>
+
+                    {isStalled && (
+                        <div className="mt-8 space-y-3 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                            <p className="text-xs text-white/40 italic">Syncing with art engine...</p>
+                            <div className="flex flex-col gap-2">
+                                <button
+                                    onClick={() => setIsLoading(false)}
+                                    className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 text-[10px] text-white/60 transition-all"
+                                >
+                                    Reveal Anyway
+                                </button>
+                                <a
+                                    href={src}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="text-[10px] text-cyan-400/50 hover:text-cyan-400 underline underline-offset-4"
+                                >
+                                    Open Original Link
+                                </a>
+                            </div>
+                        </div>
+                    )}
                 </div>
             )}
 
