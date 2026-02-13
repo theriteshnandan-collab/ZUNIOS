@@ -53,7 +53,8 @@ export async function POST(req: Request) {
             thought: `You are Zunios, a sharp but friendly mentor. 
             
 Talk to the user like a friend who's really listening. Be direct, warm, and insightful. 
-CRITICAL: Return exactly ONE single paragraph. No multiple paragraphs, no bullet points. 
+CRITICAL: YOUR ENTIRE RESPONSE MUST BE A VALID JSON OBJECT. DO NOT ADD ANY CONVERSATIONAL PREAMBLE OR CLOSING REMARKS OUTSIDE THE JSON.
+Return exactly ONE single paragraph in the "interpretation" field. No bullet points. 
 Limit your response to 4-6 high-quality sentences. Escape all newlines within strings as \\n.
 
 Return JSON:
@@ -66,7 +67,7 @@ Return JSON:
             dream: `You are Zunios, a friend who's great at picking up on vibes. 
 
 Interpret this dream like you're talking over coffee. Be insightful but keep it tight. 
-CRITICAL: Return exactly ONE single paragraph. 
+CRITICAL: YOUR ENTIRE RESPONSE MUST BE A VALID JSON OBJECT. NO PREAMBLE.
 
 Return JSON:
 {
@@ -78,7 +79,7 @@ Return JSON:
             idea: `You are Zunios, a co-founder friend. 
 
 Analyze this idea with energy. Tell them why it's cool.
-CRITICAL: Return exactly ONE single paragraph. 
+CRITICAL: YOUR ENTIRE RESPONSE MUST BE A VALID JSON OBJECT. NO PREAMBLE.
 
 Return JSON:
 {
@@ -88,6 +89,7 @@ Return JSON:
     "visualPrompt": "Futuristic, blueprint, tech, 8k"
 }`,
             win: `You are Zunios, their biggest fan. 
+CRITICAL: YOUR ENTIRE RESPONSE MUST BE A VALID JSON OBJECT. NO PREAMBLE.
 
 Return JSON:
 {
@@ -97,6 +99,7 @@ Return JSON:
     "visualPrompt": "Cinematic, heroic, golden hour, 8k"
 }`,
             journal: `You are Zunios, a safe person to talk to. 
+CRITICAL: YOUR ENTIRE RESPONSE MUST BE A VALID JSON OBJECT. NO PREAMBLE.
 
 Return JSON:
 {
@@ -143,34 +146,24 @@ Return JSON:
             // Robust JSON Parsing Helper
             const cleanAndParse = (input: string) => {
                 try {
-                    // 1. Remove Markdown
-                    let cleaned = input.replace(/```json/g, "").replace(/```/g, "").trim();
-                    // 2. Find the first '{' and last '}' to strip external text
-                    const firstBrace = cleaned.indexOf('{');
-                    const lastBrace = cleaned.lastIndexOf('}');
-                    if (firstBrace !== -1 && lastBrace !== -1) {
-                        cleaned = cleaned.substring(firstBrace, lastBrace + 1);
-                    }
-                    // 3. Attempt parse
-                    return JSON.parse(cleaned);
-                } catch (e: any) {
-                    // 4. Retry: Escape unescaped newlines inside strings (simple heuristic)
+                    // Try direct parse first
+                    return JSON.parse(input);
+                } catch (e) {
+                    // Start hunting for the JSON block
                     try {
-                        let sanitized = input
-                            .replace(/```json/g, "")
-                            .replace(/```/g, "")
-                            .trim();
-                        // Find bounds again
-                        const first = sanitized.indexOf('{');
-                        const last = sanitized.lastIndexOf('}');
-                        if (first !== -1 && last !== -1) {
-                            sanitized = sanitized.substring(first, last + 1);
+                        let cleaned = input.trim();
+                        const firstBrace = cleaned.indexOf('{');
+                        const lastBrace = cleaned.lastIndexOf('}');
+
+                        if (firstBrace !== -1 && lastBrace !== -1) {
+                            cleaned = cleaned.substring(firstBrace, lastBrace + 1);
+                            // Aggressively clean internal junk (unescaped newlines)
+                            const sanitized = cleaned.replace(/\n/g, "\\n").replace(/\r/g, "");
+                            return JSON.parse(sanitized);
                         }
-                        // Aggressive escape of newlines that might be unescaped
-                        const reSanitized = sanitized.replace(/\n/g, "\\n").replace(/\r/g, "");
-                        return JSON.parse(reSanitized);
-                    } catch (e2: any) {
-                        throw new Error("Failed to parse JSON response: " + e.message);
+                        throw new Error("No JSON structure found in AI response");
+                    } catch (innerError: any) {
+                        throw new Error(`Failed to extract valid data from AI: ${innerError.message}`);
                     }
                 }
             };
@@ -180,10 +173,8 @@ Return JSON:
         } catch (groqError: any) {
             console.warn("Cloud Intelligence Failed:", groqError.message);
 
-            // FALLBACK TO LOCAL + ERROR INFO
+            // FALLBACK TO LOCAL
             analysis = analyzeLocally(dream, category);
-            // Append the error to the interpretation so the user can see it in the UI
-            analysis.interpretation += `\n\n[SYSTEM NOTE: Cloud Analysis Failed. Using Local Neural Net. Reason: ${groqError.message.substring(0, 100)}...]`;
         }
 
         // 3. VISUALIZATION (Pollinations Unlimited)
