@@ -377,7 +377,7 @@ function HomeContent() {
       }
 
       // No image probes or pre-fetching needed in Silent Zen
-      setResult(analysisResult);
+      setResult({ ...analysisResult, content: text });
       confetti({
         particleCount: 150,
         spread: 70,
