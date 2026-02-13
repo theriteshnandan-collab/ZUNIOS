@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import DreamImage from "@/components/DreamImage";
 import { ShinyButton } from "@/components/ui/ShinyButton";
 
 interface RevelationViewProps {
@@ -28,77 +27,64 @@ export default function RevelationView({ result, onClose, onSave, isSaving }: Re
                 </Button>
             </div>
 
-            <div className="min-h-screen w-full flex flex-col lg:flex-row">
-                {/* LEFT: VISUAL IMMERSION (50% Width) */}
-                <div className="w-full lg:w-1/2 relative h-[50vh] lg:h-screen bg-black">
-                    <DreamImage
-                        src={result.imageUrl}
-                        alt={result.theme}
-                        className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#050510] to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-[#050510]" />
-                </div>
+            <div className="min-h-screen w-full flex items-center justify-center p-6 md:p-12 relative overflow-hidden">
+                {/* Background Ambient Glow */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/5 blur-[120px] rounded-full pointer-events-none" />
 
-                {/* RIGHT: INTELLECTUAL CORE (Text) */}
-                <div className="w-full lg:w-1/2 flex flex-col justify-center p-8 lg:p-20 space-y-8 bg-[#050510]">
+                {/* CONTENT: INTELLECTUAL CORE (Centered Text) */}
+                <div className="max-w-3xl w-full flex flex-col items-center text-center space-y-12 relative z-10">
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="space-y-4"
+                        transition={{ delay: 0.2, duration: 0.8 }}
+                        className="space-y-6 flex flex-col items-center"
                     >
-                        <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-950/30 text-cyan-400 text-xs font-medium tracking-wide border border-cyan-500/20 uppercase">
+                        <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-cyan-950/20 text-cyan-400 text-[10px] font-bold tracking-[0.2em] border border-cyan-500/10 uppercase mb-4">
                             {result.mood || "ANALYSIS COMPLETE"}
                         </div>
-                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold font-serif tracking-tight text-white leading-[1.1]">
+                        <h2 className="text-5xl md:text-7xl font-bold font-serif tracking-tight bg-gradient-to-b from-white via-zinc-200 to-zinc-500 bg-clip-text text-transparent leading-[1.1] pb-2">
                             {result.theme || "Your Vision"}
                         </h2>
                     </motion.div>
 
                     <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.4 }}
-                        className="w-full h-px bg-gradient-to-r from-white/20 to-transparent"
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ delay: 0.5, duration: 1 }}
+                        className="w-32 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"
                     />
 
                     <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 }}
-                        className="prose prose-invert prose-lg max-w-none"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.8, duration: 0.8 }}
+                        className="prose prose-invert prose-2xl max-w-2xl mx-auto"
                     >
-                        {Array.isArray(result.interpretation) ? (
-                            result.interpretation.map((item: string, i: number) => (
-                                <p key={i} className="text-gray-300 leading-relaxed text-lg">{item}</p>
-                            ))
-                        ) : (
-                            <p className="text-gray-300 leading-8 text-xl font-light whitespace-pre-wrap">
-                                {result.interpretation}
-                            </p>
-                        )}
+                        <p className="text-zinc-300 leading-[1.6] text-2xl md:text-3xl font-light italic tracking-tight font-serif">
+                            "{result.interpretation}"
+                        </p>
                     </motion.div>
 
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.8 }}
-                        className="pt-8 flex gap-4"
+                        transition={{ delay: 1.2, duration: 0.6 }}
+                        className="pt-12 flex flex-col sm:flex-row gap-6 items-center"
                     >
                         <ShinyButton
                             onClick={onSave}
                             disabled={isSaving}
-                            className="px-8 py-4 text-base min-w-[180px]"
+                            className="px-10 py-5 text-lg min-w-[220px]"
                         >
-                            {isSaving ? "Saving..." : "Save to Core"}
+                            {isSaving ? "Saving..." : "Log to Consciousness"}
                         </ShinyButton>
 
                         <Button
-                            variant="outline"
+                            variant="ghost"
                             onClick={onClose}
-                            className="px-8 py-4 h-auto text-base border-white/10 hover:bg-white/5"
+                            className="text-zinc-500 hover:text-white transition-colors text-lg"
                         >
-                            Discard
+                            Discard Vision
                         </Button>
                     </motion.div>
                 </div>

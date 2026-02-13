@@ -4,7 +4,6 @@ import { X, Share2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import DreamImage from "@/components/DreamImage";
 import { useState, useRef } from "react";
 import ArtifactCard from "./ArtifactCard";
 import { Dream } from "@/types/dream";
@@ -129,18 +128,8 @@ export default function DreamInsightModal({ dream, isOpen, onClose }: DreamInsig
                             </div>
 
                             <div className="grid md:grid-cols-2 gap-0">
-                                {/* Image Side - Cinematic Mode (Brick 8) */}
-                                <div className="relative aspect-square md:aspect-auto overflow-hidden group min-h-[300px]">
-                                    <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent z-10 md:hidden" /> {/* Mobile text protection */}
-                                    <DreamImage
-                                        src={dream.image_url || ''}
-                                        alt={dream.theme || 'Dream'}
-                                        className="w-full h-full object-cover animate-ken-burns"
-                                    />
-                                </div>
-
-                                {/* Content Side */}
-                                <div className="p-6 space-y-6">
+                                {/* Content Side (Now Full Width) */}
+                                <div className="p-6 md:p-12 space-y-8 col-span-2">
                                     {/* Header */}
                                     <div>
                                         <div className="flex items-center gap-2 mb-2">

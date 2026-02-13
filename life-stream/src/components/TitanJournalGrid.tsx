@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { SpotlightContainer } from "@/components/ui/Spotlight";
 import { GlassCard } from "@/components/ui/GlassCard";
-import DreamImage from "@/components/DreamImage";
 import { formatDistanceToNow } from "date-fns";
 import { Eye, Zap, Target, Brain, Trash2, Share2 } from "lucide-react";
 import type { Dream } from "@/types/dream";
@@ -167,17 +166,6 @@ export default function TitanJournalGrid({
                                     <p className="text-sm text-zinc-400 line-clamp-3 flex-1">
                                         {dream.content}
                                     </p>
-
-                                    {/* Image (if available) - SHOWN ON ALL CARDS (Brick 8 Fix) */}
-                                    {dream.image_url && (
-                                        <div className="mt-4 rounded-xl overflow-hidden aspect-video">
-                                            <DreamImage
-                                                src={dream.image_url}
-                                                alt={dream.theme || dream.content}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        </div>
-                                    )}
 
                                     {/* Mood Badge */}
                                     {dream.mood && (

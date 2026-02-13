@@ -1,4 +1,3 @@
-import { ClerkProvider } from '@clerk/nextjs'
 import { Analytics } from "@vercel/analytics/next"
 import type { Metadata } from "next";
 
@@ -7,20 +6,16 @@ import { Toaster } from "@/components/ui/sonner";
 import BackgroundLayout from "@/components/BackgroundLayout";
 import FloatingNav from "@/components/FloatingNav";
 import Footer from "@/components/Footer";
-import NotificationManager from "@/components/NotificationManager";
 import { ModeProvider } from "@/components/ModeProvider";
 import NoiseOverlay from "@/components/ui/NoiseOverlay";
-import dynamic from "next/dynamic";
-
-const OnboardingModal = dynamic(() => import("@/components/OnboardingModal"), { ssr: false });
-import CleanConsole from "@/components/CleanConsole";
+import ClientShell from "@/components/ClientShell";
 import { Inter, Crimson_Pro, JetBrains_Mono } from "next/font/google";
 
 // 1. The Machine (System Interface)
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
-  display: "swap", // Performance: Show text immediately
+  display: "swap",
 });
 
 // 2. The Code (Monospace)
@@ -44,7 +39,7 @@ export const viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
-  interactiveWidget: "resizes-content", // Key for mobile keyboard handling
+  interactiveWidget: "resizes-content",
 };
 
 export const metadata: Metadata = {
@@ -53,7 +48,7 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   icons: {
     icon: "/icon.svg",
-    apple: "/icon.svg", // We can use SVG for Apple touch icon in most modern contexts or it will fallback
+    apple: "/icon.svg",
   },
   appleWebApp: {
     capable: true,
@@ -69,7 +64,7 @@ export const metadata: Metadata = {
     url: "https://zunios.codes",
     siteName: "Zunios",
     images: [{
-      url: "https://zunios.codes/og-image.jpg", // You need to add this image to public/ folder
+      url: "https://zunios.codes/og-image.jpg",
       width: 1200,
       height: 630,
       alt: "Zunios Dashboard Interface"
@@ -99,22 +94,19 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${crimsonPro.variable} ${jetbrainsMono.variable} antialiased bg-[#050510] text-[#E0E0E0] select-none`}
       >
-        <CleanConsole />
         <ModeProvider>
-          <OnboardingModal />
-          <NotificationManager />
-          {/* <NeuralSearch /> Removed as per user request */}
-          {/* <PrivacyShield /> Removed as per user request */}
-          <NoiseOverlay />
-          <BackgroundLayout>
-            <FloatingNav />
-            <div className="flex flex-col min-h-screen pt-16">
-              <main className="flex-1 pb-32 md:pb-0">
-                {children}
-              </main>
-              <Footer />
-            </div>
-          </BackgroundLayout>
+          <ClientShell>
+            <NoiseOverlay />
+            <BackgroundLayout>
+              <FloatingNav />
+              <div className="flex flex-col min-h-screen pt-16">
+                <main className="flex-1 pb-32 md:pb-0">
+                  {children}
+                </main>
+                <Footer />
+              </div>
+            </BackgroundLayout>
+          </ClientShell>
         </ModeProvider>
         <Toaster richColors position="top-center" />
         <Analytics />

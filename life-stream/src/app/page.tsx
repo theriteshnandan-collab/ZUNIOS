@@ -13,7 +13,6 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import DreamLoader from "@/components/DreamLoader";
-import DreamImage from "@/components/DreamImage";
 import confetti from "canvas-confetti";
 import ZuniosLogo from "@/components/ZuniosLogo";
 import { useTaskStore } from "@/stores/taskStore";
@@ -370,74 +369,24 @@ function HomeContent() {
         }
         const data = await response.json();
         if (data.error) throw new Error(data.error);
+        // Analysis complete (Silent Zen: Text Only)
         analysisResult = data;
-
-        // 🖼️ HARDWARE-LEVEL SYNC & AUTO-RETRY (Resiliency 4.0 - CORS Immune)
-        if (analysisResult.imageUrl) {
-          let currentUrl = analysisResult.imageUrl;
-          let attempts = 0;
-          const maxAttempts = 3;
-          let isOk = false;
-
-          while (attempts < maxAttempts && !isOk) {
-            attempts++;
-            console.log(`%c[ZUNIOS] Vision Probe ${attempts}/${maxAttempts}:`, "color: #22d3ee; font-weight: bold;", currentUrl);
-
-            try {
-              // Use hardware-native Image object to bypass CORS blocks while detecting failures
-              const imgProbe = await new Promise((resolve) => {
-                const img = new Image();
-                const timeout = setTimeout(() => {
-                  img.src = ""; // Stop loading
-                  resolve({ status: "timeout" });
-                }, 15000);
-
-                img.onload = () => {
-                  clearTimeout(timeout);
-                  resolve({ status: "ok" });
-                };
-
-                img.onerror = () => {
-                  clearTimeout(timeout);
-                  resolve({ status: "error" });
-                };
-
-                img.src = currentUrl;
-              }) as { status: string };
-
-              if (imgProbe.status === "ok") {
-                isOk = true;
-                console.log("%c[ZUNIOS] Vision Status: Loaded", "color: #10b981; font-weight: bold;");
-              } else {
-                console.warn(`[ZUNIOS] Vision Probe Failed (${imgProbe.status}). Retrying with new seed...`);
-                const newSeed = Math.floor(Math.random() * 999999);
-                const url = new URL(currentUrl);
-                url.searchParams.set('seed', newSeed.toString());
-                url.searchParams.set('v', Date.now().toString());
-                currentUrl = url.toString();
-                if (attempts < maxAttempts) await new Promise(r => setTimeout(r, 1000));
-              }
-            } catch (e) {
-              console.error("[ZUNIOS] Probe Logic Error:", e);
-              isOk = true;
-            }
-          }
-
-          analysisResult.imageUrl = currentUrl;
-
-          // Final Cache Warm (no-cors for standard img tag compatibility)
-          fetch(currentUrl, { mode: 'no-cors' }).catch(() => { });
-        }
-
       } catch (err: any) {
-        console.warn("Dream Analysis Failed. Engaging Local Save.", err);
-        analysisResult = { theme: "Raw Entry", mood: "Neutral", imageUrl: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1000&auto=format&fit=crop", interpretation: [`Cloud analysis unavailable: ${err.message || 'Unknown Error'}. Entry saved safely.`], content: text };
-        toast("Offline Save Active", { description: `Analysis skipped: ${err.message}`, icon: <Zap className="w-4 h-4 text-amber-400" /> });
+        console.error("Critical Analysis Error:", err);
+        throw err;
       }
-      setResult({ ...analysisResult, content: text });
-    } catch (error: any) {
-      console.error("Critical Failure:", error);
-      toast.error(`System Error: ${error.message}`);
+
+      // No image probes or pre-fetching needed in Silent Zen
+      setResult(analysisResult);
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ["#22d3ee", "#818cf8", "#ffffff"]
+      });
+
+    } catch (err: any) {
+      toast.error(err.message || "The mind is clouded. Try again.");
     } finally {
       setIsLoading(false);
     }

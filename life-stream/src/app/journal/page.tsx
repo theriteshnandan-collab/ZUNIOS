@@ -31,7 +31,6 @@ const DreamInsightModal = dynamic(() => import("@/components/DreamInsightModal")
 const DataExportModal = dynamic(() => import("@/components/DataExportModal").then(mod => mod.DataExportModal), { ssr: false });
 const SocialShare = dynamic(() => import("@/components/SocialShare").then(mod => mod.SocialShare), { ssr: false });
 
-import DreamImage from "@/components/DreamImage";
 import AnalyticsDashboard from "@/components/analytics/AnalyticsDashboard";
 import VoiceInput from "@/components/VoiceInput";
 import SemanticSearch from "@/components/SemanticSearch";

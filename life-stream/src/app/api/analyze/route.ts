@@ -50,10 +50,10 @@ export async function POST(req: Request) {
         }
 
         const SYSTEM_PROMPTS: Record<string, string> = {
-            thought: `You are Zunios, a sharp but friendly mentor. 
+            thought: `You're Zunios, a relaxed, insightful friend. 
             
-Talk to the user like a friend who's really listening. Be direct, warm, and insightful. 
-CRITICAL: YOUR ENTIRE RESPONSE MUST BE A VALID JSON OBJECT. DO NOT ADD ANY CONVERSATIONAL PREAMBLE OR CLOSING REMARKS OUTSIDE THE JSON.
+Talk to the user like you're just hanging out. Use phrases like "Hey," "You know," and "I was thinking." Be direct, warm, and supportive. 
+CRITICAL: YOUR ENTIRE RESPONSE MUST BE A VALID JSON OBJECT. NO PREAMBLE.
 Return exactly ONE single paragraph in the "interpretation" field. No bullet points. 
 Limit your response to 4-6 high-quality sentences. Escape all newlines within strings as \\n.
 
@@ -61,52 +61,47 @@ Return JSON:
 {
     "mood": "1-2 words",
     "theme": "A punchy, cool title",
-    "interpretation": "A single, conversational paragraph speaking directly TO the user. 4-6 sentences. Focus on 'you' and 'your'.",
-    "visualPrompt": "Abstract, high fidelity, evocative, 8k"
+    "interpretation": "A single, conversational paragraph speaking directly TO the user. 4-6 sentences. Focus on 'you' and 'your'."
 }`,
-            dream: `You are Zunios, a friend who's great at picking up on vibes. 
+            dream: `You're Zunios, a friend who's great at picking up on vibes. 
 
-Interpret this dream like you're talking over coffee. Be insightful but keep it tight. 
+Analyze this dream like we're just talking. Keep it relaxed. Use "Hey" or "You know" where it fits. 
 CRITICAL: YOUR ENTIRE RESPONSE MUST BE A VALID JSON OBJECT. NO PREAMBLE.
 
 Return JSON:
 {
     "mood": "2 words",
     "theme": "A vibe-check title",
-    "interpretation": "One solid paragraph (4-6 sentences). Explain what their subconscious is telling them like a friend would. Warm, direct, no academic fluff.",
-    "visualPrompt": "Surreal, dreamlike, cinematic, 8k"
+    "interpretation": "One solid paragraph (4-6 sentences). Explain what their subconscious is telling them like a friend would. Warm, direct, no academic fluff."
 }`,
-            idea: `You are Zunios, a co-founder friend. 
+            idea: `You're Zunios, a co-founder friend. 
 
-Analyze this idea with energy. Tell them why it's cool.
+Analyze this idea with energy but keep it chill. Tell them why it's cool like a friend would.
 CRITICAL: YOUR ENTIRE RESPONSE MUST BE A VALID JSON OBJECT. NO PREAMBLE.
 
 Return JSON:
 {
     "mood": "Energetic",
     "theme": "Project Nickname",
-    "interpretation": "A punchy strategic take as a friend. What's the potential here? One paragraph, 3-5 sentences. Talk like you're in a strategy session together.",
-    "visualPrompt": "Futuristic, blueprint, tech, 8k"
+    "interpretation": "A punchy strategic take as a friend. What's the potential here? One paragraph, 3-5 sentences. Talk like you're in a strategy session together."
 }`,
-            win: `You are Zunios, their biggest fan. 
+            win: `You're Zunios, their biggest fan and close friend. 
 CRITICAL: YOUR ENTIRE RESPONSE MUST BE A VALID JSON OBJECT. NO PREAMBLE.
 
 Return JSON:
 {
     "mood": "Stoked",
     "theme": "Victory Lap",
-    "interpretation": "One single, excited paragraph (2-3 sentences) acknowledging the win. Keep it high-energy and brief.",
-    "visualPrompt": "Cinematic, heroic, golden hour, 8k"
+    "interpretation": "One single, excited paragraph (2-3 sentences) acknowledging the win. Hey, you crushed it!"
 }`,
-            journal: `You are Zunios, a safe person to talk to. 
+            journal: `You're Zunios, a safe, relaxed friend. 
 CRITICAL: YOUR ENTIRE RESPONSE MUST BE A VALID JSON OBJECT. NO PREAMBLE.
 
 Return JSON:
 {
     "mood": "Reflective",
     "theme": "Checking In",
-    "interpretation": "A warm, single paragraph (2-4 sentences) validating their feelings. Make them feel heard, like a friend giving them a nod.",
-    "visualPrompt": "Cozy, lo-fi, 8k"
+    "interpretation": "A warm, single paragraph (2-4 sentences) validating their feelings. Make them feel heard, like a friend giving them a nod."
 }`
         };
 
@@ -126,13 +121,13 @@ Return JSON:
                     "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
                 },
                 body: JSON.stringify({
-                    model: "llama-3.3-70b-versatile", // Current active flagship model
+                    model: "llama-3.3-70b-versatile",
                     messages: [
                         { role: "system", content: systemPrompt },
-                        { role: "user", content: `Analyze: "${dream}"` }
+                        { role: "user", content: `Hey, tell me about this: "${dream}"` }
                     ],
-                    temperature: 0.7,
-                    max_tokens: 1000
+                    temperature: 0.8,
+                    max_tokens: 500
                 })
             });
 
@@ -146,24 +141,20 @@ Return JSON:
             // Robust JSON Parsing Helper
             const cleanAndParse = (input: string) => {
                 try {
-                    // Try direct parse first
                     return JSON.parse(input);
                 } catch (e) {
-                    // Start hunting for the JSON block
                     try {
                         let cleaned = input.trim();
                         const firstBrace = cleaned.indexOf('{');
                         const lastBrace = cleaned.lastIndexOf('}');
-
                         if (firstBrace !== -1 && lastBrace !== -1) {
                             cleaned = cleaned.substring(firstBrace, lastBrace + 1);
-                            // Aggressively clean internal junk (unescaped newlines)
                             const sanitized = cleaned.replace(/\n/g, "\\n").replace(/\r/g, "");
                             return JSON.parse(sanitized);
                         }
-                        throw new Error("No JSON structure found in AI response");
+                        throw new Error("No JSON structure found");
                     } catch (innerError: any) {
-                        throw new Error(`Failed to extract valid data from AI: ${innerError.message}`);
+                        throw new Error(`Parse Failed: ${innerError.message}`);
                     }
                 }
             };
@@ -172,50 +163,25 @@ Return JSON:
 
         } catch (groqError: any) {
             console.warn("Cloud Intelligence Failed:", groqError.message);
-
-            // FALLBACK TO LOCAL
             analysis = analyzeLocally(dream, category);
         }
 
-        // 3. VISUALIZATION (Pollinations Unlimited)
-        // Always use the best available prompt (AI's or the raw text)
-        const basePrompt = analysis.visualPrompt || `${dream}, cinematic, 8k`;
-        const categoryModifier = category === 'dream' ? "surreal, ethereal, dreamlike" :
-            category === 'idea' ? "futuristic, blueprint, technical" :
-                category === 'win' ? "triumphant, epic, glowing" :
-                    "hyper-realistic, detailed, atmospheric";
-
-        const imagePrompt = `${categoryModifier}, ${basePrompt}, digital art, 8k`.substring(0, 350);
-
-        // Resiliency 2.0: Use the primary domain (pollinations.ai) for maximum throughput
-        // Added 'v' parameter for cache-busting to bypass stale 530 errors
-        const cleanPrompt = encodeURIComponent(imagePrompt);
-        const seed = Math.floor(Math.random() * 999999);
-        const version = Date.now();
-
-        const imageUrl = `https://pollinations.ai/p/${cleanPrompt}?width=1024&height=1024&seed=${seed}&model=flux&v=${version}`;
-
+        // Silent Zen: Image Generation Removed
         return NextResponse.json({
             theme: analysis.theme,
             mood: analysis.mood,
-            interpretation: analysis.interpretation,
-            imageUrl
+            interpretation: analysis.interpretation
         });
 
     } catch (criticalError: any) {
-        // FAILSAFE: If everything explodes, return a basic "Local Mode" response 
-        // using the user's text so they still get a result.
-
         console.error("Critical Analysis Error:", criticalError);
         const fallback = analyzeLocally(dream, category);
-        const seed = Math.floor(Math.random() * 1000000);
-        const imageUrl = `https://pollinations.ai/p/${encodeURIComponent(dream.substring(0, 100))}?width=1024&height=1024&seed=${seed}&model=flux`;
 
         return NextResponse.json({
             theme: fallback.theme,
             mood: fallback.mood,
-            interpretation: fallback.interpretation,
-            imageUrl
+            interpretation: fallback.interpretation
         });
     }
 }
+

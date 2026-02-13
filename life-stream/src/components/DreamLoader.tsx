@@ -3,7 +3,11 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-export default function DreamLoader() {
+interface DreamLoaderProps {
+    mode?: string;
+}
+
+export default function DreamLoader({ mode }: DreamLoaderProps) {
     const [phase, setPhase] = useState(0);
 
     const phases = [
