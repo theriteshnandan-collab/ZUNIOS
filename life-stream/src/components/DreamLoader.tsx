@@ -10,7 +10,7 @@ export default function DreamLoader() {
         "Listening...",
         "I hear you...",
         "Let me think about that...",
-        "Drawing it out...",
+        "Visualizing your vision...",
         "Just a moment..."
     ];
 

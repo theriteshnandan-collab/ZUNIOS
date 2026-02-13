@@ -364,6 +364,20 @@ function HomeContent() {
         const data = await response.json();
         if (data.error) throw new Error(data.error);
         analysisResult = data;
+
+        // 🖼️ PRE-LOAD IMAGE (Synchronized Reveal)
+        // This ensures the loader stays active until the vision is ready
+        if (analysisResult.imageUrl) {
+          await new Promise((resolve) => {
+            const img = new Image();
+            img.src = analysisResult.imageUrl;
+            img.onload = resolve;
+            img.onerror = resolve; // Continue even if image fails
+            // Timeout safety
+            setTimeout(resolve, 15000);
+          });
+        }
+
       } catch (err: any) {
         console.warn("Dream Analysis Failed. Engaging Local Save.", err);
         analysisResult = { theme: "Raw Entry", mood: "Neutral", imageUrl: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=1000&auto=format&fit=crop", interpretation: [`Cloud analysis unavailable: ${err.message || 'Unknown Error'}. Entry saved safely.`], content: text };

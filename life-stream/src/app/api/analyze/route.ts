@@ -185,7 +185,7 @@ Return JSON:
                 category === 'win' ? "triumphant, epic, glowing" :
                     "hyper-realistic, detailed, atmospheric";
 
-        const imagePrompt = `${categoryModifier}, ${basePrompt}, digital art, 8k`.substring(0, 120);
+        const imagePrompt = `${categoryModifier}, ${basePrompt}, digital art, 8k`.substring(0, 350);
 
         // Direct URL: Use image.pollinations.ai/prompt/ for synchronous image delivery (No redirects)
         const cleanPrompt = encodeURIComponent(imagePrompt);
