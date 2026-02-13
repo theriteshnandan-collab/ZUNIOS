@@ -370,6 +370,11 @@ function HomeContent() {
         if (data.error) throw new Error(data.error);
         analysisResult = data;
 
+        // 🔗 TRACEABILITY LOG (Tracing Tool for User)
+        if (analysisResult.imageUrl) {
+          console.log("%c🔗 Vision Trace:", "color: #22d3ee; font-weight: bold; font-size: 12px;", analysisResult.imageUrl);
+        }
+
         // 🖼️ NETWORK-LAYER CACHE WARMING (Deep Sync)
         // We use fetch() to force the browser to pull the bytes into the cache
         // while the loading screen is still active, bypassing "Lazy Load" interventions.

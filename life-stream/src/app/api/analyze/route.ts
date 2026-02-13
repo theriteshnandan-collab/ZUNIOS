@@ -187,12 +187,13 @@ Return JSON:
 
         const imagePrompt = `${categoryModifier}, ${basePrompt}, digital art, 8k`.substring(0, 350);
 
-        // Deep Sync URL: Use image.pollinations.ai/prompt/ for direct binary delivery (No redirects)
-        // This is required for Network-Layer cache warming via fetch()
+        // Resiliency 2.0: Use the primary domain (pollinations.ai) for maximum throughput
+        // Added 'v' parameter for cache-busting to bypass stale 530 errors
         const cleanPrompt = encodeURIComponent(imagePrompt);
         const seed = Math.floor(Math.random() * 999999);
+        const version = Date.now();
 
-        const imageUrl = `https://image.pollinations.ai/prompt/${cleanPrompt}?width=1024&height=1024&seed=${seed}&model=flux&nologo=true`;
+        const imageUrl = `https://pollinations.ai/p/${cleanPrompt}?width=1024&height=1024&seed=${seed}&model=flux&v=${version}`;
 
         return NextResponse.json({
             theme: analysis.theme,
