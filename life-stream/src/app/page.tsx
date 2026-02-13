@@ -372,7 +372,7 @@ function HomeContent() {
         if (data.error) throw new Error(data.error);
         analysisResult = data;
 
-        // 🖼️ HARDWARE-LEVEL SYNC & AUTO-RETRY (Resiliency 3.0)
+        // 🖼️ HARDWARE-LEVEL SYNC & AUTO-RETRY (Resiliency 4.0 - CORS Immune)
         if (analysisResult.imageUrl) {
           let currentUrl = analysisResult.imageUrl;
           let attempts = 0;
@@ -384,36 +384,49 @@ function HomeContent() {
             console.log(`%c[ZUNIOS] Vision Probe ${attempts}/${maxAttempts}:`, "color: #22d3ee; font-weight: bold;", currentUrl);
 
             try {
-              // We use a HEAD or GET request to probe the status
-              // Note: Pollinations allows CORS for status checks
-              const probe = await fetch(currentUrl, { method: 'GET', cache: 'no-cache' });
+              // Use hardware-native Image object to bypass CORS blocks while detecting failures
+              const imgProbe = await new Promise((resolve) => {
+                const img = new Image();
+                const timeout = setTimeout(() => {
+                  img.src = ""; // Stop loading
+                  resolve({ status: "timeout" });
+                }, 15000);
 
-              if (probe.status === 200) {
+                img.onload = () => {
+                  clearTimeout(timeout);
+                  resolve({ status: "ok" });
+                };
+
+                img.onerror = () => {
+                  clearTimeout(timeout);
+                  resolve({ status: "error" });
+                };
+
+                img.src = currentUrl;
+              }) as { status: string };
+
+              if (imgProbe.status === "ok") {
                 isOk = true;
-                console.log("%c[ZUNIOS] Vision Status: 200 OK", "color: #10b981; font-weight: bold;");
-              } else if (probe.status === 530 || probe.status >= 500) {
-                console.warn(`[ZUNIOS] Vision Probe Failed (${probe.status}). Retrying with new seed...`);
-                // Generate a new seed to target a different art worker/cache
+                console.log("%c[ZUNIOS] Vision Status: Loaded", "color: #10b981; font-weight: bold;");
+              } else {
+                console.warn(`[ZUNIOS] Vision Probe Failed (${imgProbe.status}). Retrying with new seed...`);
                 const newSeed = Math.floor(Math.random() * 999999);
                 const url = new URL(currentUrl);
                 url.searchParams.set('seed', newSeed.toString());
                 url.searchParams.set('v', Date.now().toString());
                 currentUrl = url.toString();
-                if (attempts < maxAttempts) await new Promise(r => setTimeout(r, 1500));
-              } else {
-                // Other error? Try anyway or break
-                isOk = true;
+                if (attempts < maxAttempts) await new Promise(r => setTimeout(r, 1000));
               }
             } catch (e) {
-              console.error("[ZUNIOS] Probe Error:", e);
-              isOk = true; // Fallback to normal loading if fetch itself fails
+              console.error("[ZUNIOS] Probe Logic Error:", e);
+              isOk = true;
             }
           }
 
           analysisResult.imageUrl = currentUrl;
 
           // Final Cache Warm (no-cors for standard img tag compatibility)
-          await fetch(currentUrl, { mode: 'no-cors' }).catch(() => { });
+          fetch(currentUrl, { mode: 'no-cors' }).catch(() => { });
         }
 
       } catch (err: any) {
