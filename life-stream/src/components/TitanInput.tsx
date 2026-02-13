@@ -199,20 +199,20 @@ export default function TitanInput({
         <div className="w-full relative z-50">
             {/* === THE TITAN GLOW (Underglow) === */}
             <motion.div
-                className="absolute -bottom-2 left-1/2 -translate-x-1/2 pointer-events-none z-0"
-                initial={{ opacity: 0.4, width: "50%" }}
+                className="absolute -bottom-6 left-1/2 -translate-x-1/2 pointer-events-none z-0"
+                initial={{ opacity: 0.3, width: "30%" }}
                 animate={{
-                    opacity: isFocused ? 0.7 : 0.4,
-                    width: isFocused ? "70%" : "50%",
-                    height: isFocused ? "80px" : "50px"
+                    opacity: isFocused ? 0.6 : 0.3,
+                    width: isFocused ? "80%" : "30%",
+                    height: isFocused ? "100px" : "60px"
                 }}
-                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                transition={{ type: "spring", stiffness: 200, damping: 40 }}
             >
                 <div
                     className="w-full h-full rounded-full"
                     style={{
                         background: getGlowGradient(),
-                        filter: "blur(40px)",
+                        filter: "blur(60px)",
                         animation: `titan-breathe ${glowAnimationDuration} ease-in-out infinite`
                     }}
                 />
@@ -221,14 +221,14 @@ export default function TitanInput({
             {/* === THE TITAN CONTAINER === */}
             <motion.div
                 className={cn(
-                    "relative overflow-hidden rounded-[28px]",
-                    "bg-[#0a0a0c]/90 backdrop-blur-2xl",
+                    "relative overflow-hidden rounded-[32px]",
+                    "bg-[#0a0a0c]/80 backdrop-blur-3xl",
                     // Inner Light Effect (top edge)
-                    "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)]",
-                    // Subtle border
-                    "border border-white/[0.06]",
-                    "transition-all duration-300",
-                    isFocused && "border-white/[0.12] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]",
+                    "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)]",
+                    // Sharp Border
+                    "border border-white/10",
+                    "transition-all duration-500",
+                    isFocused && "border-white/20 shadow-[0_0_40px_rgba(255,255,255,0.03),inset_0_1px_0_0_rgba(255,255,255,0.15)]",
                     isAnalyzing && "opacity-50 pointer-events-none"
                 )}
                 layout

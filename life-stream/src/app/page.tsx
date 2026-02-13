@@ -527,17 +527,19 @@ function HomeContent() {
         >
 
           {/* Header */}
-          <div className="space-y-4">
-            <div className="flex items-center justify-center mb-6 scale-125">
-              <ZuniosLogo size="xl" showText={true} className="flex-col !gap-4" />
+          <div className="space-y-4 relative">
+            {/* Logo with Premium Underglow */}
+            <div className="flex items-center justify-center mb-8 scale-125 relative">
+              <div className="absolute inset-0 bg-cyan-500/10 blur-3xl rounded-full scale-150 transform -translate-y-4" />
+              <ZuniosLogo size="xl" showText={true} className="flex-col !gap-4 relative z-10" />
             </div>
 
-            {/* 💻 DESKTOP HERO TEXT */}
-            <h1 className="text-4xl md:text-6xl font-bold font-serif tracking-tight bg-gradient-to-br from-white via-white to-gray-400 bg-clip-text text-transparent pb-2 hidden sm:block">
+            {/* 💻 DESKTOP HERO TEXT - Stellar Gradient */}
+            <h1 className="text-5xl md:text-7xl font-bold font-serif tracking-tight bg-gradient-to-b from-white via-zinc-200 to-zinc-500 bg-clip-text text-transparent pb-4 hidden sm:block animate-in fade-in slide-in-from-bottom-4 duration-1000">
               The OS for <br /> Your Mind
             </h1>
 
-            <p className="text-lg text-gray-400 max-w-lg mx-auto leading-relaxed hidden sm:block font-light">
+            <p className="text-xl text-zinc-500 max-w-lg mx-auto leading-relaxed hidden sm:block font-light tracking-wide animate-in fade-in slide-in-from-bottom-2 duration-1000 delay-300">
               Capture visions. Build ideas. Log moments. Think deeply.
             </p>
           </div>
