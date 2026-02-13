@@ -365,16 +365,21 @@ function HomeContent() {
         if (data.error) throw new Error(data.error);
         analysisResult = data;
 
-        // 🖼️ PRE-LOAD IMAGE (Synchronized Reveal)
-        // This ensures the loader stays active until the vision is ready
+        // 🖼️ NETWORK-LAYER CACHE WARMING (Deep Sync)
+        // We use fetch() to force the browser to pull the bytes into the cache
+        // while the loading screen is still active, bypassing "Lazy Load" interventions.
         if (analysisResult.imageUrl) {
           await new Promise((resolve) => {
-            const img = new Image();
-            img.src = analysisResult.imageUrl;
-            img.onload = resolve;
-            img.onerror = resolve; // Continue even if image fails
-            // Timeout safety (Allow 30s for high-fidelity generation)
-            setTimeout(resolve, 30000);
+            const timeoutId = setTimeout(resolve, 45000); // Max patience: 45s
+            fetch(analysisResult.imageUrl, { mode: 'no-cors' })
+              .then(() => {
+                clearTimeout(timeoutId);
+                resolve(null);
+              })
+              .catch(() => {
+                clearTimeout(timeoutId);
+                resolve(null);
+              });
           });
         }
 
