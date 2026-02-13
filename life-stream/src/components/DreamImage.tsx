@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 interface DreamImageProps {
@@ -13,11 +13,19 @@ interface DreamImageProps {
 export default function DreamImage({ src, alt, className }: DreamImageProps) {
     const [isLoading, setIsLoading] = useState(true);
     const [hasError, setHasError] = useState(false);
+    const imgRef = useRef<HTMLImageElement>(null);
 
     // If it's a base64 data URL or Pollinations, we'll use standard img to bypass optimization issues
     const isBase64 = src.startsWith('data:');
     const isPollinations = src.includes('pollinations.ai') || src.includes('prompt/');
     const fallbackSrc = "https://placehold.co/800x600/050510/666?text=Capturing+Vision...";
+
+    // Force check for completed images (important for cached results)
+    useEffect(() => {
+        if (imgRef.current?.complete) {
+            setIsLoading(false);
+        }
+    }, [src]);
 
     return (
         <div className={cn("relative overflow-hidden bg-white/5", className)}>
@@ -37,14 +45,14 @@ export default function DreamImage({ src, alt, className }: DreamImageProps) {
             {isBase64 || isPollinations || hasError ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
+                    ref={imgRef}
                     src={hasError ? fallbackSrc : src}
                     alt={alt}
                     loading="eager"
                     decoding="sync"
-                    crossOrigin="anonymous"
                     referrerPolicy="no-referrer"
                     className={cn(
-                        "w-full h-full object-cover transition-opacity duration-500",
+                        "w-full h-full object-cover transition-opacity duration-700",
                         isLoading ? "opacity-0" : "opacity-100"
                     )}
                     onLoad={() => setIsLoading(false)}
@@ -60,7 +68,7 @@ export default function DreamImage({ src, alt, className }: DreamImageProps) {
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className={cn(
-                        "object-cover transition-opacity duration-500",
+                        "object-cover transition-opacity duration-700",
                         isLoading ? "opacity-0" : "opacity-100"
                     )}
                     unoptimized

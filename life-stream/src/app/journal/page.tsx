@@ -25,7 +25,12 @@ import {
     Trophy,
     BrainCircuit
 } from "lucide-react";
-import DreamInsightModal from "@/components/DreamInsightModal";
+import dynamic from "next/dynamic";
+
+const DreamInsightModal = dynamic(() => import("@/components/DreamInsightModal"), { ssr: false });
+const DataExportModal = dynamic(() => import("@/components/DataExportModal").then(mod => mod.DataExportModal), { ssr: false });
+const SocialShare = dynamic(() => import("@/components/SocialShare").then(mod => mod.SocialShare), { ssr: false });
+
 import DreamImage from "@/components/DreamImage";
 import AnalyticsDashboard from "@/components/analytics/AnalyticsDashboard";
 import VoiceInput from "@/components/VoiceInput";
@@ -36,10 +41,8 @@ import { cn } from "@/lib/utils";
 import { calculateStats } from "@/lib/gamification";
 import { calculateJournalStats } from "@/lib/journal-streaks";
 import { JournalStreakCard } from "@/components/analytics/JournalStreakCard";
-import { DataExportModal } from "@/components/DataExportModal";
 import type { Dream } from "@/types/dream";
 import { JournalLoadingGrid } from "@/components/skeletons/DreamCardSkeleton";
-import { SocialShare } from "@/components/SocialShare";
 import { useTaskStore } from "@/stores/taskStore";
 import { calculateTotalXP, getLevelInfo } from "@/lib/leveling";
 import { calculateTaskStats, getEarnedBadges as getTaskBadges } from "@/lib/task-gamification";
