@@ -8,22 +8,22 @@ import { generateEmbedding } from "@/lib/vector";
 
 export const dynamic = 'force-dynamic';
 
-// Initialize Supabase
-function getSupabase() {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-    return createClient(url, key);
-}
+// Utility to get the server-side Supabase client (handles cookies/Auth)
+const getSupabase = async () => {
+    const { createClient } = await import("@/utils/supabase/server");
+    return await createClient();
+};
 
 // GET: Fetch all tasks for user
 export async function GET(req: Request) {
     try {
-        const { userId } = await auth();
+        const supabase = await getSupabase();
+        const { data: { user } } = await supabase.auth.getUser();
+        const userId = user?.id;
+
         // FLIGHT FIX: DB expects UUID, so 'guest' string fails.
         // We use a NIL UUID for guest tasks
         const guestId = userId || '00000000-0000-0000-0000-000000000000';
-
-        const supabase = getSupabase();
 
         const { searchParams } = new URL(req.url);
         const status = searchParams.get('status');
@@ -57,7 +57,10 @@ export async function GET(req: Request) {
 // POST: Create new task
 export async function POST(req: Request) {
     try {
-        const { userId } = await auth();
+        const supabase = await getSupabase();
+        const { data: { user } } = await supabase.auth.getUser();
+        const userId = user?.id;
+
         // FLIGHT FIX: DB expects UUID, so 'guest' string fails.
         // We use a NIL UUID for guest tasks or a specific guest UUID if needed.
         // For now, let's use the Nil UUID: 00000000-0000-0000-0000-000000000000
@@ -71,8 +74,6 @@ export async function POST(req: Request) {
                 { status: 400 }
             );
         }
-
-        const supabase = getSupabase();
 
         // Generate Embedding for Neural Recall
         let embedding = null;
@@ -131,7 +132,10 @@ export async function POST(req: Request) {
 // PATCH: Update task
 export async function PATCH(req: Request) {
     try {
-        const { userId } = await auth();
+        const supabase = await getSupabase();
+        const { data: { user } } = await supabase.auth.getUser();
+        const userId = user?.id;
+
         // FLIGHT FIX: DB expects UUID, so 'guest' string fails.
         // We use a NIL UUID for guest tasks
         const guestId = userId || '00000000-0000-0000-0000-000000000000';
@@ -144,8 +148,6 @@ export async function PATCH(req: Request) {
                 { status: 400 }
             );
         }
-
-        const supabase = getSupabase();
 
         // If marking as done, set completed_at
         const updateData: Record<string, unknown> = { ...updates };
@@ -186,13 +188,10 @@ export async function PATCH(req: Request) {
 // DELETE: Remove task
 export async function DELETE(req: Request) {
     try {
-        const supabaseServer = getSupabase();
-        const { data: { user } } = await supabaseServer.auth.getUser();
+        const supabase = await getSupabase();
+        const { data: { user } } = await supabase.auth.getUser();
         const userId = user?.id;
-
-        if (!userId) {
-            return new NextResponse("Unauthorized", { status: 401 });
-        }
+        const guestId = userId || '00000000-0000-0000-0000-000000000000';
 
         // Get ID from URL query or body? 
         // Standard delete usually has ID in URL or body. 
@@ -206,8 +205,6 @@ export async function DELETE(req: Request) {
                 { status: 400 }
             );
         }
-
-        const supabase = getSupabase();
 
         const { error } = await supabase
             .from('tasks')
