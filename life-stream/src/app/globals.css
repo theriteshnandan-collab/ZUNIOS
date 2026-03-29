@@ -87,7 +87,7 @@
 }
 
 .bg-aurora {
-  background: linear-gradient(-45deg, #050510, #0f0a1a, #0a0f18, #050510);
+  background: linear-gradient(-45deg, #050505, #0a0a0a, #080808, #050505);
   background-size: 400% 400%;
   animation: aurora-flow 15s ease infinite;
   position: fixed;
@@ -232,51 +232,51 @@
   Matching the footer section color
 */
 :root {
-  /* Deep void purple-black - #050510 style */
-  --background: 260 30% 3%;
+  /* Pure dark monochrome */
+  --background: 0 0% 2%;
   --foreground: 0 0% 98%;
-  --card: 260 20% 6%;
+  --card: 0 0% 5%;
   --card-foreground: 0 0% 98%;
-  --popover: 260 30% 4%;
+  --popover: 0 0% 3%;
   --popover-foreground: 0 0% 98%;
-  --primary: 270 70% 60%;
+  --primary: 0 0% 80%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 260 15% 12%;
+  --secondary: 0 0% 10%;
   --secondary-foreground: 0 0% 98%;
-  --muted: 260 15% 12%;
-  --muted-foreground: 260 10% 60%;
-  --accent: 260 15% 15%;
+  --muted: 0 0% 10%;
+  --muted-foreground: 0 0% 50%;
+  --accent: 0 0% 12%;
   --accent-foreground: 0 0% 98%;
   --destructive: 0 63% 31%;
   --destructive-foreground: 0 0% 98%;
-  --border: 260 15% 15%;
-  --input: 260 15% 12%;
-  --ring: 270 70% 60%;
+  --border: 0 0% 12%;
+  --input: 0 0% 10%;
+  --ring: 0 0% 80%;
   --radius: 0.75rem;
 
   color-scheme: dark;
 }
 
 .dark {
-  --background: 260 30% 3%;
+  --background: 0 0% 2%;
   --foreground: 0 0% 98%;
-  --card: 260 20% 6%;
+  --card: 0 0% 5%;
   --card-foreground: 0 0% 98%;
-  --popover: 260 30% 4%;
+  --popover: 0 0% 3%;
   --popover-foreground: 0 0% 98%;
-  --primary: 270 70% 60%;
+  --primary: 0 0% 80%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 260 15% 12%;
+  --secondary: 0 0% 10%;
   --secondary-foreground: 0 0% 98%;
-  --muted: 260 15% 12%;
-  --muted-foreground: 260 10% 60%;
-  --accent: 260 15% 15%;
+  --muted: 0 0% 10%;
+  --muted-foreground: 0 0% 50%;
+  --accent: 0 0% 12%;
   --accent-foreground: 0 0% 98%;
   --destructive: 0 63% 31%;
   --destructive-foreground: 0 0% 98%;
-  --border: 260 15% 15%;
-  --input: 260 15% 12%;
-  --ring: 270 70% 60%;
+  --border: 0 0% 12%;
+  --input: 0 0% 10%;
+  --ring: 0 0% 80%;
 }
 
 @layer base {
@@ -285,7 +285,7 @@
   }
 
   html {
-    background-color: #0d0a12;
+    background-color: #080808;
     color-scheme: dark;
     touch-action: manipulation;
     /* Zero-Lag Tap */
@@ -296,7 +296,7 @@
 
   body {
     @apply bg-background text-foreground;
-    background-color: #0d0a12;
+    background-color: #080808;
     min-height: 100vh;
   }
 }
@@ -398,10 +398,10 @@ button:active:not(:disabled) {
 /* Image Glow Animation */
 @keyframes image-glow {
   0%, 100% {
-    filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.4));
+    filter: drop-shadow(0 0 20px rgba(200, 200, 200, 0.3));
   }
   50% {
-    filter: drop-shadow(0 0 40px rgba(139, 92, 246, 0.6));
+    filter: drop-shadow(0 0 40px rgba(220, 220, 220, 0.5));
   }
 }
 

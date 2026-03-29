@@ -63,7 +63,7 @@ export default function FloatingNav() {
                                 >
                                     <div className={cn(
                                         "relative z-10 p-4 rounded-full transition-all duration-300 touch-manipulation", // Hit Area 48px+ (p-4 + icon)
-                                        isActive ? "text-purple-300 bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5",
+                                        isActive ? "text-white bg-white/12" : "text-white/40 hover:text-white hover:bg-white/5",
                                         "active:scale-90" // Tactile feedback
                                     )}>
                                         <link.icon className={cn("w-6 h-6", isActive && "stroke-[2.5px]")} />
@@ -73,7 +73,7 @@ export default function FloatingNav() {
                                     {isActive && (
                                         <motion.div
                                             layoutId="nav-glow"
-                                            className="absolute inset-0 bg-purple-500/20 blur-lg rounded-full -z-10"
+                                            className="absolute inset-0 bg-white/[0.08] blur-lg rounded-full -z-10"
                                             transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                                         />
                                     )}

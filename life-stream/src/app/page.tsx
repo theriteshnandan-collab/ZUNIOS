@@ -37,8 +37,8 @@ const RevelationView = dynamic(() => import("@/components/RevelationView"), {
 // --- FEATURE ITEM ---
 const FeatureItem = ({ icon: Icon, label, desc }: { icon: any, label: string, desc: string }) => (
   <div className="flex flex-col items-center text-center space-y-2.5 group cursor-default">
-    <div className="p-3 rounded-2xl bg-white/[0.04] border border-white/[0.06] group-hover:bg-violet-500/10 group-hover:border-violet-500/25 transition-all duration-500 group-hover:scale-110">
-      <Icon className="w-5 h-5 text-white/25 group-hover:text-violet-400 transition-colors duration-300" />
+    <div className="p-3 rounded-2xl bg-white/[0.04] border border-white/[0.06] group-hover:bg-white/[0.07] group-hover:border-white/20 transition-all duration-500 group-hover:scale-110">
+      <Icon className="w-5 h-5 text-white/25 group-hover:text-white transition-colors duration-300" />
     </div>
     <div className="space-y-0.5">
       <div className="text-xs font-semibold text-white/50 group-hover:text-white/90 transition-colors tracking-wide">{label}</div>
@@ -77,12 +77,12 @@ const FeatureSection = ({
       )}
     >
       {/* SCROLL LINE NODE */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-[130%] bg-gradient-to-b from-transparent via-violet-500/15 to-transparent hidden md:block -z-10" />
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#050510] border border-violet-500/40 rounded-full hidden md:block z-0 shadow-[0_0_12px_rgba(139,92,246,0.6)]" />
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-[130%] bg-gradient-to-b from-transparent via-white/8 to-transparent hidden md:block -z-10" />
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#050510] border border-white/25 rounded-full hidden md:block z-0 shadow-[0_0_10px_rgba(255,255,255,0.12)]" />
 
       {/* VISUAL SIDE */}
       <div className="w-full md:w-1/2">
-        <div className="relative w-full h-[220px] md:h-[300px] rounded-[2.5rem] overflow-hidden border border-white/[0.07] bg-black/40 backdrop-blur-xl group-hover/section:border-violet-500/20 group-hover/section:shadow-[0_0_80px_-20px_rgba(139,92,246,0.2)] transition-all duration-700 shadow-[0_0_40px_-15px_rgba(0,0,0,0.8)]">
+        <div className="relative w-full h-[220px] md:h-[300px] rounded-[2.5rem] overflow-hidden border border-white/[0.07] bg-black/40 backdrop-blur-xl group-hover/section:border-white/15 group-hover/section:shadow-[0_0_80px_-20px_rgba(255,255,255,0.06)] transition-all duration-700 shadow-[0_0_40px_-15px_rgba(0,0,0,0.8)]">
           {image ? (
             <motion.div
               initial={{ opacity: 0 }}
@@ -103,14 +103,14 @@ const FeatureSection = ({
           )}
           <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] via-transparent to-black/30 pointer-events-none z-10" />
           <div className="absolute inset-0 ring-1 ring-inset ring-white/[0.04] rounded-[2.5rem] pointer-events-none z-20" />
-          <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-violet-600/15 rounded-full blur-2xl z-0" />
+          <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-white/[0.06] rounded-full blur-2xl z-0" />
         </div>
       </div>
 
       {/* TEXT SIDE */}
       <div className="w-full md:w-1/2 space-y-5 text-center md:text-left relative z-10">
         {tag && (
-          <span className="inline-block text-[10px] font-bold uppercase tracking-[0.2em] text-violet-400/70 bg-violet-500/10 border border-violet-500/20 px-3 py-1 rounded-full">
+          <span className="inline-block text-[10px] font-bold uppercase tracking-[0.2em] text-white/50 bg-white/[0.06] border border-white/15 px-3 py-1 rounded-full">
             {tag}
           </span>
         )}
@@ -121,7 +121,7 @@ const FeatureSection = ({
           {description}
         </p>
         <div className="pt-2 flex justify-center md:justify-start">
-          <div className="h-px w-12 bg-gradient-to-r from-violet-500/60 to-transparent rounded-full" />
+          <div className="h-px w-12 bg-gradient-to-r from-white/25 to-transparent rounded-full" />
         </div>
       </div>
     </motion.div>
@@ -144,7 +144,7 @@ const StatsStrip = () => (
       { value: "0ms", label: "Local Processing" },
     ].map((stat) => (
       <div key={stat.label} className="text-center group">
-        <div className="text-4xl md:text-5xl font-bold font-serif bg-gradient-to-b from-white to-white/30 bg-clip-text text-transparent mb-2 group-hover:from-violet-300 group-hover:to-violet-300/30 transition-all duration-500">
+        <div className="text-4xl md:text-5xl font-bold font-serif bg-gradient-to-b from-white to-white/30 bg-clip-text text-transparent mb-2 group-hover:from-zinc-200 group-hover:to-zinc-400/30 transition-all duration-500">
           {stat.value}
         </div>
         <div className="text-[10px] text-white/25 uppercase tracking-[0.2em] font-medium">{stat.label}</div>
@@ -174,10 +174,10 @@ const CinematicHero = () => (
     <div className="absolute bottom-6 right-6 w-14 h-14 border-b-[1.5px] border-r-[1.5px] border-white/20 z-20 pointer-events-none" />
 
     {/* Corner Dots */}
-    <div className="absolute top-[72px] left-6 w-1.5 h-1.5 bg-violet-400/50 rounded-full -translate-x-[2px] -translate-y-[2px] z-20" />
-    <div className="absolute top-[72px] right-6 w-1.5 h-1.5 bg-violet-400/50 rounded-full translate-x-[2px] -translate-y-[2px] z-20" />
-    <div className="absolute bottom-6 left-6 w-1.5 h-1.5 bg-violet-400/50 rounded-full -translate-x-[2px] translate-y-[2px] z-20" />
-    <div className="absolute bottom-6 right-6 w-1.5 h-1.5 bg-violet-400/50 rounded-full translate-x-[2px] translate-y-[2px] z-20" />
+    <div className="absolute top-[72px] left-6 w-1.5 h-1.5 bg-white/40 rounded-full -translate-x-[2px] -translate-y-[2px] z-20" />
+    <div className="absolute top-[72px] right-6 w-1.5 h-1.5 bg-white/40 rounded-full translate-x-[2px] -translate-y-[2px] z-20" />
+    <div className="absolute bottom-6 left-6 w-1.5 h-1.5 bg-white/40 rounded-full -translate-x-[2px] translate-y-[2px] z-20" />
+    <div className="absolute bottom-6 right-6 w-1.5 h-1.5 bg-white/40 rounded-full translate-x-[2px] translate-y-[2px] z-20" />
 
     {/* Main Content */}
     <div className="relative z-10 flex-1 flex items-center w-full max-w-7xl mx-auto px-10 xl:px-16 pt-24 pb-36">
@@ -190,9 +190,9 @@ const CinematicHero = () => (
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-violet-500/25 bg-violet-500/[0.08] text-xs font-medium text-violet-300/70 backdrop-blur-sm"
+            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-white/15 bg-white/[0.06] text-xs font-medium text-zinc-300/70 backdrop-blur-sm"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" />
             AI-Powered Mind OS · Now in Beta
           </motion.div>
 
@@ -206,7 +206,7 @@ const CinematicHero = () => (
             <span className="bg-gradient-to-b from-white via-white/95 to-white/25 bg-clip-text text-transparent block pb-2">
               The OS for
             </span>
-            <span className="bg-gradient-to-r from-violet-400 via-purple-300 to-cyan-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#e8e8e8] via-[#c0c0c0] to-[#888888] bg-clip-text text-transparent">
               Your Mind.
             </span>
           </motion.h1>
@@ -264,12 +264,12 @@ const CinematicHero = () => (
           className="flex-1 max-w-[460px] xl:max-w-[520px] relative"
         >
           <div className="relative w-full aspect-square">
-            {/* Deep violet halo — large atmospheric glow */}
-            <div className="absolute -inset-16 bg-violet-600/25 blur-[100px] rounded-full" />
+            {/* Deep halo — large atmospheric glow */}
+            <div className="absolute -inset-16 bg-white/[0.06] blur-[100px] rounded-full" />
             {/* Inner bright core */}
-            <div className="absolute inset-[15%] bg-violet-500/30 blur-[60px] rounded-full" />
-            {/* Cyan accent spark */}
-            <div className="absolute inset-[35%] bg-cyan-500/15 blur-[30px] rounded-full" />
+            <div className="absolute inset-[15%] bg-white/12 blur-[60px] rounded-full" />
+            {/* Accent spark */}
+            <div className="absolute inset-[35%] bg-white/[0.08] blur-[30px] rounded-full" />
             <Image
               src={mindImage}
               alt="Neural constellation — ZUNIOS Mind Map"
@@ -298,10 +298,10 @@ const CinematicHero = () => (
         ].map((stat) => (
           <div
             key={stat.label}
-            className="relative p-4 rounded-2xl bg-black/50 backdrop-blur-md border border-white/[0.07] hover:border-violet-500/20 transition-all duration-500 group text-center overflow-hidden"
+            className="relative p-4 rounded-2xl bg-black/50 backdrop-blur-md border border-white/[0.07] hover:border-white/15 transition-all duration-500 group text-center overflow-hidden"
           >
-            <div className="absolute inset-0 bg-gradient-to-b from-violet-500/0 to-violet-500/0 group-hover:from-violet-500/[0.06] transition-all duration-700 rounded-2xl" />
-            <div className="text-2xl font-bold font-serif bg-gradient-to-b from-white to-white/30 bg-clip-text text-transparent group-hover:from-violet-300 group-hover:to-violet-300/30 transition-all duration-500 relative z-10">
+            <div className="absolute inset-0 bg-gradient-to-b from-white/0 to-white/0 group-hover:from-white/[0.04] transition-all duration-700 rounded-2xl" />
+            <div className="text-2xl font-bold font-serif bg-gradient-to-b from-white to-white/30 bg-clip-text text-transparent group-hover:from-zinc-200 group-hover:to-zinc-400/30 transition-all duration-500 relative z-10">
               {stat.value}
             </div>
             <div className="text-[11px] text-white/50 font-medium mt-1 relative z-10">{stat.label}</div>
@@ -358,7 +358,7 @@ const NarrativeFlowLines = () => {
       <div ref={containerRef} className="relative pb-20">
         {/* DYNAMIC SCROLL LINE */}
         <motion.div
-          className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-violet-500/0 via-violet-500/30 to-violet-500/0 -translate-x-1/2 origin-top z-0"
+          className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-white/0 via-white/15 to-white/0 -translate-x-1/2 origin-top z-0"
           style={{ scaleY, opacity }}
         />
 
@@ -408,10 +408,10 @@ const NarrativeFlowLines = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-violet-400/60">Full Stack</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/30">Full Stack</span>
             <h3 className="text-3xl md:text-4xl font-serif text-white/90 mt-3">System Capabilities</h3>
           </motion.div>
-          <div className="h-px w-16 bg-gradient-to-r from-violet-500/50 to-transparent mx-auto" />
+          <div className="h-px w-16 bg-gradient-to-r from-white/25 to-transparent mx-auto" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -431,9 +431,9 @@ const NarrativeFlowLines = () => {
               key={i}
               className="relative p-6 rounded-3xl bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.06] hover:border-white/10 transition-all duration-500 group overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-violet-500/0 to-violet-500/0 group-hover:from-violet-500/[0.05] group-hover:to-transparent transition-all duration-700 rounded-3xl" />
+              <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/0 group-hover:from-white/[0.04] group-hover:to-transparent transition-all duration-700 rounded-3xl" />
               <div className="w-10 h-10 rounded-xl bg-black/60 border border-white/[0.08] flex items-center justify-center mb-5 group-hover:scale-110 group-hover:border-white/15 transition-all duration-300 relative z-10">
-                <item.icon className="w-5 h-5 text-white/35 group-hover:text-violet-300 transition-colors duration-300" />
+                <item.icon className="w-5 h-5 text-white/35 group-hover:text-white transition-colors duration-300" />
               </div>
               <h4 className="text-base font-bold text-white/80 mb-2.5 relative z-10 group-hover:text-white transition-colors">{item.title}</h4>
               <p className="text-white/30 text-sm leading-relaxed relative z-10">{item.desc}</p>
@@ -625,7 +625,7 @@ function HomeContent() {
         particleCount: 150,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ["#8b5cf6", "#a78bfa", "#ffffff"]
+        colors: ["#ffffff", "#e0e0e0", "#a0a0a0"]
       });
 
     } catch (err: any) {
@@ -718,10 +718,10 @@ function HomeContent() {
         {user && (
           <div className="w-full max-w-5xl mx-auto px-6 pt-28 pb-6 text-center relative hidden md:block">
             <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
-              <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-gradient-to-b from-violet-950/40 via-purple-950/15 to-transparent blur-[80px]" />
+              <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-gradient-to-b from-white/[0.03] via-white/[0.03] to-transparent blur-[80px]" />
             </div>
             <div className="flex items-center justify-center mb-6 relative">
-              <div className="absolute inset-0 bg-purple-600/8 blur-[80px] rounded-full scale-[3] pointer-events-none" />
+              <div className="absolute inset-0 bg-white/[0.03] blur-[80px] rounded-full scale-[3] pointer-events-none" />
               <ZuniosLogo size="lg" showText={true} className="flex-col !gap-3 relative z-10" />
             </div>
             <motion.h1
@@ -731,7 +731,7 @@ function HomeContent() {
               className="text-5xl md:text-7xl font-bold font-serif tracking-tight leading-[0.88] pb-4"
             >
               <span className="bg-gradient-to-b from-white via-white/95 to-white/20 bg-clip-text text-transparent">The OS for </span>
-              <span className="bg-gradient-to-r from-violet-400 via-purple-300 to-cyan-400 bg-clip-text text-transparent">Your Mind.</span>
+              <span className="bg-gradient-to-r from-[#e8e8e8] via-[#c0c0c0] to-[#888888] bg-clip-text text-transparent">Your Mind.</span>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 8 }}
@@ -753,7 +753,7 @@ function HomeContent() {
             <>
               <h1 className="text-4xl font-bold font-serif tracking-tight leading-[0.9] pb-3">
                 <span className="bg-gradient-to-b from-white to-white/30 bg-clip-text text-transparent">The OS for </span>
-                <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">Your Mind.</span>
+                <span className="bg-gradient-to-r from-[#e8e8e8] to-[#888888] bg-clip-text text-transparent">Your Mind.</span>
               </h1>
               <p className="text-base text-white/35 mb-6 max-w-xs mx-auto">Capture ideas. Analyze patterns. Extract intelligence.</p>
             </>

@@ -45,7 +45,7 @@ export const ParticleBackground = ({ className, children }: ParticleBackgroundPr
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(139, 92, 246, ${opacity})`; // Violet-500
+            ctx.strokeStyle = `rgba(180, 180, 180, ${opacity})`;
             ctx.lineWidth = 0.8;
             ctx.stroke();
         };
@@ -94,9 +94,9 @@ export const ParticleBackground = ({ className, children }: ParticleBackgroundPr
     }, []);
 
     return (
-        <div className={cn("relative w-full min-h-screen bg-[#020205] text-white overflow-x-hidden", className)}>
+        <div className={cn("relative w-full min-h-screen bg-[#050505] text-white overflow-x-hidden", className)}>
             {/* Deep Space Gradient Layer */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black via-[#050510] to-[#0a0a1a] pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black via-[#080808] to-[#0f0f0f] pointer-events-none" />
 
             {/* Canvas Layer */}
             <canvas
