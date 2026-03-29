@@ -23,12 +23,12 @@ import { ParticleBackground } from "@/components/ui/ParticleBackground";
 import { ShinyButton } from "@/components/ui/ShinyButton";
 import { BentoGrid, EliteBentoCard } from "@/components/ui/BentoGrid";
 import { NeuralVisual, SyncVisual, CaptureVisual, VaultVisual } from "@/components/ui/BentoVisuals";
-import neuralCoreImage from "@/public/images/POLLOAIONE.png";
-import biometricImage from "@/public/images/BIOMETRICWAVEFORM.png";
-import voiceImage from "@/public/images/SOUNDWAVES.png";
-import vaultImage from "@/public/images/ENCRYPTEDVAULT.png";
-import mindImage from "@/public/images/MIND.png";
-import neuralComplexImage from "@/public/images/THENEURAL.png";
+import neuralCoreImage from "@/public/images/POLLOAIONE.jpeg";
+import biometricImage from "@/public/images/BIOMETRICWAVEFORM.jpeg";
+import voiceImage from "@/public/images/SOUNDWAVES.jpeg";
+import vaultImage from "@/public/images/ENCRYPTEDVAULT.jpeg";
+import mindImage from "@/public/images/MIND.jpeg";
+import neuralComplexImage from "@/public/images/THENEURAL.jpeg";
 
 import dynamic from "next/dynamic";
 
