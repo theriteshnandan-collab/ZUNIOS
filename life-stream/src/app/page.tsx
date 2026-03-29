@@ -158,19 +158,23 @@ const CinematicHero = () => (
     {/* Cinematic CSS Background */}
     <div className="absolute inset-0 z-0">
       {/* Deep void base */}
-      <div className="absolute inset-0 bg-[#020208]" />
-      {/* Left violet nebula — cinematic glow */}
-      <div className="absolute -left-40 top-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-violet-900/20 blur-[120px]" />
-      {/* Right deep blue accent */}
-      <div className="absolute -right-20 top-1/3 w-[500px] h-[500px] rounded-full bg-indigo-950/25 blur-[100px]" />
-      {/* Top center — distant star cluster */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px] rounded-full bg-violet-950/30 blur-[80px]" />
-      {/* Bottom right warm accent */}
-      <div className="absolute bottom-0 right-1/4 w-[400px] h-[300px] rounded-full bg-purple-950/20 blur-[90px]" />
-      {/* Noise texture overlay for cinematic grain */}
-      <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")" }} />
-      {/* Bottom fade into page */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-[#010108]" />
+      {/* MAIN: Right-side violet nebula (behind the brain) */}
+      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full bg-violet-800/20 blur-[140px]" />
+      {/* Left edge — subtle indigo atmosphere */}
+      <div className="absolute -left-20 top-1/3 w-[600px] h-[600px] rounded-full bg-indigo-900/15 blur-[120px]" />
+      {/* Top sweep — star field glow */}
+      <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[1200px] h-[500px] rounded-full bg-violet-950/40 blur-[100px]" />
+      {/* Center deep blue depth */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-full bg-blue-950/20 blur-[120px]" />
+      {/* Subtle warm purple bottom */}
+      <div className="absolute -bottom-20 right-1/3 w-[500px] h-[300px] rounded-full bg-purple-900/15 blur-[100px]" />
+      {/* Film grain texture */}
+      <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")" }} />
+      {/* Vignette bottom — blend into page */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-[#050510]/20 to-transparent" />
+      {/* Vignette edges */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_50%,rgba(1,1,8,0.6)_100%)]" />
     </div>
 
     {/* Corner Bracket Frames */}
@@ -264,21 +268,23 @@ const CinematicHero = () => (
 
         {/* RIGHT: MIND Constellation */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9, x: 30 }}
+          initial={{ opacity: 0, scale: 0.88, x: 40 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
-          transition={{ duration: 1.4, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="flex-1 max-w-[440px] xl:max-w-[500px] relative"
+          transition={{ duration: 1.5, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          className="flex-1 max-w-[460px] xl:max-w-[520px] relative"
         >
           <div className="relative w-full aspect-square">
-            {/* Outer violet aura */}
-            <div className="absolute inset-0 bg-violet-600/15 blur-[80px] rounded-full scale-90" />
-            {/* Inner core glow */}
-            <div className="absolute inset-[20%] bg-violet-500/10 blur-[40px] rounded-full" />
+            {/* Deep violet halo — large atmospheric glow */}
+            <div className="absolute -inset-16 bg-violet-600/25 blur-[100px] rounded-full" />
+            {/* Inner bright core */}
+            <div className="absolute inset-[15%] bg-violet-500/30 blur-[60px] rounded-full" />
+            {/* Cyan accent spark */}
+            <div className="absolute inset-[35%] bg-cyan-500/15 blur-[30px] rounded-full" />
             <Image
               src={mindImage}
               alt="Neural constellation — ZUNIOS Mind Map"
               fill
-              className="object-contain image-glow relative z-10 drop-shadow-2xl"
+              className="object-contain image-glow relative z-10 mix-blend-screen"
               priority
             />
           </div>
