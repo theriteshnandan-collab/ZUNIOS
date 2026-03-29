@@ -158,12 +158,12 @@ const CinematicHero = () => (
     {/* Cinematic Photo Background */}
     <div className="absolute inset-0 z-0">
       <Image src={heroCinematicImage} alt="" fill className="object-cover object-center" priority />
-      {/* Left overlay — just enough for text, photo visible on right */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-black/0" />
-      {/* Bottom fade into page — pure dark, no purple */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-transparent" />
-      {/* Top dark for nav area */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-transparent" />
+      {/* Very subtle left-to-right gradient — let image breathe */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/10 to-black/0" />
+      {/* Bottom fade into page */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/20 to-transparent" />
+      {/* Top nav area */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-transparent" />
     </div>
 
     {/* Corner Bracket Frames */}
@@ -178,83 +178,59 @@ const CinematicHero = () => (
     <div className="absolute bottom-6 left-6 w-1.5 h-1.5 bg-white/40 rounded-full -translate-x-[2px] translate-y-[2px] z-20" />
     <div className="absolute bottom-6 right-6 w-1.5 h-1.5 bg-white/40 rounded-full translate-x-[2px] translate-y-[2px] z-20" />
 
-    {/* Main Content */}
-    <div className="relative z-10 flex-1 flex items-center w-full max-w-7xl mx-auto px-10 xl:px-16 pt-24 pb-36">
-      <div className="flex flex-row items-center w-full">
+    {/* Main Content — true vertical center */}
+    <div className="relative z-10 flex-1 flex items-center w-full">
+      <div className="w-full max-w-7xl mx-auto px-10 xl:px-20">
 
-        {/* LEFT: Text */}
-        <div className="max-w-[620px] space-y-7">
+        {/* Glass text card — readable without killing the photo */}
+        <motion.div
+          initial={{ opacity: 0, x: -24 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-[560px] space-y-7 p-10 rounded-3xl bg-black/30 backdrop-blur-md border border-white/[0.07]"
+        >
           {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-white/15 bg-white/[0.06] text-xs font-medium text-zinc-300/70 backdrop-blur-sm"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" />
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-white/20 bg-white/[0.08] text-xs font-medium text-white/60">
+            <span className="w-1.5 h-1.5 rounded-full bg-white/80 animate-pulse" />
             AI-Powered Mind OS · Now in Beta
-          </motion.div>
+          </div>
 
           {/* Headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="text-6xl xl:text-[5.5rem] font-bold font-serif tracking-tight leading-[0.88]"
-          >
-            <span className="bg-gradient-to-b from-white via-white/95 to-white/25 bg-clip-text text-transparent block pb-2">
-              The OS for
-            </span>
-            <span className="bg-gradient-to-r from-[#e8e8e8] via-[#c0c0c0] to-[#888888] bg-clip-text text-transparent">
+          <h1 className="text-5xl xl:text-[4.5rem] font-bold font-serif tracking-tight leading-[0.92]">
+            <span className="text-white block pb-1">The OS for</span>
+            <span className="bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
               Your Mind.
             </span>
-          </motion.h1>
+          </h1>
 
           {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.28 }}
-            className="text-lg text-white/45 font-light leading-relaxed max-w-md"
-          >
+          <p className="text-base text-white/55 font-light leading-relaxed">
             Capture ideas. Analyze patterns. Extract intelligence.
-            <br />
             The cognitive layer between your mind and the world.
-          </motion.p>
+          </p>
 
           {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.42 }}
-            className="flex items-center gap-4 pt-1"
-          >
-            <button className="group relative px-8 py-3.5 rounded-full bg-white text-black font-bold text-sm transition-all duration-300 active:scale-95 shadow-[0_0_50px_rgba(255,255,255,0.08),inset_0_1px_0_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_rgba(255,255,255,0.18)] flex items-center gap-2 overflow-hidden">
+          <div className="flex items-center gap-4">
+            <button className="group relative px-7 py-3 rounded-full bg-white text-black font-bold text-sm transition-all duration-300 active:scale-95 hover:shadow-[0_0_40px_rgba(255,255,255,0.25)] flex items-center gap-2 overflow-hidden">
               <span className="relative z-10">Start Thinking Free</span>
               <span className="relative z-10 group-hover:translate-x-1 transition-transform duration-200">→</span>
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/[0.04] to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
             </button>
-            <button className="px-8 py-3.5 rounded-full border border-white/[0.09] text-white/40 font-medium text-sm hover:border-white/20 hover:text-white/70 transition-all duration-300 backdrop-blur-sm">
+            <button className="px-7 py-3 rounded-full border border-white/25 text-white/55 font-medium text-sm hover:border-white/50 hover:text-white/90 transition-all duration-300">
               See How It Works
             </button>
-          </motion.div>
+          </div>
 
           {/* Tech Trust Strip */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.72 }}
-            className="flex items-center gap-2 flex-wrap pt-1"
-          >
-            <span className="text-[10px] text-white/15 uppercase tracking-[0.25em] mr-2">Built with</span>
+          <div className="pt-2 border-t border-white/[0.07] flex items-center gap-2 flex-wrap">
+            <span className="text-[10px] text-white/20 uppercase tracking-[0.25em] mr-1 mt-3">Built with</span>
             {["Groq AI", "Supabase", "Vector Search", "Edge Runtime", "Next.js"].map((t, i) => (
-              <span key={i} className="text-[11px] font-mono text-white/25 px-3 py-1 rounded-full border border-white/[0.06] hover:text-white/45 transition-colors duration-300 cursor-default">
+              <span key={i} className="text-[11px] font-mono text-white/30 px-2.5 py-1 rounded-full border border-white/[0.08] mt-3 cursor-default">
                 {t}
               </span>
             ))}
-          </motion.div>
-        </div>
-
+          </div>
+        </motion.div>
       </div>
     </div>
 
