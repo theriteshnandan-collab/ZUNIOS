@@ -19,12 +19,12 @@ import { useAppBadge } from "@/hooks/useAppBadge";
 import { parseCommandLocally } from "@/lib/local-intelligence";
 import { ParticleBackground } from "@/components/ui/ParticleBackground";
 import { NeuralVisual, SyncVisual, CaptureVisual, VaultVisual } from "@/components/ui/BentoVisuals";
-import neuralCoreImage from "@/public/images/POLLOAIONE.jpeg";
-import biometricImage from "@/public/images/BIOMETRICWAVEFORM.jpeg";
-import voiceImage from "@/public/images/SOUNDWAVES.jpeg";
-import vaultImage from "@/public/images/ENCRYPTEDVAULT.jpeg";
-import mindImage from "@/public/images/MIND.jpeg";
-import heroCinematicImage from "@/public/images/hero-cinematic.png";
+import neuralCoreImage from "../../public/images/POLLOAIONE.jpeg";
+import biometricImage from "../../public/images/BIOMETRICWAVEFORM.jpeg";
+import voiceImage from "../../public/images/SOUNDWAVES.jpeg";
+import vaultImage from "../../public/images/ENCRYPTEDVAULT.jpeg";
+import mindImage from "../../public/images/MIND.jpeg";
+import heroCinematicImage from "../../public/images/hero-cinematic.png";
 
 import dynamic from "next/dynamic";
 
