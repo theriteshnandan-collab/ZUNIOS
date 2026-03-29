@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Moon, Sparkles, Lightbulb, Target, BrainCircuit } from "lucide-react";
+import Image, { StaticImageData } from "next/image";
 import TitanInput from "@/components/TitanInput";
 import { cn } from "@/lib/utils";
 import { useMode } from "@/components/ModeProvider";
@@ -22,6 +23,12 @@ import { ParticleBackground } from "@/components/ui/ParticleBackground";
 import { ShinyButton } from "@/components/ui/ShinyButton";
 import { BentoGrid, EliteBentoCard } from "@/components/ui/BentoGrid";
 import { NeuralVisual, SyncVisual, CaptureVisual, VaultVisual } from "@/components/ui/BentoVisuals";
+import neuralCoreImage from "@/public/images/POLLOAIONE.png";
+import biometricImage from "@/public/images/BIOMETRICWAVEFORM.png";
+import voiceImage from "@/public/images/SOUNDWAVES.png";
+import vaultImage from "@/public/images/ENCRYPTEDVAULT.png";
+import mindImage from "@/public/images/MIND.png";
+import neuralComplexImage from "@/public/images/THENEURAL.png";
 
 import dynamic from "next/dynamic";
 
@@ -50,6 +57,7 @@ const FeatureItem = ({ icon: Icon, label, desc }: { icon: any, label: string, de
 // --- FEATURE SECTION ---
 const FeatureSection = ({
   visual: Visual,
+  image,
   title,
   description,
   align = "left",
@@ -57,6 +65,7 @@ const FeatureSection = ({
   tag
 }: {
   visual: any,
+  image?: StaticImageData,
   title: string,
   description: string,
   align?: "left" | "right",
@@ -81,7 +90,24 @@ const FeatureSection = ({
       {/* VISUAL SIDE */}
       <div className="w-full md:w-1/2">
         <div className="relative w-full h-[220px] md:h-[300px] rounded-[2.5rem] overflow-hidden border border-white/[0.07] bg-black/40 backdrop-blur-xl group-hover/section:border-violet-500/20 group-hover/section:shadow-[0_0_80px_-20px_rgba(139,92,246,0.2)] transition-all duration-700 shadow-[0_0_40px_-15px_rgba(0,0,0,0.8)]">
-          <div className="absolute inset-0 z-0"><Visual /></div>
+          {image ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.8 }}
+              className="absolute inset-0 image-glow"
+            >
+              <Image
+                src={image}
+                alt={title}
+                fill
+                className="object-cover"
+                priority={false}
+              />
+            </motion.div>
+          ) : (
+            <div className="absolute inset-0 z-0"><Visual /></div>
+          )}
           <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] via-transparent to-black/30 pointer-events-none z-10" />
           <div className="absolute inset-0 ring-1 ring-inset ring-white/[0.04] rounded-[2.5rem] pointer-events-none z-20" />
           <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-violet-600/15 rounded-full blur-2xl z-0" />
@@ -170,6 +196,7 @@ const NarrativeFlowLines = () => {
 
         <FeatureSection
           visual={NeuralVisual}
+          image={neuralCoreImage}
           title="The Neural Core"
           description="An advanced AI engine that maps your thoughts into a living constellation. Patterns emerge automatically, revealing insights you never knew existed."
           align="left"
@@ -178,6 +205,7 @@ const NarrativeFlowLines = () => {
 
         <FeatureSection
           visual={SyncVisual}
+          image={biometricImage}
           title="Daily Sync"
           description="Your biological rhythm, visualized. Track your cognitive peak and ensure your system is optimal every single day."
           align="right"
@@ -186,6 +214,7 @@ const NarrativeFlowLines = () => {
 
         <FeatureSection
           visual={CaptureVisual}
+          image={voiceImage}
           title="Voice Command"
           description="Speak to the machine. The Arc Reactor core processes natural language instantly into structured, searchable intelligence."
           align="left"
@@ -194,6 +223,7 @@ const NarrativeFlowLines = () => {
 
         <FeatureSection
           visual={VaultVisual}
+          image={vaultImage}
           title="Zero-Knowledge Vault"
           description="Your mind is private property. Military-grade encryption ensures only you hold the keys to your thoughts, forever."
           align="right"

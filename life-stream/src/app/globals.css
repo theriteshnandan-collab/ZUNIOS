@@ -394,3 +394,17 @@ button:active:not(:disabled) {
 ::-webkit-scrollbar-corner {
   background: transparent;
 }
+
+/* Image Glow Animation */
+@keyframes image-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 40px rgba(139, 92, 246, 0.6));
+  }
+}
+
+.image-glow {
+  animation: image-glow 4s ease-in-out infinite;
+}
