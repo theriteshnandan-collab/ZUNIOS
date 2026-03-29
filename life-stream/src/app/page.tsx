@@ -178,66 +178,74 @@ const CinematicHero = () => (
     <div className="absolute bottom-6 left-6 w-1.5 h-1.5 bg-white/40 rounded-full -translate-x-[2px] translate-y-[2px] z-20" />
     <div className="absolute bottom-6 right-6 w-1.5 h-1.5 bg-white/40 rounded-full translate-x-[2px] translate-y-[2px] z-20" />
 
-    {/* Main Content — full width, two columns */}
-    <div className="relative z-10 flex-1 flex items-center w-full">
-      <div className="w-full max-w-7xl mx-auto px-10 xl:px-16 flex items-center justify-between gap-12">
+    {/* Main Content — stacked layout, upper positioned */}
+    <div className="relative z-10 flex-1 flex flex-col justify-center w-full pt-8">
+      <div className="w-full max-w-7xl mx-auto px-10 xl:px-16 space-y-8" style={{ filter: "drop-shadow(0 4px 32px rgba(0,0,0,0.8))" }}>
 
-        {/* LEFT: Text — direct on image, text-shadow for readability */}
+        {/* Badge */}
         <motion.div
-          initial={{ opacity: 0, x: -24 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="flex-1 max-w-[540px] space-y-7"
-          style={{ filter: "drop-shadow(0 4px 24px rgba(0,0,0,0.7))" }}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-white/25 bg-black/40 backdrop-blur-sm text-xs font-medium text-white/70"
         >
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-white/25 bg-black/40 backdrop-blur-sm text-xs font-medium text-white/70">
-            <span className="w-1.5 h-1.5 rounded-full bg-white/80 animate-pulse" />
-            AI-Powered Mind OS · Now in Beta
-          </div>
-
-          {/* Headline */}
-          <h1 className="text-6xl xl:text-[5rem] font-bold font-serif tracking-tight leading-[0.9]">
-            <span className="text-white block pb-1">The OS for</span>
-            <span className="bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
-              Your Mind.
-            </span>
-          </h1>
-
-          {/* Subtitle */}
-          <p className="text-lg text-white/70 font-light leading-relaxed max-w-sm">
-            Capture ideas. Analyze patterns. Extract intelligence. The cognitive layer between your mind and the world.
-          </p>
-
-          {/* CTAs */}
-          <div className="flex items-center gap-4">
-            <button className="group relative px-8 py-3.5 rounded-full bg-white text-black font-bold text-sm transition-all duration-300 active:scale-95 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] flex items-center gap-2 overflow-hidden">
-              <span className="relative z-10">Start Thinking Free</span>
-              <span className="relative z-10 group-hover:translate-x-1 transition-transform duration-200">→</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/[0.04] to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
-            </button>
-            <button className="px-8 py-3.5 rounded-full border border-white/30 text-white/70 font-medium text-sm hover:border-white/60 hover:text-white transition-all duration-300 backdrop-blur-sm bg-black/20">
-              See How It Works
-            </button>
-          </div>
-
+          <span className="w-1.5 h-1.5 rounded-full bg-white/80 animate-pulse" />
+          AI-Powered Mind OS · Now in Beta
         </motion.div>
 
-        {/* RIGHT: Floating feature cards — fills the empty space */}
-        <motion.div
-          initial={{ opacity: 0, x: 24 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1.1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="flex-1 max-w-[420px] relative h-[380px] hidden xl:block"
+        {/* Headline — single line, full width */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          className="text-5xl md:text-6xl xl:text-7xl font-bold font-serif tracking-tight leading-none whitespace-nowrap"
         >
-          {/* Ghost Card 1 — top right */}
-          <div className="absolute top-0 right-0 w-[220px] p-5 rounded-2xl border border-white/[0.06] opacity-[0.08]" />
+          <span className="text-white">The OS for </span>
+          <span className="bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">Your Mind.</span>
+        </motion.h1>
 
-          {/* Ghost Card 2 — middle left */}
-          <div className="absolute top-[40%] left-0 w-[200px] p-5 rounded-2xl border border-white/[0.06] opacity-[0.08]" />
+        {/* Divider */}
+        <div className="w-full h-px bg-gradient-to-r from-white/15 via-white/5 to-transparent" />
 
-          {/* Ghost Card 3 — bottom right */}
-          <div className="absolute bottom-0 right-4 w-[210px] p-5 rounded-2xl border border-white/[0.06] opacity-[0.08]" />
+        {/* Two columns — subtitle+CTAs left, stats right */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          className="flex items-start justify-between gap-16"
+        >
+          {/* LEFT: Subtitle + CTAs */}
+          <div className="space-y-6 max-w-md">
+            <p className="text-lg text-white/65 font-light leading-relaxed">
+              Capture ideas. Analyze patterns. Extract intelligence.<br />
+              The cognitive layer between your mind and the world.
+            </p>
+            <div className="flex items-center gap-4">
+              <button className="group relative px-8 py-3.5 rounded-full bg-white text-black font-bold text-sm transition-all duration-300 active:scale-95 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] flex items-center gap-2 overflow-hidden">
+                <span className="relative z-10">Start Thinking Free</span>
+                <span className="relative z-10 group-hover:translate-x-1 transition-transform duration-200">→</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/[0.04] to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
+              </button>
+              <button className="px-8 py-3.5 rounded-full border border-white/30 text-white/70 font-medium text-sm hover:border-white/60 hover:text-white transition-all duration-300 bg-black/20 backdrop-blur-sm">
+                See How It Works
+              </button>
+            </div>
+          </div>
+
+          {/* RIGHT: 4 stats in a 2x2 grid */}
+          <div className="grid grid-cols-2 gap-4 min-w-[360px]">
+            {[
+              { value: "Neural AI", label: "Real-time thought mapping" },
+              { value: "E2E", label: "Zero-knowledge encryption" },
+              { value: "∞ Memory", label: "Vector-embedded recall" },
+              { value: "0ms", label: "Edge runtime processing" },
+            ].map((s) => (
+              <div key={s.value} className="p-4 rounded-2xl bg-black/35 backdrop-blur-md border border-white/10">
+                <div className="text-lg font-bold font-serif text-white mb-1">{s.value}</div>
+                <div className="text-[11px] text-white/45 leading-snug">{s.label}</div>
+              </div>
+            ))}
+          </div>
         </motion.div>
 
       </div>
