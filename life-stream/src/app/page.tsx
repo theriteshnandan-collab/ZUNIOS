@@ -77,32 +77,71 @@ const FeatureSection = ({
     >
       {/* SCROLL LINE NODE */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-[130%] bg-gradient-to-b from-transparent via-white/8 to-transparent hidden md:block -z-10" />
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#050510] border border-white/25 rounded-full hidden md:block z-0 shadow-[0_0_10px_rgba(255,255,255,0.12)]" />
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#080808] border border-white/25 rounded-full hidden md:block z-0 shadow-[0_0_10px_rgba(255,255,255,0.12)]" />
 
-      {/* VISUAL SIDE */}
+      {/* VISUAL SIDE — Framed Screen */}
       <div className="w-full md:w-1/2">
-        <div className="relative w-full h-[220px] md:h-[300px] rounded-[2.5rem] overflow-hidden border border-white/[0.07] bg-black/40 backdrop-blur-xl group-hover/section:border-white/15 group-hover/section:shadow-[0_0_80px_-20px_rgba(255,255,255,0.06)] transition-all duration-700 shadow-[0_0_40px_-15px_rgba(0,0,0,0.8)]">
-          {image ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              className="absolute inset-0 image-glow"
-            >
-              <Image
-                src={image}
-                alt={title}
-                fill
-                className="object-cover"
-                priority={false}
-              />
-            </motion.div>
-          ) : (
-            <div className="absolute inset-0 z-0"><Visual /></div>
-          )}
-          <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] via-transparent to-black/30 pointer-events-none z-10" />
-          <div className="absolute inset-0 ring-1 ring-inset ring-white/[0.04] rounded-[2.5rem] pointer-events-none z-20" />
-          <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-white/[0.06] rounded-full blur-2xl z-0" />
+        {/* Outer bezel / monitor frame */}
+        <div className="relative rounded-2xl bg-gradient-to-b from-white/[0.10] to-white/[0.04] border border-white/20 shadow-[0_0_0_1px_rgba(0,0,0,0.8),0_20px_60px_-10px_rgba(0,0,0,0.9)] group-hover/section:border-white/30 group-hover/section:shadow-[0_0_0_1px_rgba(0,0,0,0.8),0_20px_80px_-10px_rgba(255,255,255,0.06)] transition-all duration-700 p-[3px]">
+          {/* Screen surface */}
+          <div className="relative w-full h-[220px] md:h-[300px] rounded-[14px] overflow-hidden bg-black">
+
+            {/* Top bar — monitor chrome */}
+            <div className="absolute top-0 left-0 right-0 z-30 h-8 bg-gradient-to-b from-white/[0.08] to-transparent backdrop-blur-sm flex items-center justify-between px-3 border-b border-white/[0.06]">
+              {/* 3 dots */}
+              <div className="flex items-center gap-1.5">
+                <div className="w-2 h-2 rounded-full bg-white/20" />
+                <div className="w-2 h-2 rounded-full bg-white/15" />
+                <div className="w-2 h-2 rounded-full bg-white/10" />
+              </div>
+              {/* Live indicator */}
+              <div className="flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 rounded-full bg-white/60 animate-pulse" />
+                <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-white/30">Live</span>
+              </div>
+            </div>
+
+            {/* Image / Visual with ken-burns */}
+            {image ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 1.2 }}
+                className="absolute inset-0 animate-ken-burns"
+              >
+                <Image
+                  src={image}
+                  alt={title}
+                  fill
+                  className="object-cover"
+                  priority={false}
+                />
+              </motion.div>
+            ) : (
+              <div className="absolute inset-0 z-0"><Visual /></div>
+            )}
+
+            {/* Scanline overlay */}
+            <div
+              className="absolute inset-0 z-20 pointer-events-none"
+              style={{
+                backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.18) 2px, rgba(0,0,0,0.18) 4px)",
+                mixBlendMode: "multiply"
+              }}
+            />
+
+            {/* Dark vignette */}
+            <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] via-transparent to-black/50 pointer-events-none z-20" />
+
+            {/* Corner brackets */}
+            <div className="absolute top-10 left-3 w-4 h-4 border-t border-l border-white/25 z-30 pointer-events-none" />
+            <div className="absolute top-10 right-3 w-4 h-4 border-t border-r border-white/25 z-30 pointer-events-none" />
+            <div className="absolute bottom-3 left-3 w-4 h-4 border-b border-l border-white/25 z-30 pointer-events-none" />
+            <div className="absolute bottom-3 right-3 w-4 h-4 border-b border-r border-white/25 z-30 pointer-events-none" />
+
+            {/* Inner screen edge shine */}
+            <div className="absolute inset-0 ring-1 ring-inset ring-white/[0.06] rounded-[14px] pointer-events-none z-30" />
+          </div>
         </div>
       </div>
 
@@ -735,7 +774,7 @@ function HomeContent() {
 export default function Home() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-[#050510]">
+      <div className="min-h-screen flex items-center justify-center bg-[#080808]">
         <div className="animate-pulse text-white/20">Initializing Core...</div>
       </div>
     }>
