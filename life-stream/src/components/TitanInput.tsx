@@ -191,8 +191,8 @@ export default function TitanInput({
     const glowAnimationDuration = isListening ? "1s" : isTyping ? "1.5s" : isFocused ? "3s" : "4s";
 
     const getGlowGradient = () => {
-        if (isListening) return "linear-gradient(90deg, #ef4444 0%, #fca5a5 50%, #b91c1c 100%)"; // Red (Recording)
-        return "linear-gradient(90deg, rgba(139, 92, 246, 0.5) 0%, rgba(249, 115, 22, 0.4) 50%, rgba(59, 130, 246, 0.5) 100%)";
+        if (isListening) return "linear-gradient(90deg, #ef4444 0%, #fca5a5 50%, #b91c1c 100%)";
+        return "linear-gradient(90deg, rgba(220,220,220,0.4) 0%, rgba(255,255,255,0.6) 50%, rgba(200,200,200,0.4) 100%)";
     };
 
     return (
@@ -222,13 +222,13 @@ export default function TitanInput({
             <motion.div
                 className={cn(
                     "relative overflow-hidden rounded-[32px]",
-                    "bg-[#0a0a0c]/80 backdrop-blur-3xl",
-                    // Inner Light Effect (top edge)
-                    "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08)]",
-                    // Sharp Border
-                    "border border-white/10",
+                    "bg-gradient-to-b from-white/[0.12] to-white/[0.07] backdrop-blur-3xl",
+                    // Silver top-edge shimmer
+                    "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.30),0_4px_40px_rgba(0,0,0,0.4)]",
+                    // Silver border
+                    "border border-white/20",
                     "transition-all duration-500",
-                    isFocused && "border-white/20 shadow-[0_0_40px_rgba(255,255,255,0.03),inset_0_1px_0_0_rgba(255,255,255,0.15)]",
+                    isFocused && "border-white/40 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.08)]",
                     isAnalyzing && "opacity-50 pointer-events-none"
                 )}
                 layout
@@ -253,7 +253,7 @@ export default function TitanInput({
                     placeholder={placeholder}
                     className={cn(
                         "relative z-10 w-full bg-transparent",
-                        "text-lg text-zinc-200 placeholder:text-zinc-600",
+                        "text-lg text-white placeholder:text-white/35",
                         "p-6 min-h-[100px] outline-none resize-none",
                         "font-light leading-relaxed",
                         "scrollbar-hide"
@@ -268,7 +268,7 @@ export default function TitanInput({
                         <motion.div
                             className={cn(
                                 "flex items-center gap-2 px-3 py-1.5 rounded-full",
-                                "bg-white/[0.04] border border-white/[0.06]",
+                                "bg-white/[0.10] border border-white/20",
                                 "transition-colors",
                                 activeModeConfig.color
                             )}
@@ -286,7 +286,7 @@ export default function TitanInput({
                                 onClick={() => setShowTemplates(!showTemplates)}
                                 className={cn(
                                     "flex items-center gap-1.5 px-3 py-1.5 rounded-full",
-                                    "border border-white/[0.06] transition-colors text-xs font-medium",
+                                    "border border-white/20 transition-colors text-xs font-medium",
                                     showTemplates
                                         ? "bg-white/[0.08] text-white"
                                         : "bg-white/[0.03] text-zinc-500 hover:text-white"
@@ -361,8 +361,8 @@ export default function TitanInput({
                         transition={{ type: "spring", stiffness: 400, damping: 30 }}
                         className={cn(
                             "absolute top-full left-0 mt-3 w-auto min-w-[240px] max-w-[90vw]",
-                            "bg-[#0a0a0c]/95 backdrop-blur-xl",
-                            "border border-white/[0.06] rounded-xl",
+                            "bg-white/[0.10] backdrop-blur-xl",
+                            "border border-white/20 rounded-xl",
                             "shadow-2xl shadow-black/50",
                             "z-[100] overflow-hidden"
                         )}
