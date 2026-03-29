@@ -44,35 +44,6 @@ const FeatureItem = ({ icon: Icon, label, desc }: { icon: any, label: string, de
 );
 
 // --- TIMELINE NODE (FEATURE SECTION) ---
-const featureVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.15, delayChildren: 0.2 }
-  }
-};
-
-const visualVariants = {
-  hidden: { opacity: 0, scale: 0.85, filter: "blur(12px)", y: 20 },
-  visible: { 
-    opacity: 1, 
-    scale: 1, 
-    filter: "blur(0px)", 
-    y: 0,
-    transition: { type: "spring", stiffness: 100, damping: 20, delay: 0.2 }
-  }
-};
-
-const textVariants = {
-  hidden: { opacity: 0, x: 20 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
-};
-
-const textLeftVariants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
-};
-
 const FeatureSection = ({
   visual: Visual,
   title,
@@ -86,16 +57,33 @@ const FeatureSection = ({
   align?: "left" | "right",
   tag?: string
 }) => {
+  // If 'right', image is strictly on the right side and text is on the left.
   const isRight = align === "right";
 
+  // Create a ref to track the physical scroll intersection of this specific component container
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    // Animation starts perfectly when node hits 85% down the screen, and fully finishes when its center hits 45% (optimal view height).
+    offset: ["start 85%", "center 45%"]
+  });
+
+  // Zero-State Hardware Transforms (Mathematically bound to scroll pixels, avoiding React entirely)
+  const visualX = useTransform(scrollYProgress, [0, 1], [isRight ? -40 : 40, 0]);
+  const textX = useTransform(scrollYProgress, [0, 1], [isRight ? 20 : -20, 0]);
+  
+  // Opacity interpolation mapped identically to the physical progress
+  const commonOpacity = useTransform(scrollYProgress, [0, 0.8], [0, 1]); // Hits 100% opacity slighly before fully translating
+  
+  // Center wire socket transformations
+  const nodeScale = useTransform(scrollYProgress, [0, 0.4], [0, 1]); // Pops in fast
+  const sparkScaleX = useTransform(scrollYProgress, [0.3, 1], [0, 1]); // Sparks cleanly out
+
   return (
-    <motion.div
-      variants={featureVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-40% 0px -40% 0px" }}
+    <div
+      ref={containerRef}
       className={cn(
-        "relative flex flex-col md:flex-row items-center gap-10 md:gap-24 py-24 max-w-6xl mx-auto px-8 group/section",
+        "relative flex flex-col md:flex-row items-center gap-10 md:gap-24 py-24 max-w-6xl mx-auto px-8 group/section transform-gpu",
         isRight ? "md:flex-row-reverse" : ""
       )}
     >
@@ -103,30 +91,33 @@ const FeatureSection = ({
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex items-center justify-center z-10 pointer-events-none">
         {/* The Node Socket */}
         <motion.div 
-          className="relative w-4 h-4 rounded-full bg-white border-2 border-black/10 shadow-[0_0_20px_rgba(0,0,0,0.15)] flex items-center justify-center"
-          variants={{
-            hidden: { scale: 0, backgroundColor: "rgba(255,255,255,0)" },
-            visible: { scale: 1, backgroundColor: "rgba(255,255,255,1)", transition: { type: "spring" } }
-          }}
+          style={{ scale: nodeScale, opacity: commonOpacity }}
+          className="relative w-4 h-4 rounded-full bg-white border-2 border-black/10 shadow-[0_0_20px_rgba(0,0,0,0.15)] flex items-center justify-center transform-gpu"
         >
           <div className="w-1.5 h-1.5 bg-black rounded-full animate-pulse" />
         </motion.div>
         
         {/* The Horizontal Spark Line */}
         <motion.div
+          style={{ scaleX: sparkScaleX, opacity: commonOpacity }}
           className={cn(
-            "absolute h-[2px] bg-gradient-to-r from-black/0 via-black/40 to-black/0 w-24",
-            isRight ? "right-2 origin-right" : "left-2 origin-left"
+            "absolute h-[2px] bg-gradient-to-r w-24 transform-gpu",
+            isRight 
+              ? "right-2 origin-left from-black/40 to-black/0" 
+              : "left-2 origin-right from-black/0 to-black/40"
           )}
-          variants={{
-            hidden: { scaleX: 0, opacity: 0 },
-            visible: { scaleX: 1, opacity: 1, transition: { duration: 0.4, ease: "easeOut", delay: 0.1 } }
-          }}
         />
       </div>
 
       {/* VISUAL SIDE — Spawning Container */}
-      <motion.div variants={visualVariants} className="w-full md:w-1/2 relative z-20">
+      <motion.div 
+        style={{ 
+          x: visualX, 
+          opacity: commonOpacity,
+          WebkitBackfaceVisibility: "hidden" 
+        }} 
+        className="w-full md:w-1/2 relative z-20 transform-gpu"
+      >
         <div className="relative rounded-[16px] bg-gradient-to-b from-black/[0.08] to-black/[0.02] border border-black/15 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.25)] group-hover/section:border-black/30 group-hover/section:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.3)] transition-all duration-700 p-1">
           <div className="relative w-full h-[260px] md:h-[340px] rounded-[12px] overflow-hidden bg-black">
             
@@ -146,14 +137,14 @@ const FeatureSection = ({
             <div className="absolute inset-0 z-0 p-1"><Visual /></div>
 
             {/* Cinematic Overlays */}
-            <div className="absolute inset-0 z-20 pointer-events-none mix-blend-multiply opacity-40 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
+            <div className="absolute inset-0 z-20 pointer-events-none mix-blend-multiply opacity-40 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
             <div className="absolute inset-0 ring-1 ring-inset ring-white/[0.1] rounded-[12px] pointer-events-none z-30" />
           </div>
         </div>
       </motion.div>
 
       {/* TEXT SIDE */}
-      <motion.div variants={isRight ? textLeftVariants : textVariants} className="w-full md:w-1/2 space-y-6 text-center md:text-left relative z-10">
+      <motion.div style={{ x: textX, opacity: commonOpacity, WebkitBackfaceVisibility: "hidden" }} className="w-full md:w-1/2 space-y-6 text-center md:text-left relative z-10 transform-gpu">
         {tag && (
           <span className="inline-block text-[11px] font-bold uppercase tracking-[0.25em] text-black/60 bg-black/[0.04] border border-black/10 px-3.5 py-1.5 rounded-full">
             {tag}
@@ -169,7 +160,7 @@ const FeatureSection = ({
           <div className="h-[2px] w-16 bg-gradient-to-r from-black/30 to-transparent rounded-full" />
         </div>
       </motion.div>
-    </motion.div>
+    </div>
   );
 };
 
