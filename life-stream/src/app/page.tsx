@@ -23,7 +23,6 @@ import neuralCoreImage from "../../public/images/POLLOAIONE.jpeg";
 import biometricImage from "../../public/images/BIOMETRICWAVEFORM.jpeg";
 import voiceImage from "../../public/images/SOUNDWAVES.jpeg";
 import vaultImage from "../../public/images/ENCRYPTEDVAULT.jpeg";
-import mindImage from "../../public/images/MIND.jpeg";
 import heroCinematicImage from "../../public/images/image1234.jpg";
 
 import dynamic from "next/dynamic";
@@ -159,12 +158,12 @@ const CinematicHero = () => (
     {/* Cinematic Photo Background */}
     <div className="absolute inset-0 z-0">
       <Image src={heroCinematicImage} alt="" fill className="object-cover object-center" priority />
-      {/* Left dark overlay — text readability */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/10" />
-      {/* Bottom fade into page */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-transparent to-black/30" />
-      {/* Edge vignette */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.5)_100%)]" />
+      {/* Left overlay — just enough for text, photo visible on right */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/30 to-black/0" />
+      {/* Bottom fade into page — pure dark, no purple */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-transparent" />
+      {/* Top dark for nav area */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-transparent" />
     </div>
 
     {/* Corner Bracket Frames */}
@@ -181,10 +180,10 @@ const CinematicHero = () => (
 
     {/* Main Content */}
     <div className="relative z-10 flex-1 flex items-center w-full max-w-7xl mx-auto px-10 xl:px-16 pt-24 pb-36">
-      <div className="flex flex-row items-center justify-between w-full gap-12">
+      <div className="flex flex-row items-center w-full">
 
         {/* LEFT: Text */}
-        <div className="flex-1 max-w-[560px] space-y-7">
+        <div className="max-w-[620px] space-y-7">
           {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: -12 }}
@@ -256,29 +255,6 @@ const CinematicHero = () => (
           </motion.div>
         </div>
 
-        {/* RIGHT: MIND Constellation */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.88, x: 40 }}
-          animate={{ opacity: 1, scale: 1, x: 0 }}
-          transition={{ duration: 1.5, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="flex-1 max-w-[460px] xl:max-w-[520px] relative"
-        >
-          <div className="relative w-full aspect-square">
-            {/* Deep halo — large atmospheric glow */}
-            <div className="absolute -inset-16 bg-white/[0.06] blur-[100px] rounded-full" />
-            {/* Inner bright core */}
-            <div className="absolute inset-[15%] bg-white/12 blur-[60px] rounded-full" />
-            {/* Accent spark */}
-            <div className="absolute inset-[35%] bg-white/[0.08] blur-[30px] rounded-full" />
-            <Image
-              src={mindImage}
-              alt="Neural constellation — ZUNIOS Mind Map"
-              fill
-              className="object-contain image-glow relative z-10 mix-blend-screen"
-              priority
-            />
-          </div>
-        </motion.div>
       </div>
     </div>
 
