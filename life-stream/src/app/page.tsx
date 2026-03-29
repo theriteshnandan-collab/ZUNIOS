@@ -380,7 +380,7 @@ const NarrativeFlowLines = () => {
       </div>
 
       {/* CAPABILITIES GRID */}
-      <div className="pt-20 px-8 max-w-6xl mx-auto border-t border-white/[0.04]">
+      <div className="pt-20 px-8 max-w-6xl mx-auto border-t border-white/[0.06]">
         <div className="text-center space-y-4 mb-16">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -388,10 +388,10 @@ const NarrativeFlowLines = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/30">Full Stack</span>
-            <h3 className="text-3xl md:text-4xl font-serif text-white/90 mt-3">System Capabilities</h3>
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/50">Full Stack</span>
+            <h3 className="text-3xl md:text-4xl font-serif text-white mt-3">System Capabilities</h3>
           </motion.div>
-          <div className="h-px w-16 bg-gradient-to-r from-white/25 to-transparent mx-auto" />
+          <div className="h-px w-16 bg-gradient-to-r from-transparent via-white/30 to-transparent mx-auto" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -409,14 +409,17 @@ const NarrativeFlowLines = () => {
               transition={{ delay: i * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true }}
               key={i}
-              className="relative p-6 rounded-3xl bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.06] hover:border-white/10 transition-all duration-500 group overflow-hidden"
+              className="relative p-6 rounded-2xl bg-gradient-to-b from-white/[0.10] to-white/[0.04] border border-white/20 hover:border-white/40 hover:shadow-[0_0_40px_rgba(255,255,255,0.06)] transition-all duration-500 group overflow-hidden backdrop-blur-xl"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/0 group-hover:from-white/[0.04] group-hover:to-transparent transition-all duration-700 rounded-3xl" />
-              <div className="w-10 h-10 rounded-xl bg-black/60 border border-white/[0.08] flex items-center justify-center mb-5 group-hover:scale-110 group-hover:border-white/15 transition-all duration-300 relative z-10">
-                <item.icon className="w-5 h-5 text-white/35 group-hover:text-white transition-colors duration-300" />
+              {/* Top shine line */}
+              <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+              {/* Hover glow */}
+              <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/0 group-hover:from-white/[0.06] group-hover:to-transparent transition-all duration-700 rounded-2xl" />
+              <div className="w-10 h-10 rounded-xl bg-white/[0.08] border border-white/20 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:border-white/40 group-hover:bg-white/[0.15] transition-all duration-300 relative z-10">
+                <item.icon className="w-5 h-5 text-white/70 group-hover:text-white transition-colors duration-300" />
               </div>
-              <h4 className="text-base font-bold text-white/80 mb-2.5 relative z-10 group-hover:text-white transition-colors">{item.title}</h4>
-              <p className="text-white/30 text-sm leading-relaxed relative z-10">{item.desc}</p>
+              <h4 className="text-base font-bold text-white mb-2.5 relative z-10">{item.title}</h4>
+              <p className="text-white/50 text-sm leading-relaxed relative z-10 group-hover:text-white/70 transition-colors">{item.desc}</p>
             </motion.div>
           ))}
         </div>
