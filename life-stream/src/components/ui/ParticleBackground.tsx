@@ -45,7 +45,7 @@ export const ParticleBackground = ({ className, children }: ParticleBackgroundPr
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(34, 211, 238, ${opacity})`; // Cyan-400
+            ctx.strokeStyle = `rgba(139, 92, 246, ${opacity})`; // Violet-500
             ctx.lineWidth = 0.8;
             ctx.stroke();
         };

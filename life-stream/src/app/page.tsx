@@ -34,80 +34,105 @@ const RevelationView = dynamic(() => import("@/components/RevelationView"), {
   ssr: false,
 });
 
-// --- SMALL FEATURE GRID COMPONENT ---
+// --- FEATURE ITEM ---
 const FeatureItem = ({ icon: Icon, label, desc }: { icon: any, label: string, desc: string }) => (
-  <div className="flex flex-col items-center text-center space-y-2 group cursor-default">
-    <div className="p-3 rounded-2xl bg-white/5 border border-white/10 group-hover:bg-cyan-500/10 group-hover:border-cyan-500/30 transition-all duration-300">
-      <Icon className="w-5 h-5 text-gray-400 group-hover:text-cyan-400 transition-colors" />
+  <div className="flex flex-col items-center text-center space-y-2.5 group cursor-default">
+    <div className="p-3 rounded-2xl bg-white/[0.04] border border-white/[0.06] group-hover:bg-violet-500/10 group-hover:border-violet-500/25 transition-all duration-500 group-hover:scale-110">
+      <Icon className="w-5 h-5 text-white/25 group-hover:text-violet-400 transition-colors duration-300" />
     </div>
     <div className="space-y-0.5">
-      <div className="text-sm font-medium text-gray-300 group-hover:text-white transition-colors">{label}</div>
-      <div className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">{desc}</div>
+      <div className="text-xs font-semibold text-white/50 group-hover:text-white/90 transition-colors tracking-wide">{label}</div>
+      <div className="text-[9px] text-white/20 font-medium uppercase tracking-[0.15em]">{desc}</div>
     </div>
   </div>
 );
 
-// --- ZIG-ZAG FEATURE COMPONENT ---
+// --- FEATURE SECTION ---
 const FeatureSection = ({
   visual: Visual,
   title,
   description,
   align = "left",
-  delay = 0
+  delay = 0,
+  tag
 }: {
   visual: any,
   title: string,
   description: string,
   align?: "left" | "right",
-  delay?: number
+  delay?: number,
+  tag?: string
 }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 60 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.8, delay }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "relative flex flex-col md:flex-row items-center gap-8 md:gap-20 py-16 max-w-6xl mx-auto px-6 group/section",
+        "relative flex flex-col md:flex-row items-center gap-10 md:gap-24 py-20 max-w-6xl mx-auto px-8 group/section",
         align === "right" ? "md:flex-row-reverse" : ""
       )}
     >
-
-      {/* CONNECTED SCROLL LINE NODE */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-[120%] bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent hidden md:block -z-10" />
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-cyan-950 border border-cyan-500/50 rounded-full hidden md:block z-0 shadow-[0_0_10px_rgba(6,182,212,0.5)]" />
+      {/* SCROLL LINE NODE */}
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-[130%] bg-gradient-to-b from-transparent via-violet-500/15 to-transparent hidden md:block -z-10" />
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#050510] border border-violet-500/40 rounded-full hidden md:block z-0 shadow-[0_0_12px_rgba(139,92,246,0.6)]" />
 
       {/* VISUAL SIDE */}
       <div className="w-full md:w-1/2">
-        {/* PREMIUM VISUAL CONTAINER */}
-        <div className="relative w-full h-[220px] md:h-[280px] rounded-[2rem] overflow-hidden border border-white/10 bg-[#0a0a0a]/40 backdrop-blur-xl shadow-[0_0_40px_-10px_rgba(0,0,0,0.5)] group-hover/section:border-cyan-500/30 group-hover/section:shadow-[0_0_60px_-15px_rgba(6,182,212,0.2)] transition-all duration-700">
-
-          {/* Elite Visual Wrapper */}
-          <div className="absolute inset-0 z-0">
-            <Visual />
-          </div>
-
-          {/* Premium Glass Overlays */}
-          <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-black/20 pointer-events-none z-10" />
-          <div className="absolute inset-0 ring-1 ring-inset ring-white/5 rounded-[2rem] pointer-events-none z-20" />
+        <div className="relative w-full h-[220px] md:h-[300px] rounded-[2.5rem] overflow-hidden border border-white/[0.07] bg-black/40 backdrop-blur-xl group-hover/section:border-violet-500/20 group-hover/section:shadow-[0_0_80px_-20px_rgba(139,92,246,0.2)] transition-all duration-700 shadow-[0_0_40px_-15px_rgba(0,0,0,0.8)]">
+          <div className="absolute inset-0 z-0"><Visual /></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] via-transparent to-black/30 pointer-events-none z-10" />
+          <div className="absolute inset-0 ring-1 ring-inset ring-white/[0.04] rounded-[2.5rem] pointer-events-none z-20" />
+          <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-violet-600/15 rounded-full blur-2xl z-0" />
         </div>
       </div>
 
       {/* TEXT SIDE */}
-      <div className="w-full md:w-1/2 space-y-6 text-center md:text-left relative z-10">
-        <h2 className="text-3xl md:text-5xl font-serif font-bold text-white tracking-tight leading-tight drop-shadow-lg">
+      <div className="w-full md:w-1/2 space-y-5 text-center md:text-left relative z-10">
+        {tag && (
+          <span className="inline-block text-[10px] font-bold uppercase tracking-[0.2em] text-violet-400/70 bg-violet-500/10 border border-violet-500/20 px-3 py-1 rounded-full">
+            {tag}
+          </span>
+        )}
+        <h2 className="text-3xl md:text-5xl font-serif font-bold text-white tracking-tight leading-[1.05]">
           {title}
         </h2>
-        <p className="text-lg md:text-xl text-blue-100/60 font-light leading-relaxed max-w-md mx-auto md:mx-0">
+        <p className="text-base md:text-lg text-white/35 font-light leading-relaxed max-w-md mx-auto md:mx-0">
           {description}
         </p>
-        <div className="pt-4 flex justify-center md:justify-start">
-          <div className="h-0.5 w-16 bg-gradient-to-r from-cyan-500 to-transparent rounded-full" />
+        <div className="pt-2 flex justify-center md:justify-start">
+          <div className="h-px w-12 bg-gradient-to-r from-violet-500/60 to-transparent rounded-full" />
         </div>
       </div>
     </motion.div>
   );
 };
+
+// --- STATS STRIP ---
+const StatsStrip = () => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    transition={{ duration: 0.8 }}
+    className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto px-8 py-16"
+  >
+    {[
+      { value: "AI", label: "Neural Analysis" },
+      { value: "E2E", label: "Encrypted" },
+      { value: "∞", label: "Memory Bank" },
+      { value: "0ms", label: "Local Processing" },
+    ].map((stat) => (
+      <div key={stat.label} className="text-center group">
+        <div className="text-4xl md:text-5xl font-bold font-serif bg-gradient-to-b from-white to-white/30 bg-clip-text text-transparent mb-2 group-hover:from-violet-300 group-hover:to-violet-300/30 transition-all duration-500">
+          {stat.value}
+        </div>
+        <div className="text-[10px] text-white/25 uppercase tracking-[0.2em] font-medium">{stat.label}</div>
+      </div>
+    ))}
+  </motion.div>
+);
 
 // WRAPPER COMPONENT TO HANDLE SCROLL LOGIC
 const NarrativeFlowLines = () => {
@@ -121,78 +146,99 @@ const NarrativeFlowLines = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]);
 
   return (
-    <div className="w-full mt-8 space-y-0 pb-12 hidden sm:block">
+    <div className="w-full mt-4 pb-16 hidden sm:block">
 
-      {/* 1. CONNECTED FEATURES CONTAINER (Line exists only here) */}
+      {/* SECTION DIVIDER */}
+      <div className="max-w-6xl mx-auto px-8 mb-4">
+        <div className="flex items-center gap-6">
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent to-white/[0.05]" />
+          <span className="text-[10px] text-white/15 uppercase tracking-[0.3em] font-medium whitespace-nowrap">What Zunios Does</span>
+          <div className="flex-1 h-px bg-gradient-to-l from-transparent to-white/[0.05]" />
+        </div>
+      </div>
+
+      {/* STATS STRIP */}
+      <StatsStrip />
+
+      {/* CONNECTED FEATURES CONTAINER */}
       <div ref={containerRef} className="relative pb-20">
         {/* DYNAMIC SCROLL LINE */}
         <motion.div
-          className="absolute left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-cyan-500/0 via-cyan-500/50 to-cyan-500/0 -translate-x-1/2 origin-top z-0"
+          className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-violet-500/0 via-violet-500/30 to-violet-500/0 -translate-x-1/2 origin-top z-0"
           style={{ scaleY, opacity }}
         />
 
-        {/* 1. NEURAL CORE */}
         <FeatureSection
           visual={NeuralVisual}
           title="The Neural Core"
-          description="An advanced AI engine that maps your thoughts into a living constellation. Patterns emerge automatically."
+          description="An advanced AI engine that maps your thoughts into a living constellation. Patterns emerge automatically, revealing insights you never knew existed."
           align="left"
+          tag="AI Analysis"
         />
 
-        {/* 2. MEMORY BANK */}
         <FeatureSection
           visual={SyncVisual}
           title="Daily Sync"
-          description="Your biological rhythm, visualized. Track your cognitive peak and ensure your system is optimal every day."
+          description="Your biological rhythm, visualized. Track your cognitive peak and ensure your system is optimal every single day."
           align="right"
+          tag="Biometric Data"
         />
 
-        {/* 3. QUICK CAPTURE */}
         <FeatureSection
           visual={CaptureVisual}
           title="Voice Command"
-          description="Speak to the machine. The Arc Reactor core processes natural language instantly into structured data."
+          description="Speak to the machine. The Arc Reactor core processes natural language instantly into structured, searchable intelligence."
           align="left"
+          tag="Voice Input"
         />
 
-        {/* 4. VAULT SECURITY */}
         <FeatureSection
           visual={VaultVisual}
           title="Zero-Knowledge Vault"
-          description="Your mind is private property. Military-grade encryption ensures only you hold the keys to your thoughts."
+          description="Your mind is private property. Military-grade encryption ensures only you hold the keys to your thoughts, forever."
           align="right"
+          tag="Privacy First"
         />
       </div>
 
-      {/* 2. CAPABILITIES GRID (Outside the line flow) */}
-      <div className="pt-16 px-6 max-w-6xl mx-auto border-t border-white/5">
+      {/* CAPABILITIES GRID */}
+      <div className="pt-20 px-8 max-w-6xl mx-auto border-t border-white/[0.04]">
         <div className="text-center space-y-4 mb-16">
-          <h3 className="text-2xl md:text-3xl font-serif text-white/90">System Capabilities</h3>
-          <div className="h-1 w-20 bg-cyan-900/50 mx-auto rounded-full" />
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-violet-400/60">Full Stack</span>
+            <h3 className="text-3xl md:text-4xl font-serif text-white/90 mt-3">System Capabilities</h3>
+          </motion.div>
+          <div className="h-px w-16 bg-gradient-to-r from-violet-500/50 to-transparent mx-auto" />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { title: "Neural Input", desc: "Natural language processing that understands context, intent, and emotion.", icon: Brain },
-            { title: "Quantum Sync", desc: "Real-time state synchronization across all your logged-in neural interfaces.", icon: Share2 },
-            { title: "Task Matrices", desc: "Auto-prioritization of objectives based on urgency and your cognitive load.", icon: Target },
-            { title: "Visual Recall", desc: "Vector-embedded image storage for instant photographic memory retrieval.", icon: Sparkles },
-            { title: "Time Distortion", desc: "Focus modes that warp your perception of time to induce flow states.", icon: Activity },
-            { title: "Secure Core", desc: "Local-first encryption. Your thoughts never leave the secure enclave unencrypted.", icon: Shield },
+            { title: "Neural Input", desc: "Natural language processing that understands context, intent, and emotional state in real-time.", icon: Brain },
+            { title: "Quantum Sync", desc: "Real-time state synchronization across all your logged-in neural interfaces and devices.", icon: Share2 },
+            { title: "Task Matrices", desc: "Auto-prioritization of objectives based on urgency, cognitive load, and strategic importance.", icon: Target },
+            { title: "Visual Recall", desc: "Vector-embedded memory storage for instant, photographic-quality information retrieval.", icon: Sparkles },
+            { title: "Flow States", desc: "Focus modes engineered to warp your perception of time and induce deep productive flow.", icon: Activity },
+            { title: "Secure Core", desc: "Local-first encryption architecture. Your thoughts never leave the secure enclave unencrypted.", icon: Shield },
           ].map((item, i) => (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
+              transition={{ delay: i * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true }}
               key={i}
-              className="p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-cyan-500/20 transition-all duration-300 group"
+              className="relative p-6 rounded-3xl bg-white/[0.03] border border-white/[0.05] hover:bg-white/[0.06] hover:border-white/10 transition-all duration-500 group overflow-hidden"
             >
-              <div className="w-10 h-10 rounded-lg bg-black/50 border border-white/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <item.icon className="w-5 h-5 text-cyan-400" />
+              <div className="absolute inset-0 bg-gradient-to-br from-violet-500/0 to-violet-500/0 group-hover:from-violet-500/[0.05] group-hover:to-transparent transition-all duration-700 rounded-3xl" />
+              <div className="w-10 h-10 rounded-xl bg-black/60 border border-white/[0.08] flex items-center justify-center mb-5 group-hover:scale-110 group-hover:border-white/15 transition-all duration-300 relative z-10">
+                <item.icon className="w-5 h-5 text-white/35 group-hover:text-violet-300 transition-colors duration-300" />
               </div>
-              <h4 className="text-lg font-bold text-white mb-2">{item.title}</h4>
-              <p className="text-blue-100/60 text-sm leading-relaxed">{item.desc}</p>
+              <h4 className="text-base font-bold text-white/80 mb-2.5 relative z-10 group-hover:text-white transition-colors">{item.title}</h4>
+              <p className="text-white/30 text-sm leading-relaxed relative z-10">{item.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -203,7 +249,6 @@ const NarrativeFlowLines = () => {
 };
 
 function HomeContent() {
-  // ... existing state ... (Lines 105-180 preserved via context usually, but here we replace the render)
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [result, setResult] = useState<any>(null);
@@ -382,7 +427,7 @@ function HomeContent() {
         particleCount: 150,
         spread: 70,
         origin: { y: 0.6 },
-        colors: ["#22d3ee", "#818cf8", "#ffffff"]
+        colors: ["#8b5cf6", "#a78bfa", "#ffffff"]
       });
 
     } catch (err: any) {
@@ -449,7 +494,7 @@ function HomeContent() {
     }
   };
 
-  // REVELATION VIEW (PRO DESIGN) - Immersive Split Layout
+  // REVELATION VIEW
   if (result) {
     return (
       <RevelationView
@@ -461,71 +506,142 @@ function HomeContent() {
     );
   }
 
-  // INPUT VIEW (Particle Background)
+  // MAIN VIEW
   return (
     <ParticleBackground>
-      <div className="min-h-screen flex flex-col items-center justify-center p-4 relative z-10 py-20">
+      <div className="min-h-screen flex flex-col items-center relative z-10">
 
         {isLoading && <DreamLoader mode={mode} />}
 
-        <motion.div
-          initial={{ opacity: 1, y: 0 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="z-10 w-full max-w-2xl text-center space-y-10"
-        >
+        {/* ——— HERO SECTION ——— */}
+        <div className="w-full max-w-5xl mx-auto px-6 pt-28 pb-10 text-center relative">
 
-          {/* Header */}
-          <div className="space-y-4 relative">
-            {/* Logo with Premium Underglow */}
-            <div className="flex items-center justify-center mb-8 scale-125 relative">
-              <div className="absolute inset-0 bg-cyan-500/10 blur-3xl rounded-full scale-150 transform -translate-y-4" />
-              <ZuniosLogo size="xl" showText={true} className="flex-col !gap-4 relative z-10" />
-            </div>
-
-            {/* 💻 DESKTOP HERO TEXT - Stellar Gradient */}
-            <h1 className="text-5xl md:text-7xl font-bold font-serif tracking-tight bg-gradient-to-b from-white via-zinc-200 to-zinc-500 bg-clip-text text-transparent pb-4 hidden sm:block animate-in fade-in slide-in-from-bottom-4 duration-1000">
-              The OS for <br /> Your Mind
-            </h1>
-
-            <p className="text-xl text-zinc-500 max-w-lg mx-auto leading-relaxed hidden sm:block font-light tracking-wide animate-in fade-in slide-in-from-bottom-2 duration-1000 delay-300">
-              Capture visions. Build ideas. Log moments. Think deeply.
-            </p>
+          {/* Gradient Mesh Orbs */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
+            <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[900px] h-[700px] rounded-full bg-gradient-to-b from-violet-950/50 via-purple-950/20 to-transparent blur-[90px]" />
+            <div className="absolute top-32 left-[8%] w-[400px] h-[400px] rounded-full bg-cyan-950/25 blur-[100px]" />
+            <div className="absolute top-32 right-[8%] w-[400px] h-[400px] rounded-full bg-indigo-950/25 blur-[100px]" />
           </div>
 
-          {/* Input Card - Titan Design System V2 */}
-          <div className="w-full max-w-2xl mx-auto">
-            <TitanInput
-              onAnalyze={handleAnalyze}
-              isAnalyzing={isLoading}
-              initialMode={mode}
-              initialValue={searchParams.get('content') || ''}
-            />
+          {/* Launch Badge — non-users only */}
+          {!user && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-violet-500/20 bg-violet-500/[0.07] text-xs font-medium text-violet-300/70 mb-10 backdrop-blur-sm"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+              AI-Powered Mind OS · Now in Beta
+            </motion.div>
+          )}
+
+          {/* Logo */}
+          <div className="flex items-center justify-center mb-8 relative">
+            <div className="absolute inset-0 bg-purple-600/8 blur-[80px] rounded-full scale-[3] pointer-events-none" />
+            <ZuniosLogo size={user ? "lg" : "xl"} showText={true} className="flex-col !gap-4 relative z-10" />
           </div>
 
-          {/* ✨ NEW FEATURE STRIP (Compact) */}
+          {/* Main Headline */}
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="grid grid-cols-4 gap-4 w-full max-w-2xl mx-auto pt-4 border-t border-white/5"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="hidden sm:block mb-6"
           >
-            <FeatureItem icon={Brain} label="Neural Core" desc="AI Processing" />
-            <FeatureItem icon={Database} label="Memory Bank" desc="Vector Recall" />
-            <FeatureItem icon={Hexagon} label="Task Engine" desc="Auto-Organize" />
-            <FeatureItem icon={Share2} label="Sync Link" desc="Cross-Device" />
+            <h1 className={cn(
+              "font-bold font-serif tracking-tight leading-[0.88] pb-4",
+              user ? "text-5xl md:text-7xl" : "text-6xl md:text-[7.5rem]"
+            )}>
+              <span className="bg-gradient-to-b from-white via-white/95 to-white/20 bg-clip-text text-transparent">
+                The OS for
+              </span>
+              <br />
+              <span className="bg-gradient-to-r from-violet-400 via-purple-300 to-cyan-400 bg-clip-text text-transparent">
+                Your Mind.
+              </span>
+            </h1>
           </motion.div>
 
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.25 }}
+            className={cn(
+              "hidden sm:block leading-relaxed max-w-lg mx-auto",
+              user ? "text-lg text-white/30 mb-8" : "text-xl text-white/35 mb-10"
+            )}
+          >
+            {user
+              ? "Capture visions. Build ideas. Log moments. Think deeply."
+              : "Capture ideas. Analyze patterns. Extract intelligence.\nThe cognitive layer between your mind and the world."}
+          </motion.p>
+
+          {/* CTA Buttons — non-users, desktop */}
+          {!user && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="hidden sm:flex items-center justify-center gap-4 mb-14"
+            >
+              <button className="group relative px-8 py-3.5 rounded-full bg-white text-black font-bold text-sm transition-all duration-300 active:scale-95 shadow-[0_0_50px_rgba(255,255,255,0.08),inset_0_1px_0_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_rgba(255,255,255,0.18)] flex items-center gap-2 overflow-hidden">
+                <span className="relative z-10">Start Thinking Free</span>
+                <span className="relative z-10 group-hover:translate-x-1 transition-transform duration-200">→</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/[0.04] to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
+              </button>
+              <button className="px-8 py-3.5 rounded-full border border-white/[0.09] text-white/40 font-medium text-sm hover:border-white/20 hover:text-white/70 transition-all duration-300">
+                See How It Works
+              </button>
+            </motion.div>
+          )}
+
+          {/* Tech Trust Strip — non-users, desktop */}
+          {!user && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.7 }}
+              className="hidden sm:flex items-center justify-center gap-2.5 mb-16 flex-wrap"
+            >
+              <span className="text-[10px] text-white/15 uppercase tracking-[0.25em] mr-3">Built with</span>
+              {["Groq AI", "Supabase", "Vector Search", "Edge Runtime", "Next.js"].map((t, i) => (
+                <span key={i} className="text-[11px] font-mono text-white/25 px-3 py-1 rounded-full border border-white/[0.06] hover:text-white/45 hover:border-white/12 transition-colors duration-300 cursor-default">
+                  {t}
+                </span>
+              ))}
+            </motion.div>
+          )}
+        </div>
+
+        {/* ——— TITAN INPUT ——— */}
+        <div className="w-full max-w-2xl mx-auto px-4 pb-8">
+          <TitanInput
+            onAnalyze={handleAnalyze}
+            isAnalyzing={isLoading}
+            initialMode={mode}
+            initialValue={searchParams.get('content') || ''}
+          />
+        </div>
+
+        {/* ——— FEATURE STRIP ——— */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+          className="grid grid-cols-4 gap-4 w-full max-w-2xl mx-auto px-4 pt-6 pb-20 border-t border-white/[0.04]"
+        >
+          <FeatureItem icon={Brain} label="Neural Core" desc="AI Processing" />
+          <FeatureItem icon={Database} label="Memory Bank" desc="Vector Recall" />
+          <FeatureItem icon={Hexagon} label="Task Engine" desc="Auto-Organize" />
+          <FeatureItem icon={Share2} label="Sync Link" desc="Cross-Device" />
         </motion.div>
 
-
-
-
-
-        {/* 💻 DESKTOP: NARRATIVE FLOW description -> diagram */}
+        {/* ——— NARRATIVE FLOW (non-users, desktop) ——— */}
         {!user && <NarrativeFlowLines />}
       </div>
-    </ParticleBackground >
+    </ParticleBackground>
   );
 }
 
