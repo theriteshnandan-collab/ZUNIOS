@@ -8,6 +8,13 @@ export async function middleware(request: NextRequest) {
         },
     });
 
+    // Bypass heavy network calls if the user has no auth cookie
+    const hasAuthCookie = request.cookies.getAll().some(c => c.name.startsWith('sb-') && c.name.endsWith('-auth-token'));
+    
+    if (!hasAuthCookie) {
+        return response;
+    }
+
     const supabase = createServerClient(
         process.env.NEXT_PUBLIC_SUPABASE_URL!,
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -33,8 +40,12 @@ export async function middleware(request: NextRequest) {
         }
     );
 
-    // Refreshing the auth token
-    await supabase.auth.getUser();
+    // Refreshing the auth token ONLY if a token exists
+    try {
+        await supabase.auth.getSession(); // Use getSession instead of getUser for edge middleware performance
+    } catch (e) {
+        console.error("Middleware session refresh timeout/error:", e);
+    }
 
     return response;
 }

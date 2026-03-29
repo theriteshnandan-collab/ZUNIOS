@@ -1,6 +1,4 @@
-"use client";
-
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { SpotlightContainer } from "@/components/ui/Spotlight";
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -31,14 +29,6 @@ interface TitanJournalGridProps {
     deletingId?: string | null;
 }
 
-/**
- * TitanJournalGrid
- * 
- * A Bento-style masonry grid with:
- * - CSS Grid (no JS masonry)
- * - GlassCard items with Scrubbed Glass effect
- * - SpotlightContainer for cursor-following reveal
- */
 export default function TitanJournalGrid({
     dreams,
     onSelect,
@@ -65,122 +55,146 @@ export default function TitanJournalGrid({
         >
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-auto">
                 {dreams.map((dream, index) => {
-                    const ModeIcon = MODE_ICONS[dream.category] || Brain;
-                    const modeGradient = MODE_COLORS[dream.category] || MODE_COLORS.thought;
+                    const isLarge = index % 5 === 0;
+                    const isWide = index % 7 === 3;
                     const isDeleting = deletingId === dream.id;
 
-                    // Bento sizing: make some cards bigger
-                    const isLarge = index % 5 === 0; // Every 5th card is large
-                    const isWide = index % 7 === 3; // Some cards are wide
-
                     return (
-                        <motion.div
+                        <SwipeableJournalCard 
                             key={dream.id}
-                            layoutId={`dream-${dream.id}`}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            transition={{
-                                type: "spring",
-                                stiffness: 400,
-                                damping: 30,
-                                delay: index * 0.05
-                            }}
-                            className={cn(
-                                isLarge && "md:col-span-2 md:row-span-2",
-                                isWide && "lg:col-span-2"
-                            )}
-                        >
-                            <GlassCard
-                                className={cn(
-                                    "group cursor-pointer h-full",
-                                    "hover:scale-[1.02] transition-transform duration-300",
-                                    isDeleting && "opacity-50 pointer-events-none"
-                                )}
-                                innerLight
-                                noiseOpacity={0.04}
-                            >
-                                {/* Mood Gradient Overlay */}
-                                <div
-                                    className={cn(
-                                        "absolute inset-0 opacity-0 group-hover:opacity-100",
-                                        "bg-gradient-to-br transition-opacity duration-500",
-                                        modeGradient
-                                    )}
-                                />
-
-                                {/* Content */}
-                                <div
-                                    className="relative z-10 p-5 h-full flex flex-col"
-                                    onClick={() => onSelect(dream)}
-                                >
-                                    {/* Header */}
-                                    <div className="flex items-start justify-between mb-3">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-8 h-8 rounded-full bg-white/[0.05] flex items-center justify-center">
-                                                <ModeIcon className="w-4 h-4 text-zinc-400 group-hover:text-white transition-colors" />
-                                            </div>
-                                            <div>
-                                                <p className="text-xs text-zinc-500 uppercase tracking-wider">
-                                                    {dream.category}
-                                                </p>
-                                                <p className="text-xs text-zinc-600">
-                                                    {formatDistanceToNow(new Date(dream.created_at), { addSuffix: true })}
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        {/* Actions */}
-                                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    // Share logic
-                                                }}
-                                                className="p-1.5 rounded-full hover:bg-white/[0.1] transition-colors"
-                                            >
-                                                <Share2 className="w-3.5 h-3.5 text-zinc-400" />
-                                            </button>
-                                            {onDelete && (
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        onDelete(dream.id);
-                                                    }}
-                                                    className="p-1.5 rounded-full hover:bg-red-500/20 transition-colors"
-                                                >
-                                                    <Trash2 className="w-3.5 h-3.5 text-zinc-400 hover:text-red-400" />
-                                                </button>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {/* Theme/Title */}
-                                    {dream.theme && (
-                                        <h3 className="text-lg font-medium text-zinc-200 group-hover:text-white transition-colors mb-2 line-clamp-2">
-                                            {dream.theme}
-                                        </h3>
-                                    )}
-
-                                    {/* Content Preview */}
-                                    <p className="text-sm text-zinc-400 line-clamp-3 flex-1">
-                                        {dream.content}
-                                    </p>
-
-                                    {/* Mood Badge */}
-                                    {dream.mood && (
-                                        <div className="mt-4 pt-3 border-t border-white/[0.05]">
-                                            <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-white/[0.05] text-xs text-zinc-400">
-                                                {dream.mood}
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-                            </GlassCard>
-                        </motion.div>
+                            dream={dream}
+                            index={index}
+                            isLarge={isLarge}
+                            isWide={isWide}
+                            isDeleting={isDeleting}
+                            onSelect={onSelect}
+                            onDelete={onDelete}
+                        />
                     );
                 })}
             </div>
         </SpotlightContainer>
+    );
+}
+
+// 🧬 The iOS-Swipable Draft Node
+function SwipeableJournalCard({ dream, index, isLarge, isWide, isDeleting, onSelect, onDelete }: any) {
+    const ModeIcon = MODE_ICONS[dream.category] || Brain;
+    const modeGradient = MODE_COLORS[dream.category] || MODE_COLORS.thought;
+    
+    // Drag Physics
+    const x = useMotionValue(0);
+    // When dragged left (-100px), opacity hits 1
+    const deleteOpacity = useTransform(x, [-100, -50], [1, 0]);
+    const deleteScale = useTransform(x, [-100, -50], [1.2, 0.8]);
+
+    const handleDragEnd = (event: any, info: any) => {
+        if (info.offset.x < -80 && onDelete) {
+            onDelete(dream.id);
+        }
+    };
+
+    return (
+        <motion.div
+            layoutId={`dream-${dream.id}`}
+            layout
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, filter: "blur(10px)" }}
+            transition={{
+                type: "spring",
+                stiffness: 400,
+                damping: 30,
+                delay: index * 0.05
+            }}
+            className={cn(
+                "relative rounded-3xl overflow-hidden",
+                isLarge && "md:col-span-2 md:row-span-2",
+                isWide && "lg:col-span-2"
+            )}
+        >
+            {/* Background Delete Action Slate */}
+            {onDelete && (
+                <motion.div 
+                    style={{ opacity: deleteOpacity }} 
+                    className="absolute inset-0 bg-red-500/20 border border-red-500/50 flex items-center justify-end pr-8"
+                >
+                    <motion.div style={{ scale: deleteScale }}>
+                        <Trash2 className="w-8 h-8 text-red-500 shadow-2xl" />
+                    </motion.div>
+                </motion.div>
+            )}
+
+            <motion.div
+                style={{ x }}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.4}
+                onDragEnd={handleDragEnd}
+                whileDrag={{ scale: 1.02, cursor: "grabbing" }}
+                className="h-full relative z-10 w-full"
+            >
+                <GlassCard
+                    className={cn(
+                        "group cursor-pointer h-full w-full",
+                        "hover:scale-[1.01] transition-transform duration-300",
+                        isDeleting && "opacity-50 pointer-events-none filter blur-sm transition-all duration-500"
+                    )}
+                    innerLight
+                    noiseOpacity={0.04}
+                >
+                    <div
+                        className={cn(
+                            "absolute inset-0 opacity-0 group-hover:opacity-100",
+                            "bg-gradient-to-br transition-opacity duration-500",
+                            modeGradient
+                        )}
+                    />
+
+                    <div
+                        className="relative z-10 p-5 h-full flex flex-col pointer-events-auto"
+                        onClick={() => onSelect(dream)}
+                    >
+                        {/* Header */}
+                        <div className="flex items-start justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                                <div className="w-8 h-8 rounded-full bg-white/[0.05] flex items-center justify-center">
+                                    <ModeIcon className="w-4 h-4 text-zinc-400 group-hover:text-white transition-colors" />
+                                </div>
+                                <div>
+                                    <p className="text-xs text-zinc-500 uppercase tracking-wider">
+                                        {dream.category}
+                                    </p>
+                                    <p className="text-xs text-zinc-600">
+                                        {formatDistanceToNow(new Date(dream.created_at), { addSuffix: true })}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Theme/Title */}
+                        {dream.theme && (
+                            <h3 className="text-lg font-medium text-zinc-200 group-hover:text-white transition-colors mb-2 line-clamp-2">
+                                {dream.theme}
+                            </h3>
+                        )}
+
+                        {/* Content Preview */}
+                        <p className="text-sm text-zinc-400 line-clamp-3 w-full flex-grow">
+                            {dream.content}
+                        </p>
+
+                        {/* Mood Badge */}
+                        {dream.mood && (
+                            <div className="mt-4 pt-3 border-t border-white/[0.05]">
+                                <span className="inline-flex items-center px-2.5 py-1 rounded-full bg-white/[0.05] text-xs text-zinc-400">
+                                    {dream.mood}
+                                </span>
+                            </div>
+                        )}
+                    </div>
+                </GlassCard>
+            </motion.div>
+        </motion.div>
     );
 }

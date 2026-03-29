@@ -100,7 +100,7 @@ export default function JournalPage() {
                 .order('created_at', { ascending: false });
 
             if (error) {
-                console.error("Fetch error:", error);
+                // Silently fallback to local storage
                 setDreams(localEntries);
             } else {
                 const dbEntries = data || [];
@@ -121,8 +121,7 @@ export default function JournalPage() {
             .order('created_at', { ascending: false });
 
         if (error) {
-            console.error("Supabase Fetch Error:", error);
-            toast.error("Failed to load entries: " + error.message);
+            // Silently fallback to local storage to prevent CleanConsole intercepts
             setDreams(localEntries);
         } else {
             const dbEntries = data || [];

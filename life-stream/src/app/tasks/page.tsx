@@ -1,7 +1,7 @@
-"use client";
+﻿"use client";
 
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useState, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Target, Clock, CheckCircle, ArrowLeft, ListTodo, LayoutGrid, LucideIcon, Calendar as CalendarIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useTaskStore } from '@/stores/taskStore';
@@ -196,7 +196,7 @@ export default function TasksPage() {
                                             </motion.div>
                                         ) : (
                                             filteredTasks.map((task) => (
-                                                <TaskCard key={task.id} task={task} />
+                                                <HardwareScrollCard key={task.id} task={task} />
                                             ))
                                         )}
                                     </AnimatePresence>
@@ -211,17 +211,30 @@ export default function TasksPage() {
                                             onSelectDate={setSelectedDate}
                                         />
 
-                                        {/* Sector Status */}
-                                        <div className="bg-white/5 border border-white/10 rounded-2xl p-6">
-                                            <h3 className="text-sm font-medium text-white/50 uppercase tracking-wider mb-4">Sector Status</h3>
-                                            <div className="space-y-4">
-                                                <MetricRow label="Pending" value={counts.todo} color="text-white" />
-
-                                                <MetricRow label="Complete" value={counts.done} color="text-emerald-400" />
-                                                <div className="pt-4 mt-4 border-t border-white/10 flex justify-between items-center">
-                                                    <span className="text-sm text-white/40">Total Efficiency</span>
-                                                    <span className="text-xl font-bold text-white">
-                                                        {counts.total > 0 ? Math.round((counts.done / counts.total) * 100) : 0}%
+                                        {/* Sector Status (Neural Bento Upgrade) */}
+                                        <div className="relative group overflow-hidden bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 rounded-3xl p-6 backdrop-blur-xl shadow-[inset_0_1px_2px_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-500 hover:border-white/20">
+                                            <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none group-hover:bg-cyan-500/20 transition-colors duration-700" />
+                                            <h3 className="text-xs font-bold text-white/50 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+                                                <Target className="w-4 h-4 text-cyan-400" />
+                                                Sector Status
+                                            </h3>
+                                            <div className="space-y-5 relative z-10">
+                                                <MetricRow label="Active Vectors" value={counts.todo} color="text-white" />
+                                                <MetricRow label="Neutralized" value={counts.done} color="text-cyan-400" />
+                                                <div className="pt-5 mt-5 border-t border-white/10 flex justify-between items-end relative">
+                                                    <div className="space-y-1">
+                                                        <span className="block text-[10px] uppercase tracking-[0.15em] text-white/40">Total Efficiency</span>
+                                                        <div className="w-16 h-1 bg-white/10 rounded-full overflow-hidden">
+                                                            <motion.div 
+                                                                initial={{ width: 0 }}
+                                                                animate={{ width: `${counts.total > 0 ? (counts.done / counts.total) * 100 : 0}%` }}
+                                                                transition={{ duration: 1.5, ease: "circOut" }}
+                                                                className="h-full bg-cyan-400"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <span className="text-3xl font-light tracking-tighter text-white">
+                                                        {counts.total > 0 ? Math.round((counts.done / counts.total) * 100) : 0}<span className="text-lg text-white/30 ml-0.5">%</span>
                                                     </span>
                                                 </div>
                                             </div>
@@ -272,28 +285,66 @@ function KanbanColumn({ title, tasks, color, icon: Icon }: {
     icon: LucideIcon;
 }) {
     const colorMap = {
-        purple: 'border-purple-500/30 bg-purple-500/5',
-        green: 'border-green-500/30 bg-green-500/5',
-        gray: 'border-white/10 bg-white/5'
+        purple: 'from-purple-500/[0.05] to-purple-500/[0.01] border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.05)]',
+        green: 'from-emerald-500/[0.05] to-emerald-500/[0.01] border-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.05)]',
+        gray: 'from-white/[0.05] to-white/[0.01] border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.02)]'
     };
 
     return (
-        <div className={`rounded-2xl border p-4 ${colorMap[color]}`}>
-            <div className="flex items-center gap-2 mb-4">
-                <Icon className={`w-5 h-5 ${color === 'green' ? 'text-green-400' : color === 'purple' ? 'text-purple-400' : 'text-white/40'}`} />
-                <h3 className="font-semibold text-white">{title}</h3>
-                <span className="ml-auto text-sm text-white/40">{tasks.length}</span>
+        <div className={`relative rounded-3xl border bg-gradient-to-br p-6 backdrop-blur-xl transition-all duration-700 hover:shadow-[0_8px_40px_rgba(0,0,0,0.5)] hover:scale-[1.01] ${colorMap[color]}`}>
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay rounded-3xl z-0" />
+            
+            <div className="flex items-center gap-3 mb-6 relative z-10">
+                <div className={`p-2 rounded-xl backdrop-blur-md border ${
+                    color === 'green' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' :
+                    color === 'purple' ? 'bg-purple-500/10 border-purple-500/20 text-purple-400' :
+                    'bg-white/5 border-white/10 text-white/50'
+                }`}>
+                    <Icon className="w-5 h-5" />
+                </div>
+                <h3 className="text-lg font-bold tracking-tight text-white/90">{title}</h3>
+                <div className="ml-auto flex items-center justify-center w-8 h-8 rounded-full bg-black/40 border border-white/5 shadow-[inset_0_1px_2px_rgba(255,255,255,0.05)] text-sm font-medium text-white/50">
+                    {tasks.length}
+                </div>
             </div>
-            <div className="space-y-3">
+            
+            <div className="space-y-4 relative z-10 min-h-[150px]">
                 <AnimatePresence mode="popLayout">
                     {tasks.map(task => (
-                        <TaskCard key={task.id} task={task} />
+                        <HardwareScrollCard key={task.id} task={task} />
                     ))}
                 </AnimatePresence>
                 {tasks.length === 0 && (
-                    <p className="text-sm text-white/30 text-center py-8">No tasks</p>
+                    <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center justify-center text-xs font-semibold uppercase tracking-[0.2em] text-white/20">
+                        Zero Targets
+                    </motion.p>
                 )}
             </div>
         </div>
+    );
+}
+
+// God-Tier Hardware Scroll Unrolling Wrapper
+function HardwareScrollCard({ task }: { task: Task }) {
+    const ref = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: ref,
+        // Card starts sliding in perfectly tied to physical wheel scrolling at the bottom edge
+        offset: ["start 95%", "start 80%"] 
+    });
+    const y = useTransform(scrollYProgress, [0, 1], [40, 0]);
+    const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
+    const scale = useTransform(scrollYProgress, [0, 1], [0.97, 1]);
+
+    return (
+        <motion.div 
+            layout
+            exit={{ opacity: 0, height: 0, scale: 0.8, filter: 'blur(10px)', transition: { duration: 0.4, ease: 'circOut' } }}
+            ref={ref} 
+            style={{ y, opacity, scale }} 
+            className="transform-gpu will-change-transform w-full drop-shadow-2xl"
+        >
+            <TaskCard task={task} />
+        </motion.div>
     );
 }
