@@ -8,9 +8,7 @@ import TitanInput from "@/components/TitanInput";
 import { cn } from "@/lib/utils";
 import { useMode } from "@/components/ModeProvider";
 import { EntryMode } from "@/lib/theme-config";
-import { Button } from "@/components/ui/button";
 import { useSearchParams, useRouter } from "next/navigation";
-import { GlassCard } from "@/components/ui/GlassCard";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import DreamLoader from "@/components/DreamLoader";
@@ -20,22 +18,17 @@ import { useTaskStore } from "@/stores/taskStore";
 import { useAppBadge } from "@/hooks/useAppBadge";
 import { parseCommandLocally } from "@/lib/local-intelligence";
 import { ParticleBackground } from "@/components/ui/ParticleBackground";
-import { ShinyButton } from "@/components/ui/ShinyButton";
-import { BentoGrid, EliteBentoCard } from "@/components/ui/BentoGrid";
 import { NeuralVisual, SyncVisual, CaptureVisual, VaultVisual } from "@/components/ui/BentoVisuals";
 import neuralCoreImage from "@/public/images/POLLOAIONE.jpeg";
 import biometricImage from "@/public/images/BIOMETRICWAVEFORM.jpeg";
 import voiceImage from "@/public/images/SOUNDWAVES.jpeg";
 import vaultImage from "@/public/images/ENCRYPTEDVAULT.jpeg";
 import mindImage from "@/public/images/MIND.jpeg";
-import neuralComplexImage from "@/public/images/THENEURAL.jpeg";
+import heroCinematicImage from "@/public/images/hero-cinematic.png";
 
 import dynamic from "next/dynamic";
 
-const LandingSections = dynamic(() => import("@/components/marketing/LandingSections"), { ssr: false });
-const MobileDashboard = dynamic(() => import("@/components/mobile/MobileDashboard"), { ssr: false });
-const AuraCore = dynamic(() => import("@/components/AuraCore"), { ssr: false });
-import { Activity, Disc, Zap, Brain, Calendar, Shield, Share2, Hexagon, Database } from "lucide-react";
+import { Activity, Zap, Brain, Shield, Share2, Hexagon, Database } from "lucide-react";
 
 const RevelationView = dynamic(() => import("@/components/RevelationView"), {
   ssr: false,
@@ -158,6 +151,179 @@ const StatsStrip = () => (
       </div>
     ))}
   </motion.div>
+);
+
+// --- CINEMATIC HERO ---
+const CinematicHero = () => (
+  <section className="relative w-full min-h-screen flex flex-col overflow-hidden hidden md:flex">
+    {/* Background Image */}
+    <div className="absolute inset-0 z-0">
+      <Image src={heroCinematicImage} alt="ZUNIOS — The OS for Your Mind" fill className="object-cover object-center" priority />
+      {/* Left-heavy dark overlay for text readability */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/92 via-black/65 to-black/15" />
+      {/* Bottom fade into page */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-transparent to-black/50" />
+      {/* Subtle violet tint on left */}
+      <div className="absolute inset-0 bg-gradient-to-br from-violet-950/30 via-transparent to-transparent" />
+    </div>
+
+    {/* Corner Bracket Frames */}
+    <div className="absolute top-[72px] left-6 w-14 h-14 border-t-[1.5px] border-l-[1.5px] border-white/20 z-20 pointer-events-none" />
+    <div className="absolute top-[72px] right-6 w-14 h-14 border-t-[1.5px] border-r-[1.5px] border-white/20 z-20 pointer-events-none" />
+    <div className="absolute bottom-6 left-6 w-14 h-14 border-b-[1.5px] border-l-[1.5px] border-white/20 z-20 pointer-events-none" />
+    <div className="absolute bottom-6 right-6 w-14 h-14 border-b-[1.5px] border-r-[1.5px] border-white/20 z-20 pointer-events-none" />
+
+    {/* Corner Dots */}
+    <div className="absolute top-[72px] left-6 w-1.5 h-1.5 bg-violet-400/50 rounded-full -translate-x-[2px] -translate-y-[2px] z-20" />
+    <div className="absolute top-[72px] right-6 w-1.5 h-1.5 bg-violet-400/50 rounded-full translate-x-[2px] -translate-y-[2px] z-20" />
+    <div className="absolute bottom-6 left-6 w-1.5 h-1.5 bg-violet-400/50 rounded-full -translate-x-[2px] translate-y-[2px] z-20" />
+    <div className="absolute bottom-6 right-6 w-1.5 h-1.5 bg-violet-400/50 rounded-full translate-x-[2px] translate-y-[2px] z-20" />
+
+    {/* Main Content */}
+    <div className="relative z-10 flex-1 flex items-center w-full max-w-7xl mx-auto px-10 xl:px-16 pt-24 pb-36">
+      <div className="flex flex-row items-center justify-between w-full gap-12">
+
+        {/* LEFT: Text */}
+        <div className="flex-1 max-w-[560px] space-y-7">
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-violet-500/25 bg-violet-500/[0.08] text-xs font-medium text-violet-300/70 backdrop-blur-sm"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
+            AI-Powered Mind OS · Now in Beta
+          </motion.div>
+
+          {/* Headline */}
+          <motion.h1
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="text-6xl xl:text-[5.5rem] font-bold font-serif tracking-tight leading-[0.88]"
+          >
+            <span className="bg-gradient-to-b from-white via-white/95 to-white/25 bg-clip-text text-transparent block pb-2">
+              The OS for
+            </span>
+            <span className="bg-gradient-to-r from-violet-400 via-purple-300 to-cyan-400 bg-clip-text text-transparent">
+              Your Mind.
+            </span>
+          </motion.h1>
+
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.28 }}
+            className="text-lg text-white/45 font-light leading-relaxed max-w-md"
+          >
+            Capture ideas. Analyze patterns. Extract intelligence.
+            <br />
+            The cognitive layer between your mind and the world.
+          </motion.p>
+
+          {/* CTAs */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.42 }}
+            className="flex items-center gap-4 pt-1"
+          >
+            <button className="group relative px-8 py-3.5 rounded-full bg-white text-black font-bold text-sm transition-all duration-300 active:scale-95 shadow-[0_0_50px_rgba(255,255,255,0.08),inset_0_1px_0_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_rgba(255,255,255,0.18)] flex items-center gap-2 overflow-hidden">
+              <span className="relative z-10">Start Thinking Free</span>
+              <span className="relative z-10 group-hover:translate-x-1 transition-transform duration-200">→</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/[0.04] to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
+            </button>
+            <button className="px-8 py-3.5 rounded-full border border-white/[0.09] text-white/40 font-medium text-sm hover:border-white/20 hover:text-white/70 transition-all duration-300 backdrop-blur-sm">
+              See How It Works
+            </button>
+          </motion.div>
+
+          {/* Tech Trust Strip */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.72 }}
+            className="flex items-center gap-2 flex-wrap pt-1"
+          >
+            <span className="text-[10px] text-white/15 uppercase tracking-[0.25em] mr-2">Built with</span>
+            {["Groq AI", "Supabase", "Vector Search", "Edge Runtime", "Next.js"].map((t, i) => (
+              <span key={i} className="text-[11px] font-mono text-white/25 px-3 py-1 rounded-full border border-white/[0.06] hover:text-white/45 transition-colors duration-300 cursor-default">
+                {t}
+              </span>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* RIGHT: MIND Constellation */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, x: 30 }}
+          animate={{ opacity: 1, scale: 1, x: 0 }}
+          transition={{ duration: 1.4, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+          className="flex-1 max-w-[440px] xl:max-w-[500px] relative"
+        >
+          <div className="relative w-full aspect-square">
+            {/* Outer violet aura */}
+            <div className="absolute inset-0 bg-violet-600/15 blur-[80px] rounded-full scale-90" />
+            {/* Inner core glow */}
+            <div className="absolute inset-[20%] bg-violet-500/10 blur-[40px] rounded-full" />
+            <Image
+              src={mindImage}
+              alt="Neural constellation — ZUNIOS Mind Map"
+              fill
+              className="object-contain image-glow relative z-10 drop-shadow-2xl"
+              priority
+            />
+          </div>
+        </motion.div>
+      </div>
+    </div>
+
+    {/* Bottom Stat Cards */}
+    <div className="relative z-10 w-full max-w-7xl mx-auto px-10 xl:px-16 pb-10">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.65, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        className="grid grid-cols-4 gap-3"
+      >
+        {[
+          { value: "AI", label: "Neural Analysis", sub: "Real-time" },
+          { value: "E2E", label: "Encrypted", sub: "Zero-Knowledge" },
+          { value: "∞", label: "Memory Bank", sub: "Vector Storage" },
+          { value: "0ms", label: "Processing", sub: "Edge Runtime" },
+        ].map((stat) => (
+          <div
+            key={stat.label}
+            className="relative p-4 rounded-2xl bg-black/50 backdrop-blur-md border border-white/[0.07] hover:border-violet-500/20 transition-all duration-500 group text-center overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-gradient-to-b from-violet-500/0 to-violet-500/0 group-hover:from-violet-500/[0.06] transition-all duration-700 rounded-2xl" />
+            <div className="text-2xl font-bold font-serif bg-gradient-to-b from-white to-white/30 bg-clip-text text-transparent group-hover:from-violet-300 group-hover:to-violet-300/30 transition-all duration-500 relative z-10">
+              {stat.value}
+            </div>
+            <div className="text-[11px] text-white/50 font-medium mt-1 relative z-10">{stat.label}</div>
+            <div className="text-[9px] text-white/20 uppercase tracking-[0.15em] mt-0.5 relative z-10">{stat.sub}</div>
+          </div>
+        ))}
+      </motion.div>
+    </div>
+
+    {/* Scroll Indicator */}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 1.3 }}
+      className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5 pointer-events-none"
+    >
+      <span className="text-[9px] text-white/15 uppercase tracking-[0.35em]">Scroll</span>
+      <motion.div
+        animate={{ y: [0, 5, 0] }}
+        transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+        className="w-px h-8 bg-gradient-to-b from-white/20 to-transparent"
+      />
+    </motion.div>
+  </section>
 );
 
 // WRAPPER COMPONENT TO HANDLE SCROLL LOGIC
@@ -543,105 +709,52 @@ function HomeContent() {
 
         {isLoading && <DreamLoader mode={mode} />}
 
-        {/* ——— HERO SECTION ——— */}
-        <div className="w-full max-w-5xl mx-auto px-6 pt-28 pb-10 text-center relative">
+        {/* ——— CINEMATIC HERO (non-users, desktop) ——— */}
+        {!user && <CinematicHero />}
 
-          {/* Gradient Mesh Orbs */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
-            <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[900px] h-[700px] rounded-full bg-gradient-to-b from-violet-950/50 via-purple-950/20 to-transparent blur-[90px]" />
-            <div className="absolute top-32 left-[8%] w-[400px] h-[400px] rounded-full bg-cyan-950/25 blur-[100px]" />
-            <div className="absolute top-32 right-[8%] w-[400px] h-[400px] rounded-full bg-indigo-950/25 blur-[100px]" />
-          </div>
-
-          {/* Launch Badge — non-users only */}
-          {!user && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
+        {/* ——— COMPACT HERO (logged-in users, desktop) ——— */}
+        {user && (
+          <div className="w-full max-w-5xl mx-auto px-6 pt-28 pb-6 text-center relative hidden md:block">
+            <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
+              <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-gradient-to-b from-violet-950/40 via-purple-950/15 to-transparent blur-[80px]" />
+            </div>
+            <div className="flex items-center justify-center mb-6 relative">
+              <div className="absolute inset-0 bg-purple-600/8 blur-[80px] rounded-full scale-[3] pointer-events-none" />
+              <ZuniosLogo size="lg" showText={true} className="flex-col !gap-3 relative z-10" />
+            </div>
+            <motion.h1
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-violet-500/20 bg-violet-500/[0.07] text-xs font-medium text-violet-300/70 mb-10 backdrop-blur-sm"
+              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              className="text-5xl md:text-7xl font-bold font-serif tracking-tight leading-[0.88] pb-4"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
-              AI-Powered Mind OS · Now in Beta
-            </motion.div>
-          )}
-
-          {/* Logo */}
-          <div className="flex items-center justify-center mb-8 relative">
-            <div className="absolute inset-0 bg-purple-600/8 blur-[80px] rounded-full scale-[3] pointer-events-none" />
-            <ZuniosLogo size={user ? "lg" : "xl"} showText={true} className="flex-col !gap-4 relative z-10" />
-          </div>
-
-          {/* Main Headline */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-            className="hidden sm:block mb-6"
-          >
-            <h1 className={cn(
-              "font-bold font-serif tracking-tight leading-[0.88] pb-4",
-              user ? "text-5xl md:text-7xl" : "text-6xl md:text-[7.5rem]"
-            )}>
-              <span className="bg-gradient-to-b from-white via-white/95 to-white/20 bg-clip-text text-transparent">
-                The OS for
-              </span>
-              <br />
-              <span className="bg-gradient-to-r from-violet-400 via-purple-300 to-cyan-400 bg-clip-text text-transparent">
-                Your Mind.
-              </span>
-            </h1>
-          </motion.div>
-
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.25 }}
-            className={cn(
-              "hidden sm:block leading-relaxed max-w-lg mx-auto",
-              user ? "text-lg text-white/30 mb-8" : "text-xl text-white/35 mb-10"
-            )}
-          >
-            {user
-              ? "Capture visions. Build ideas. Log moments. Think deeply."
-              : "Capture ideas. Analyze patterns. Extract intelligence.\nThe cognitive layer between your mind and the world."}
-          </motion.p>
-
-          {/* CTA Buttons — non-users, desktop */}
-          {!user && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
+              <span className="bg-gradient-to-b from-white via-white/95 to-white/20 bg-clip-text text-transparent">The OS for </span>
+              <span className="bg-gradient-to-r from-violet-400 via-purple-300 to-cyan-400 bg-clip-text text-transparent">Your Mind.</span>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="hidden sm:flex items-center justify-center gap-4 mb-14"
+              transition={{ duration: 0.8, delay: 0.15 }}
+              className="text-lg text-white/30 mb-8 max-w-md mx-auto"
             >
-              <button className="group relative px-8 py-3.5 rounded-full bg-white text-black font-bold text-sm transition-all duration-300 active:scale-95 shadow-[0_0_50px_rgba(255,255,255,0.08),inset_0_1px_0_rgba(255,255,255,0.3)] hover:shadow-[0_0_60px_rgba(255,255,255,0.18)] flex items-center gap-2 overflow-hidden">
-                <span className="relative z-10">Start Thinking Free</span>
-                <span className="relative z-10 group-hover:translate-x-1 transition-transform duration-200">→</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/[0.04] to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
-              </button>
-              <button className="px-8 py-3.5 rounded-full border border-white/[0.09] text-white/40 font-medium text-sm hover:border-white/20 hover:text-white/70 transition-all duration-300">
-                See How It Works
-              </button>
-            </motion.div>
-          )}
+              Capture visions. Build ideas. Log moments. Think deeply.
+            </motion.p>
+          </div>
+        )}
 
-          {/* Tech Trust Strip — non-users, desktop */}
+        {/* ——— MOBILE HERO (all users) ——— */}
+        <div className="w-full max-w-5xl mx-auto px-6 pt-20 pb-4 text-center relative md:hidden">
+          <div className="flex items-center justify-center mb-6 relative">
+            <ZuniosLogo size="lg" showText={true} className="flex-col !gap-3 relative z-10" />
+          </div>
           {!user && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.7 }}
-              className="hidden sm:flex items-center justify-center gap-2.5 mb-16 flex-wrap"
-            >
-              <span className="text-[10px] text-white/15 uppercase tracking-[0.25em] mr-3">Built with</span>
-              {["Groq AI", "Supabase", "Vector Search", "Edge Runtime", "Next.js"].map((t, i) => (
-                <span key={i} className="text-[11px] font-mono text-white/25 px-3 py-1 rounded-full border border-white/[0.06] hover:text-white/45 hover:border-white/12 transition-colors duration-300 cursor-default">
-                  {t}
-                </span>
-              ))}
-            </motion.div>
+            <>
+              <h1 className="text-4xl font-bold font-serif tracking-tight leading-[0.9] pb-3">
+                <span className="bg-gradient-to-b from-white to-white/30 bg-clip-text text-transparent">The OS for </span>
+                <span className="bg-gradient-to-r from-violet-400 to-cyan-400 bg-clip-text text-transparent">Your Mind.</span>
+              </h1>
+              <p className="text-base text-white/35 mb-6 max-w-xs mx-auto">Capture ideas. Analyze patterns. Extract intelligence.</p>
+            </>
           )}
         </div>
 
