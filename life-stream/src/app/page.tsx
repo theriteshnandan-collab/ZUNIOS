@@ -24,6 +24,7 @@ import biometricImage from "../../public/images/BIOMETRICWAVEFORM.jpeg";
 import voiceImage from "../../public/images/SOUNDWAVES.jpeg";
 import vaultImage from "../../public/images/ENCRYPTEDVAULT.jpeg";
 import mindImage from "../../public/images/MIND.jpeg";
+import heroCinematicImage from "../../public/images/image1234.jpg";
 
 import dynamic from "next/dynamic";
 
@@ -155,26 +156,15 @@ const StatsStrip = () => (
 // --- CINEMATIC HERO ---
 const CinematicHero = () => (
   <section className="relative w-full min-h-screen flex flex-col overflow-hidden hidden md:flex">
-    {/* Cinematic CSS Background */}
+    {/* Cinematic Photo Background */}
     <div className="absolute inset-0 z-0">
-      {/* Deep void base */}
-      <div className="absolute inset-0 bg-[#010108]" />
-      {/* MAIN: Right-side violet nebula (behind the brain) */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full bg-violet-800/20 blur-[140px]" />
-      {/* Left edge — subtle indigo atmosphere */}
-      <div className="absolute -left-20 top-1/3 w-[600px] h-[600px] rounded-full bg-indigo-900/15 blur-[120px]" />
-      {/* Top sweep — star field glow */}
-      <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[1200px] h-[500px] rounded-full bg-violet-950/40 blur-[100px]" />
-      {/* Center deep blue depth */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-full bg-blue-950/20 blur-[120px]" />
-      {/* Subtle warm purple bottom */}
-      <div className="absolute -bottom-20 right-1/3 w-[500px] h-[300px] rounded-full bg-purple-900/15 blur-[100px]" />
-      {/* Film grain texture */}
-      <div className="absolute inset-0 opacity-[0.04]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")" }} />
-      {/* Vignette bottom — blend into page */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-[#050510]/20 to-transparent" />
-      {/* Vignette edges */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_50%,rgba(1,1,8,0.6)_100%)]" />
+      <Image src={heroCinematicImage} alt="" fill className="object-cover object-center" priority />
+      {/* Left dark overlay — text readability */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-black/10" />
+      {/* Bottom fade into page */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-transparent to-black/30" />
+      {/* Edge vignette */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.5)_100%)]" />
     </div>
 
     {/* Corner Bracket Frames */}
