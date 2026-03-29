@@ -24,7 +24,6 @@ import biometricImage from "../../public/images/BIOMETRICWAVEFORM.jpeg";
 import voiceImage from "../../public/images/SOUNDWAVES.jpeg";
 import vaultImage from "../../public/images/ENCRYPTEDVAULT.jpeg";
 import mindImage from "../../public/images/MIND.jpeg";
-import heroCinematicImage from "../../public/images/hero-cinematic.png";
 
 import dynamic from "next/dynamic";
 
@@ -156,15 +155,22 @@ const StatsStrip = () => (
 // --- CINEMATIC HERO ---
 const CinematicHero = () => (
   <section className="relative w-full min-h-screen flex flex-col overflow-hidden hidden md:flex">
-    {/* Background Image */}
+    {/* Cinematic CSS Background */}
     <div className="absolute inset-0 z-0">
-      <Image src={heroCinematicImage} alt="ZUNIOS — The OS for Your Mind" fill className="object-cover object-center" priority />
-      {/* Left-heavy dark overlay for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/92 via-black/65 to-black/15" />
+      {/* Deep void base */}
+      <div className="absolute inset-0 bg-[#020208]" />
+      {/* Left violet nebula — cinematic glow */}
+      <div className="absolute -left-40 top-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-violet-900/20 blur-[120px]" />
+      {/* Right deep blue accent */}
+      <div className="absolute -right-20 top-1/3 w-[500px] h-[500px] rounded-full bg-indigo-950/25 blur-[100px]" />
+      {/* Top center — distant star cluster */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px] rounded-full bg-violet-950/30 blur-[80px]" />
+      {/* Bottom right warm accent */}
+      <div className="absolute bottom-0 right-1/4 w-[400px] h-[300px] rounded-full bg-purple-950/20 blur-[90px]" />
+      {/* Noise texture overlay for cinematic grain */}
+      <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")" }} />
       {/* Bottom fade into page */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-transparent to-black/50" />
-      {/* Subtle violet tint on left */}
-      <div className="absolute inset-0 bg-gradient-to-br from-violet-950/30 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#050510] via-transparent to-transparent" />
     </div>
 
     {/* Corner Bracket Frames */}
