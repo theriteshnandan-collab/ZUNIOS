@@ -236,7 +236,7 @@ export default function JournalPage() {
     const sortedKeys = getSortedDreamKeys(groupedDreams);
 
     return (
-        <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-purple-500/30">
+        <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-white/20">
             {/* Header */}
             <header className="sticky top-0 z-10 backdrop-blur-xl bg-black/50 border-b border-white/5">
                 <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">

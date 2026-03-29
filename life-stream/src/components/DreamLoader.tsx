@@ -26,7 +26,7 @@ export default function DreamLoader({ mode }: DreamLoaderProps) {
     }, [phases.length]);
 
     return (
-        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#050510]/95 backdrop-blur-3xl">
+        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#080808]/95 backdrop-blur-3xl">
             {/* Simple, Human-Centric Visual */}
             <div className="relative flex items-center justify-center p-20">
                 {/* Subtle Breathing Glow */}

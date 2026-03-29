@@ -44,7 +44,7 @@ export default function DreamImage({ src, alt, className }: DreamImageProps) {
         <div className={cn("relative overflow-hidden bg-white/5", className)}>
             {/* Loading skeleton */}
             {isLoading && !hasError && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#050510] to-[#0a0a20] z-10 p-6 text-center">
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#080808] to-[#0a0a0a] z-10 p-6 text-center">
                     <div className="flex flex-col items-center space-y-4">
                         <div className="w-12 h-12 border-2 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin" />
                         <span className="text-cyan-400/50 text-xs tracking-[0.2em] uppercase font-light animate-pulse">

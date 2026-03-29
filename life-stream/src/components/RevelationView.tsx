@@ -15,7 +15,7 @@ export default function RevelationView({ result, onClose, onSave, isSaving }: Re
     if (!result) return null;
 
     return (
-        <div className="fixed inset-0 z-50 bg-[#050510] text-white overflow-y-auto">
+        <div className="fixed inset-0 z-50 bg-[#080808] text-white overflow-y-auto">
             {/* Close/Back Button */}
             <div className="absolute top-6 left-6 z-50">
                 <Button

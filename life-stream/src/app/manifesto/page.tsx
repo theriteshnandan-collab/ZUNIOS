@@ -59,10 +59,10 @@ export default function ManifestoPage() {
     if (loading) return <div className="min-h-screen bg-black" />;
 
     return (
-        <div className="min-h-screen bg-[#050510] text-white overflow-hidden relative selection:bg-purple-500/30">
+        <div className="min-h-screen bg-[#080808] text-white overflow-hidden relative selection:bg-white/20">
             {/* 🌌 Background Atmosphere */}
             <div className="fixed inset-0 pointer-events-none">
-                <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-purple-900/10 to-transparent opacity-50" />
+                <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-white/[0.03] to-transparent opacity-50" />
                 <div className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-blue-900/5 rounded-full blur-[120px]" />
             </div>
 

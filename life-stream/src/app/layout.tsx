@@ -33,7 +33,7 @@ const crimsonPro = Crimson_Pro({
 });
 
 export const viewport = {
-  themeColor: "#050510",
+  themeColor: "#080808",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -92,7 +92,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${inter.variable} ${crimsonPro.variable} ${jetbrainsMono.variable} antialiased bg-[#050510] text-[#E0E0E0] select-none`}
+        className={`${inter.variable} ${crimsonPro.variable} ${jetbrainsMono.variable} antialiased bg-[#080808] text-[#E0E0E0] select-none`}
       >
         <ModeProvider>
           <ClientShell>
