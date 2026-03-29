@@ -178,8 +178,8 @@ const CinematicHero = () => (
     <div className="absolute bottom-6 left-6 w-1.5 h-1.5 bg-white/40 rounded-full -translate-x-[2px] translate-y-[2px] z-20" />
     <div className="absolute bottom-6 right-6 w-1.5 h-1.5 bg-white/40 rounded-full translate-x-[2px] translate-y-[2px] z-20" />
 
-    {/* Main Content — stacked layout, upper positioned */}
-    <div className="relative z-10 flex-1 flex flex-col justify-center w-full pt-8">
+    {/* Main Content — pushed to upper area */}
+    <div className="relative z-10 flex-1 flex flex-col justify-start w-full pt-24">
       <div className="w-full max-w-7xl mx-auto px-10 xl:px-16 space-y-8" style={{ filter: "drop-shadow(0 4px 32px rgba(0,0,0,0.8))" }}>
 
         {/* Badge */}
