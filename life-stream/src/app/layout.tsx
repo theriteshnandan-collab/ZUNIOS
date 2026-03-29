@@ -90,9 +90,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body
         className={`${inter.variable} ${crimsonPro.variable} ${jetbrainsMono.variable} antialiased bg-[#080808] text-[#E0E0E0] select-none`}
+        suppressHydrationWarning
       >
         <ModeProvider>
           <ClientShell>

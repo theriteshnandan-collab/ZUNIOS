@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git push:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"fix: Update image imports to match actual JPEG filenames:*)"
+    ]
+  }
+}

@@ -7,10 +7,10 @@ import ZuniosLogo from "@/components/ZuniosLogo";
 
 export default function Footer() {
     return (
-        <footer className="relative w-full hidden md:block overflow-hidden">
+        <footer className="relative w-full hidden md:block overflow-hidden bg-black">
 
             {/* ══════ CINEMATIC CLOSING — "Cogito" ══════ */}
-            <section className="relative py-40 flex items-center justify-center overflow-hidden">
+            <section className="relative py-40 flex items-center justify-center overflow-hidden bg-black">
 
                 {/* Radial glow behind text */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -68,7 +68,7 @@ export default function Footer() {
             </section>
 
             {/* ══════ MAIN FOOTER ══════ */}
-            <div className="relative border-t border-white/[0.08]">
+            <div className="relative border-t border-white/[0.08] bg-black">
                 {/* Top shine */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
 

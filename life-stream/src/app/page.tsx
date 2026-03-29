@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Moon, Sparkles, Lightbulb, Target, BrainCircuit } from "lucide-react";
-import Image, { StaticImageData } from "next/image";
+import Image from "next/image";
 import TitanInput from "@/components/TitanInput";
 import { cn } from "@/lib/utils";
 import { useMode } from "@/components/ModeProvider";
@@ -19,10 +19,7 @@ import { useAppBadge } from "@/hooks/useAppBadge";
 import { parseCommandLocally } from "@/lib/local-intelligence";
 import { ParticleBackground } from "@/components/ui/ParticleBackground";
 import { NeuralVisual, SyncVisual, CaptureVisual, VaultVisual } from "@/components/ui/BentoVisuals";
-import neuralCoreImage from "../../public/images/POLLOAIONE.jpeg";
-import biometricImage from "../../public/images/BIOMETRICWAVEFORM.jpeg";
-import voiceImage from "../../public/images/SOUNDWAVES.jpeg";
-import vaultImage from "../../public/images/ENCRYPTEDVAULT.jpeg";
+// Static images removed — using fully coded animated visuals instead
 import heroCinematicImage from "../../public/images/image1234.jpg";
 
 import dynamic from "next/dynamic";
@@ -46,122 +43,132 @@ const FeatureItem = ({ icon: Icon, label, desc }: { icon: any, label: string, de
   </div>
 );
 
-// --- FEATURE SECTION ---
+// --- TIMELINE NODE (FEATURE SECTION) ---
+const featureVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15, delayChildren: 0.2 }
+  }
+};
+
+const visualVariants = {
+  hidden: { opacity: 0, scale: 0.85, filter: "blur(12px)", y: 20 },
+  visible: { 
+    opacity: 1, 
+    scale: 1, 
+    filter: "blur(0px)", 
+    y: 0,
+    transition: { type: "spring", stiffness: 100, damping: 20, delay: 0.2 }
+  }
+};
+
+const textVariants = {
+  hidden: { opacity: 0, x: 20 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
+};
+
+const textLeftVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.8, ease: "easeOut" } }
+};
+
 const FeatureSection = ({
   visual: Visual,
-  image,
   title,
   description,
   align = "left",
-  delay = 0,
   tag
 }: {
   visual: any,
-  image?: StaticImageData,
   title: string,
   description: string,
   align?: "left" | "right",
-  delay?: number,
   tag?: string
 }) => {
+  const isRight = align === "right";
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 60 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }}
+      variants={featureVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-40% 0px -40% 0px" }}
       className={cn(
-        "relative flex flex-col md:flex-row items-center gap-10 md:gap-24 py-20 max-w-6xl mx-auto px-8 group/section",
-        align === "right" ? "md:flex-row-reverse" : ""
+        "relative flex flex-col md:flex-row items-center gap-10 md:gap-24 py-24 max-w-6xl mx-auto px-8 group/section",
+        isRight ? "md:flex-row-reverse" : ""
       )}
     >
-      {/* SCROLL LINE NODE */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-[130%] bg-gradient-to-b from-transparent via-white/8 to-transparent hidden md:block -z-10" />
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2.5 h-2.5 bg-[#080808] border border-white/25 rounded-full hidden md:block z-0 shadow-[0_0_10px_rgba(255,255,255,0.12)]" />
+      {/* TIMELINE SOCKET & SPARK */}
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex items-center justify-center z-10 pointer-events-none">
+        {/* The Node Socket */}
+        <motion.div 
+          className="relative w-4 h-4 rounded-full bg-white border-2 border-black/10 shadow-[0_0_20px_rgba(0,0,0,0.15)] flex items-center justify-center"
+          variants={{
+            hidden: { scale: 0, backgroundColor: "rgba(255,255,255,0)" },
+            visible: { scale: 1, backgroundColor: "rgba(255,255,255,1)", transition: { type: "spring" } }
+          }}
+        >
+          <div className="w-1.5 h-1.5 bg-black rounded-full animate-pulse" />
+        </motion.div>
+        
+        {/* The Horizontal Spark Line */}
+        <motion.div
+          className={cn(
+            "absolute h-[2px] bg-gradient-to-r from-black/0 via-black/40 to-black/0 w-24",
+            isRight ? "right-2 origin-right" : "left-2 origin-left"
+          )}
+          variants={{
+            hidden: { scaleX: 0, opacity: 0 },
+            visible: { scaleX: 1, opacity: 1, transition: { duration: 0.4, ease: "easeOut", delay: 0.1 } }
+          }}
+        />
+      </div>
 
-      {/* VISUAL SIDE — Framed Screen */}
-      <div className="w-full md:w-1/2">
-        {/* Outer bezel / monitor frame */}
-        <div className="relative rounded-2xl bg-gradient-to-b from-white/[0.10] to-white/[0.04] border border-white/20 shadow-[0_0_0_1px_rgba(0,0,0,0.8),0_20px_60px_-10px_rgba(0,0,0,0.9)] group-hover/section:border-white/30 group-hover/section:shadow-[0_0_0_1px_rgba(0,0,0,0.8),0_20px_80px_-10px_rgba(255,255,255,0.06)] transition-all duration-700 p-[3px]">
-          {/* Screen surface */}
-          <div className="relative w-full h-[220px] md:h-[300px] rounded-[14px] overflow-hidden bg-black">
-
-            {/* Top bar — monitor chrome */}
-            <div className="absolute top-0 left-0 right-0 z-30 h-8 bg-gradient-to-b from-white/[0.08] to-transparent backdrop-blur-sm flex items-center justify-between px-3 border-b border-white/[0.06]">
-              {/* 3 dots */}
-              <div className="flex items-center gap-1.5">
-                <div className="w-2 h-2 rounded-full bg-white/20" />
-                <div className="w-2 h-2 rounded-full bg-white/15" />
-                <div className="w-2 h-2 rounded-full bg-white/10" />
+      {/* VISUAL SIDE — Spawning Container */}
+      <motion.div variants={visualVariants} className="w-full md:w-1/2 relative z-20">
+        <div className="relative rounded-[16px] bg-gradient-to-b from-black/[0.08] to-black/[0.02] border border-black/15 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.25)] group-hover/section:border-black/30 group-hover/section:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.3)] transition-all duration-700 p-1">
+          <div className="relative w-full h-[260px] md:h-[340px] rounded-[12px] overflow-hidden bg-black">
+            
+            {/* Monitor Chrome */}
+            <div className="absolute top-0 left-0 right-0 z-30 h-8 bg-gradient-to-b from-black/[0.1] to-transparent backdrop-blur-md flex items-center justify-between px-4 border-b border-white/[0.08]">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-[#FF5F57]" />
+                <div className="w-2 h-2 rounded-full bg-[#FEBC2E]" />
+                <div className="w-2 h-2 rounded-full bg-[#28C840]" />
               </div>
-              {/* Live indicator */}
-              <div className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-white/60 animate-pulse" />
-                <span className="text-[9px] font-semibold uppercase tracking-[0.2em] text-white/30">Live</span>
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/50">LIVE</span>
               </div>
             </div>
 
-            {/* Image / Visual with ken-burns */}
-            {image ? (
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 1.2 }}
-                className="absolute inset-0 animate-ken-burns"
-              >
-                <Image
-                  src={image}
-                  alt={title}
-                  fill
-                  className="object-cover"
-                  priority={false}
-                />
-              </motion.div>
-            ) : (
-              <div className="absolute inset-0 z-0"><Visual /></div>
-            )}
+            <div className="absolute inset-0 z-0 p-1"><Visual /></div>
 
-            {/* Scanline overlay */}
-            <div
-              className="absolute inset-0 z-20 pointer-events-none"
-              style={{
-                backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.18) 2px, rgba(0,0,0,0.18) 4px)",
-                mixBlendMode: "multiply"
-              }}
-            />
-
-            {/* Dark vignette */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] via-transparent to-black/50 pointer-events-none z-20" />
-
-            {/* Corner brackets */}
-            <div className="absolute top-10 left-3 w-4 h-4 border-t border-l border-white/25 z-30 pointer-events-none" />
-            <div className="absolute top-10 right-3 w-4 h-4 border-t border-r border-white/25 z-30 pointer-events-none" />
-            <div className="absolute bottom-3 left-3 w-4 h-4 border-b border-l border-white/25 z-30 pointer-events-none" />
-            <div className="absolute bottom-3 right-3 w-4 h-4 border-b border-r border-white/25 z-30 pointer-events-none" />
-
-            {/* Inner screen edge shine */}
-            <div className="absolute inset-0 ring-1 ring-inset ring-white/[0.06] rounded-[14px] pointer-events-none z-30" />
+            {/* Cinematic Overlays */}
+            <div className="absolute inset-0 z-20 pointer-events-none mix-blend-multiply opacity-40 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
+            <div className="absolute inset-0 ring-1 ring-inset ring-white/[0.1] rounded-[12px] pointer-events-none z-30" />
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* TEXT SIDE */}
-      <div className="w-full md:w-1/2 space-y-5 text-center md:text-left relative z-10">
+      <motion.div variants={isRight ? textLeftVariants : textVariants} className="w-full md:w-1/2 space-y-6 text-center md:text-left relative z-10">
         {tag && (
-          <span className="inline-block text-[10px] font-bold uppercase tracking-[0.2em] text-white/50 bg-white/[0.06] border border-white/15 px-3 py-1 rounded-full">
+          <span className="inline-block text-[11px] font-bold uppercase tracking-[0.25em] text-black/60 bg-black/[0.04] border border-black/10 px-3.5 py-1.5 rounded-full">
             {tag}
           </span>
         )}
-        <h2 className="text-3xl md:text-5xl font-serif font-bold text-white tracking-tight leading-[1.05]">
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-black tracking-tight leading-[1.05]">
           {title}
         </h2>
-        <p className="text-base md:text-lg text-white/35 font-light leading-relaxed max-w-md mx-auto md:mx-0">
+        <p className="text-lg md:text-xl text-black/50 font-light leading-relaxed max-w-md mx-auto md:mx-0">
           {description}
         </p>
-        <div className="pt-2 flex justify-center md:justify-start">
-          <div className="h-px w-12 bg-gradient-to-r from-white/25 to-transparent rounded-full" />
+        <div className="pt-4 flex justify-center md:justify-start">
+          <div className="h-[2px] w-16 bg-gradient-to-r from-black/30 to-transparent rounded-full" />
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 };
@@ -182,10 +189,10 @@ const StatsStrip = () => (
       { value: "0ms", label: "Local Processing" },
     ].map((stat) => (
       <div key={stat.label} className="text-center group">
-        <div className="text-4xl md:text-5xl font-bold font-serif bg-gradient-to-b from-white to-white/30 bg-clip-text text-transparent mb-2 group-hover:from-zinc-200 group-hover:to-zinc-400/30 transition-all duration-500">
+        <div className="text-4xl md:text-5xl font-bold font-serif text-[#050505] mb-2 group-hover:text-black/70 transition-colors duration-500">
           {stat.value}
         </div>
-        <div className="text-[10px] text-white/25 uppercase tracking-[0.2em] font-medium">{stat.label}</div>
+        <div className="text-[10px] text-black/40 uppercase tracking-[0.2em] font-medium">{stat.label}</div>
       </div>
     ))}
   </motion.div>
@@ -310,24 +317,15 @@ const CinematicHero = () => (
 
 // WRAPPER COMPONENT TO HANDLE SCROLL LOGIC
 const NarrativeFlowLines = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start center", "end center"]
-  });
-
-  const scaleY = useTransform(scrollYProgress, [0, 1], [0, 1]);
-  const opacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]);
-
   return (
-    <div className="w-full mt-4 pb-16 hidden sm:block">
+    <div className="w-full mt-4 pb-16 hidden sm:block bg-white overflow-hidden">
 
       {/* SECTION DIVIDER */}
-      <div className="max-w-6xl mx-auto px-8 mb-4">
+      <div className="max-w-6xl mx-auto px-8 mb-4 pt-8">
         <div className="flex items-center gap-6">
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent to-white/[0.05]" />
-          <span className="text-[10px] text-white/15 uppercase tracking-[0.3em] font-medium whitespace-nowrap">What Zunios Does</span>
-          <div className="flex-1 h-px bg-gradient-to-l from-transparent to-white/[0.05]" />
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent to-black/[0.08]" />
+          <span className="text-[10px] text-black/25 uppercase tracking-[0.3em] font-medium whitespace-nowrap">What Zunios Does</span>
+          <div className="flex-1 h-px bg-gradient-to-l from-transparent to-black/[0.08]" />
         </div>
       </div>
 
@@ -335,16 +333,14 @@ const NarrativeFlowLines = () => {
       <StatsStrip />
 
       {/* CONNECTED FEATURES CONTAINER */}
-      <div ref={containerRef} className="relative pb-20">
-        {/* DYNAMIC SCROLL LINE */}
-        <motion.div
-          className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-white/0 via-white/15 to-white/0 -translate-x-1/2 origin-top z-0"
-          style={{ scaleY, opacity }}
-        />
+      <div className="relative pb-20">
+        {/* STATIC PASSIVE SPINE */}
+        <div className="absolute left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-transparent via-black/10 to-black/5 -translate-x-1/2 z-0">
+          <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[1px] bg-gradient-to-b from-transparent via-black/20 to-transparent" />
+        </div>
 
         <FeatureSection
           visual={NeuralVisual}
-          image={neuralCoreImage}
           title="The Neural Core"
           description="An advanced AI engine that maps your thoughts into a living constellation. Patterns emerge automatically, revealing insights you never knew existed."
           align="left"
@@ -353,7 +349,6 @@ const NarrativeFlowLines = () => {
 
         <FeatureSection
           visual={SyncVisual}
-          image={biometricImage}
           title="Daily Sync"
           description="Your biological rhythm, visualized. Track your cognitive peak and ensure your system is optimal every single day."
           align="right"
@@ -362,7 +357,6 @@ const NarrativeFlowLines = () => {
 
         <FeatureSection
           visual={CaptureVisual}
-          image={voiceImage}
           title="Voice Command"
           description="Speak to the machine. The Arc Reactor core processes natural language instantly into structured, searchable intelligence."
           align="left"
@@ -371,7 +365,6 @@ const NarrativeFlowLines = () => {
 
         <FeatureSection
           visual={VaultVisual}
-          image={vaultImage}
           title="Zero-Knowledge Vault"
           description="Your mind is private property. Military-grade encryption ensures only you hold the keys to your thoughts, forever."
           align="right"
@@ -380,7 +373,7 @@ const NarrativeFlowLines = () => {
       </div>
 
       {/* CAPABILITIES GRID */}
-      <div className="pt-20 px-8 max-w-6xl mx-auto border-t border-white/[0.06]">
+      <div className="pt-20 px-8 max-w-6xl mx-auto border-t border-black/[0.06]">
         <div className="text-center space-y-4 mb-16">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -388,10 +381,10 @@ const NarrativeFlowLines = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/50">Full Stack</span>
-            <h3 className="text-3xl md:text-4xl font-serif text-white mt-3">System Capabilities</h3>
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/40">Full Stack</span>
+            <h3 className="text-3xl md:text-4xl font-serif text-black mt-3">System Capabilities</h3>
           </motion.div>
-          <div className="h-px w-16 bg-gradient-to-r from-transparent via-white/30 to-transparent mx-auto" />
+          <div className="h-px w-16 bg-gradient-to-r from-transparent via-black/20 to-transparent mx-auto" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -409,17 +402,17 @@ const NarrativeFlowLines = () => {
               transition={{ delay: i * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true }}
               key={i}
-              className="relative p-6 rounded-2xl bg-gradient-to-b from-white/[0.10] to-white/[0.04] border border-white/20 hover:border-white/40 hover:shadow-[0_0_40px_rgba(255,255,255,0.06)] transition-all duration-500 group overflow-hidden backdrop-blur-xl"
+              className="relative p-6 rounded-2xl bg-[#070707] border border-white/[0.03] hover:border-white/[0.08] hover:shadow-[0_8px_30px_rgba(255,255,255,0.02)] transition-all duration-500 group overflow-hidden"
             >
               {/* Top shine line */}
-              <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+              <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-white/[0.05] to-transparent" />
               {/* Hover glow */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/0 group-hover:from-white/[0.06] group-hover:to-transparent transition-all duration-700 rounded-2xl" />
-              <div className="w-10 h-10 rounded-xl bg-white/[0.08] border border-white/20 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:border-white/40 group-hover:bg-white/[0.15] transition-all duration-300 relative z-10">
-                <item.icon className="w-5 h-5 text-white/70 group-hover:text-white transition-colors duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/0 group-hover:from-white/[0.02] group-hover:to-transparent transition-all duration-700 rounded-2xl" />
+              <div className="w-10 h-10 rounded-xl bg-white/[0.02] border border-white/[0.04] flex items-center justify-center mb-5 group-hover:scale-110 group-hover:border-white/[0.08] group-hover:bg-white/[0.05] transition-all duration-300 relative z-10">
+                <item.icon className="w-5 h-5 text-white/40 group-hover:text-white transition-colors duration-300" />
               </div>
               <h4 className="text-base font-bold text-white mb-2.5 relative z-10">{item.title}</h4>
-              <p className="text-white/50 text-sm leading-relaxed relative z-10 group-hover:text-white/70 transition-colors">{item.desc}</p>
+              <p className="text-white/40 text-sm leading-relaxed relative z-10 group-hover:text-white/60 transition-colors">{item.desc}</p>
             </motion.div>
           ))}
         </div>
