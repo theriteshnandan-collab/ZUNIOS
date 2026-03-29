@@ -221,15 +221,6 @@ const CinematicHero = () => (
             </button>
           </div>
 
-          {/* Tech Strip — single row */}
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[10px] text-white/30 uppercase tracking-[0.25em] mr-1">Built with</span>
-            {["Groq AI", "Supabase", "Vector Search", "Edge Runtime", "Next.js"].map((t, i) => (
-              <span key={i} className="text-[11px] font-mono text-white/40 px-2.5 py-1 rounded-full border border-white/15 bg-black/30 backdrop-blur-sm cursor-default">
-                {t}
-              </span>
-            ))}
-          </div>
         </motion.div>
 
         {/* RIGHT: Floating feature cards — fills the empty space */}
@@ -239,71 +230,19 @@ const CinematicHero = () => (
           transition={{ duration: 1.1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           className="flex-1 max-w-[420px] relative h-[380px] hidden xl:block"
         >
-          {/* Card 1 — top right */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-            className="absolute top-0 right-0 w-[220px] p-5 rounded-2xl bg-black/50 backdrop-blur-xl border border-white/10"
-          >
-            <div className="text-2xl font-bold font-serif text-white mb-1">Neural AI</div>
-            <div className="text-xs text-white/50 leading-relaxed">Maps your thoughts into a living intelligence graph in real-time.</div>
-          </motion.div>
+          {/* Ghost Card 1 — top right */}
+          <div className="absolute top-0 right-0 w-[220px] p-5 rounded-2xl border border-white/[0.06] opacity-[0.08]" />
 
-          {/* Card 2 — middle left */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.55, duration: 0.8 }}
-            className="absolute top-[40%] left-0 w-[200px] p-5 rounded-2xl bg-black/50 backdrop-blur-xl border border-white/10"
-          >
-            <div className="text-2xl font-bold font-serif text-white mb-1">E2E Vault</div>
-            <div className="text-xs text-white/50 leading-relaxed">Military-grade encryption. Only you hold the keys.</div>
-          </motion.div>
+          {/* Ghost Card 2 — middle left */}
+          <div className="absolute top-[40%] left-0 w-[200px] p-5 rounded-2xl border border-white/[0.06] opacity-[0.08]" />
 
-          {/* Card 3 — bottom right */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.8 }}
-            className="absolute bottom-0 right-4 w-[210px] p-5 rounded-2xl bg-black/50 backdrop-blur-xl border border-white/10"
-          >
-            <div className="text-2xl font-bold font-serif text-white mb-1">0ms Recall</div>
-            <div className="text-xs text-white/50 leading-relaxed">Vector-embedded memory. Instant photographic retrieval.</div>
-          </motion.div>
+          {/* Ghost Card 3 — bottom right */}
+          <div className="absolute bottom-0 right-4 w-[210px] p-5 rounded-2xl border border-white/[0.06] opacity-[0.08]" />
         </motion.div>
 
       </div>
     </div>
 
-    {/* Bottom Stat Cards */}
-    <div className="relative z-10 w-full max-w-7xl mx-auto px-10 xl:px-16 pb-10">
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.65, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        className="grid grid-cols-4 gap-3"
-      >
-        {[
-          { value: "AI", label: "Neural Analysis", sub: "Real-time" },
-          { value: "E2E", label: "Encrypted", sub: "Zero-Knowledge" },
-          { value: "∞", label: "Memory Bank", sub: "Vector Storage" },
-          { value: "0ms", label: "Processing", sub: "Edge Runtime" },
-        ].map((stat) => (
-          <div
-            key={stat.label}
-            className="relative p-4 rounded-2xl bg-black/50 backdrop-blur-md border border-white/[0.07] hover:border-white/15 transition-all duration-500 group text-center overflow-hidden"
-          >
-            <div className="absolute inset-0 bg-gradient-to-b from-white/0 to-white/0 group-hover:from-white/[0.04] transition-all duration-700 rounded-2xl" />
-            <div className="text-2xl font-bold font-serif bg-gradient-to-b from-white to-white/30 bg-clip-text text-transparent group-hover:from-zinc-200 group-hover:to-zinc-400/30 transition-all duration-500 relative z-10">
-              {stat.value}
-            </div>
-            <div className="text-[11px] text-white/50 font-medium mt-1 relative z-10">{stat.label}</div>
-            <div className="text-[9px] text-white/20 uppercase tracking-[0.15em] mt-0.5 relative z-10">{stat.sub}</div>
-          </div>
-        ))}
-      </motion.div>
-    </div>
 
     {/* Scroll Indicator */}
     <motion.div
