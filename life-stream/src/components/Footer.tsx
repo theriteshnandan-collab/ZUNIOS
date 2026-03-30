@@ -148,7 +148,7 @@ export default function Footer() {
                         transition={{ duration: 0.8, delay: 0.3 }}
                     >
                         <Link
-                            href="/"
+                            href="/#titan-input"
                             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-white text-black font-bold text-sm transition-all duration-300 hover:shadow-[0_0_50px_rgba(255,255,255,0.25)] hover:scale-105 active:scale-95 group"
                         >
                             Begin Your Journey
