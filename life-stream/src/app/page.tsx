@@ -332,12 +332,16 @@ const CinematicHero = () => {
                 The cognitive layer between your mind and the world.
               </p>
               <div className="flex items-center gap-4">
-                <button className="group relative px-8 py-3.5 rounded-full bg-white text-black font-bold text-sm transition-all duration-300 active:scale-95 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] flex items-center gap-2 overflow-hidden">
+                <button
+                  onClick={() => document.getElementById("titan-input")?.scrollIntoView({ behavior: "smooth" })}
+                  className="group relative px-8 py-3.5 rounded-full bg-white text-black font-bold text-sm transition-all duration-300 active:scale-95 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] flex items-center gap-2 overflow-hidden">
                   <span className="relative z-10">Start Thinking Free</span>
                   <span className="relative z-10 group-hover:translate-x-1 transition-transform duration-200">→</span>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/[0.04] to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
                 </button>
-                <button className="px-8 py-3.5 rounded-full border border-white/30 text-white/70 font-medium text-sm hover:border-white/60 hover:text-white transition-all duration-300 bg-black/20 backdrop-blur-sm">
+                <button
+                  onClick={() => document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })}
+                  className="px-8 py-3.5 rounded-full border border-white/30 text-white/70 font-medium text-sm hover:border-white/60 hover:text-white transition-all duration-300 bg-black/20 backdrop-blur-sm">
                   See How It Works
                 </button>
               </div>
@@ -383,7 +387,7 @@ const CinematicHero = () => {
 // WRAPPER COMPONENT TO HANDLE SCROLL LOGIC
 const NarrativeFlowLines = () => {
   return (
-    <div className="w-full mt-4 pb-16 hidden sm:block bg-white overflow-hidden">
+    <div id="how-it-works" className="w-full mt-4 pb-16 hidden sm:block bg-white overflow-hidden">
 
       {/* SECTION DIVIDER */}
       <div className="max-w-6xl mx-auto px-8 mb-4 pt-8">
