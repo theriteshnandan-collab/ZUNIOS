@@ -4,6 +4,94 @@ import Link from "next/link";
 import { Mail, Heart, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import ZuniosLogo from "@/components/ZuniosLogo";
+import { useRef, useEffect } from "react";
+
+function CogitoBg() {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d")!;
+
+        const COLS = 44;
+        const ROWS = 20;
+        const DASH = 15;
+        const W    = 1.2;
+        const BASE = 0;
+        const HOT  = 0.75;
+        const RAD  = 380;
+
+        const mouse = { x: -9999, y: -9999 };
+        let raf: number;
+
+        const resize = () => {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width  = rect.width;
+            canvas.height = rect.height;
+        };
+        resize();
+
+        const onResize = () => resize();
+        window.addEventListener("resize", onResize);
+
+        const onMove = (e: MouseEvent) => {
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+        };
+        window.addEventListener("mousemove", onMove);
+
+        const draw = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const gx = canvas.width  / COLS;
+            const gy = canvas.height / ROWS;
+
+            for (let c = 0; c < COLS; c++) {
+                for (let r = 0; r < ROWS; r++) {
+                    const px = gx * c + gx / 2;
+                    const py = gy * r + gy / 2;
+
+                    const dx  = px - mouse.x;
+                    const dy  = py - mouse.y;
+                    const d   = Math.sqrt(dx * dx + dy * dy);
+                    const ang = Math.atan2(dy, dx);
+                    const inf = Math.max(0, 1 - d / RAD);
+                    const op  = BASE + inf * (HOT - BASE);
+                    const len = DASH + inf * 10;
+
+                    const hx = Math.cos(ang) * len / 2;
+                    const hy = Math.sin(ang) * len / 2;
+
+                    ctx.beginPath();
+                    ctx.moveTo(px - hx, py - hy);
+                    ctx.lineTo(px + hx, py + hy);
+                    ctx.strokeStyle = `rgba(255,255,255,${op.toFixed(3)})`;
+                    ctx.lineWidth   = W;
+                    ctx.lineCap     = "round";
+                    ctx.stroke();
+                }
+            }
+
+            raf = requestAnimationFrame(draw);
+        };
+        draw();
+
+        return () => {
+            cancelAnimationFrame(raf);
+            window.removeEventListener("resize", onResize);
+            window.removeEventListener("mousemove", onMove);
+        };
+    }, []);
+
+    return (
+        <canvas
+            ref={canvasRef}
+            className="absolute inset-0 w-full h-full pointer-events-none z-[1]"
+            aria-hidden
+        />
+    );
+}
 
 export default function Footer() {
     return (
@@ -12,16 +100,19 @@ export default function Footer() {
             {/* ══════ CINEMATIC CLOSING — "Cogito" ══════ */}
             <section className="relative py-40 flex items-center justify-center overflow-hidden bg-black">
 
+                {/* Magnetic vector field — covers full section bg */}
+                <CogitoBg />
+
                 {/* Radial glow behind text */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[2]">
                     <div className="w-[700px] h-[400px] rounded-full bg-gradient-to-b from-white/[0.04] via-white/[0.02] to-transparent blur-[100px]" />
                 </div>
 
                 {/* Corner brackets */}
-                <div className="absolute top-12 left-12 w-10 h-10 border-t border-l border-white/15 pointer-events-none" />
-                <div className="absolute top-12 right-12 w-10 h-10 border-t border-r border-white/15 pointer-events-none" />
-                <div className="absolute bottom-12 left-12 w-10 h-10 border-b border-l border-white/15 pointer-events-none" />
-                <div className="absolute bottom-12 right-12 w-10 h-10 border-b border-r border-white/15 pointer-events-none" />
+                <div className="absolute top-12 left-12 w-10 h-10 border-t border-l border-white/15 pointer-events-none z-[3]" />
+                <div className="absolute top-12 right-12 w-10 h-10 border-t border-r border-white/15 pointer-events-none z-[3]" />
+                <div className="absolute bottom-12 left-12 w-10 h-10 border-b border-l border-white/15 pointer-events-none z-[3]" />
+                <div className="absolute bottom-12 right-12 w-10 h-10 border-b border-r border-white/15 pointer-events-none z-[3]" />
 
                 <motion.div
                     initial={{ opacity: 0, y: 40 }}

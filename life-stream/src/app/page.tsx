@@ -190,121 +190,195 @@ const StatsStrip = () => (
 );
 
 // --- CINEMATIC HERO ---
-const CinematicHero = () => (
-  <section className="relative w-full min-h-screen flex flex-col overflow-hidden hidden md:flex">
-    {/* Cinematic Photo Background */}
-    <div className="absolute inset-0 z-0">
-      <Image src={heroCinematicImage} alt="" fill className="object-cover object-center" priority />
-      {/* Very subtle left-to-right gradient — let image breathe */}
-      <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/10 to-black/0" />
-      {/* Bottom fade into page */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/20 to-transparent" />
-      {/* Top nav area */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-transparent" />
-    </div>
+const CinematicHero = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
-    {/* Corner Bracket Frames */}
-    <div className="absolute top-[72px] left-6 w-14 h-14 border-t-[1.5px] border-l-[1.5px] border-white/20 z-20 pointer-events-none" />
-    <div className="absolute top-[72px] right-6 w-14 h-14 border-t-[1.5px] border-r-[1.5px] border-white/20 z-20 pointer-events-none" />
-    <div className="absolute bottom-6 left-6 w-14 h-14 border-b-[1.5px] border-l-[1.5px] border-white/20 z-20 pointer-events-none" />
-    <div className="absolute bottom-6 right-6 w-14 h-14 border-b-[1.5px] border-r-[1.5px] border-white/20 z-20 pointer-events-none" />
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d")!;
 
-    {/* Corner Dots */}
-    <div className="absolute top-[72px] left-6 w-1.5 h-1.5 bg-white/40 rounded-full -translate-x-[2px] -translate-y-[2px] z-20" />
-    <div className="absolute top-[72px] right-6 w-1.5 h-1.5 bg-white/40 rounded-full translate-x-[2px] -translate-y-[2px] z-20" />
-    <div className="absolute bottom-6 left-6 w-1.5 h-1.5 bg-white/40 rounded-full -translate-x-[2px] translate-y-[2px] z-20" />
-    <div className="absolute bottom-6 right-6 w-1.5 h-1.5 bg-white/40 rounded-full translate-x-[2px] translate-y-[2px] z-20" />
+    const COLS = 40;
+    const ROWS = 28;
+    const DASH = 14;
+    const W    = 1.2;
+    const BASE = 0;
+    const HOT  = 0.70;
+    const RAD  = 350;
 
-    {/* Main Content — pushed to upper area */}
-    <div className="relative z-10 flex-1 flex flex-col justify-start w-full pt-24">
-      <div className="w-full max-w-7xl mx-auto px-10 xl:px-16 space-y-8" style={{ filter: "drop-shadow(0 4px 32px rgba(0,0,0,0.8))" }}>
+    const mouse = { x: -9999, y: -9999 };
+    let raf: number;
 
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-white/25 bg-black/40 backdrop-blur-sm text-xs font-medium text-white/70"
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-white/80 animate-pulse" />
-          AI-Powered Mind OS · Now in Beta
-        </motion.div>
+    const resize = () => {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
 
-        {/* Headline — single line, full width */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="text-5xl md:text-6xl xl:text-7xl font-bold font-serif tracking-tight leading-none whitespace-nowrap"
-        >
-          <span className="text-white">The OS for </span>
-          <span className="bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">Your Mind.</span>
-        </motion.h1>
+    const onMove = (e: MouseEvent) => { mouse.x = e.clientX; mouse.y = e.clientY; };
+    window.addEventListener("mousemove", onMove);
 
-        {/* Divider */}
-        <div className="w-full h-px bg-gradient-to-r from-white/15 via-white/5 to-transparent" />
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const gx = canvas.width  / COLS;
+      const gy = canvas.height / ROWS;
 
-        {/* Two columns — subtitle+CTAs left, stats right */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="flex items-start justify-between gap-16"
-        >
-          {/* LEFT: Subtitle + CTAs */}
-          <div className="space-y-6 max-w-md">
-            <p className="text-lg text-white/65 font-light leading-relaxed">
-              Capture ideas. Analyze patterns. Extract intelligence.<br />
-              The cognitive layer between your mind and the world.
-            </p>
-            <div className="flex items-center gap-4">
-              <button className="group relative px-8 py-3.5 rounded-full bg-white text-black font-bold text-sm transition-all duration-300 active:scale-95 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] flex items-center gap-2 overflow-hidden">
-                <span className="relative z-10">Start Thinking Free</span>
-                <span className="relative z-10 group-hover:translate-x-1 transition-transform duration-200">→</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/[0.04] to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
-              </button>
-              <button className="px-8 py-3.5 rounded-full border border-white/30 text-white/70 font-medium text-sm hover:border-white/60 hover:text-white transition-all duration-300 bg-black/20 backdrop-blur-sm">
-                See How It Works
-              </button>
-            </div>
-          </div>
+      for (let c = 0; c < COLS; c++) {
+        for (let r = 0; r < ROWS; r++) {
+          const px = gx * c + gx / 2;
+          const py = gy * r + gy / 2;
 
-          {/* RIGHT: 4 stats in a 2x2 grid */}
-          <div className="grid grid-cols-2 gap-4 min-w-[360px]">
-            {[
-              { value: "Neural AI", label: "Real-time thought mapping" },
-              { value: "E2E", label: "Zero-knowledge encryption" },
-              { value: "∞ Memory", label: "Vector-embedded recall" },
-              { value: "0ms", label: "Edge runtime processing" },
-            ].map((s) => (
-              <div key={s.value} className="p-4 rounded-2xl bg-black/35 backdrop-blur-md border border-white/10">
-                <div className="text-lg font-bold font-serif text-white mb-1">{s.value}</div>
-                <div className="text-[11px] text-white/45 leading-snug">{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
+          const dx  = px - mouse.x;
+          const dy  = py - mouse.y;
+          const d   = Math.sqrt(dx * dx + dy * dy);
+          const ang = Math.atan2(dy, dx);
+          const inf = Math.max(0, 1 - d / RAD);
+          const op  = BASE + inf * (HOT - BASE);
+          const len = DASH + inf * 9;
 
+          const hx = Math.cos(ang) * len / 2;
+          const hy = Math.sin(ang) * len / 2;
+
+          ctx.beginPath();
+          ctx.moveTo(px - hx, py - hy);
+          ctx.lineTo(px + hx, py + hy);
+          ctx.strokeStyle = `rgba(255,255,255,${op.toFixed(3)})`;
+          ctx.lineWidth   = W;
+          ctx.lineCap     = "round";
+          ctx.stroke();
+        }
+      }
+      raf = requestAnimationFrame(draw);
+    };
+    draw();
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", onMove);
+    };
+  }, []);
+
+  return (
+    <section className="relative w-full min-h-screen flex flex-col overflow-hidden hidden md:flex">
+      {/* Cinematic Photo Background */}
+      <div className="absolute inset-0 z-0">
+        <Image src={heroCinematicImage} alt="" fill className="object-cover object-center" priority />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/10 to-black/0" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-transparent" />
       </div>
-    </div>
 
-
-    {/* Scroll Indicator */}
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 1.3 }}
-      className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5 pointer-events-none"
-    >
-      <span className="text-[9px] text-white/15 uppercase tracking-[0.35em]">Scroll</span>
-      <motion.div
-        animate={{ y: [0, 5, 0] }}
-        transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-        className="w-px h-8 bg-gradient-to-b from-white/20 to-transparent"
+      {/* Magnetic Vector Field — sits above photo, below content */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 z-[5] pointer-events-none"
+        aria-hidden
       />
-    </motion.div>
-  </section>
-);
+
+      {/* Corner Bracket Frames */}
+      <div className="absolute top-[72px] left-6 w-14 h-14 border-t-[1.5px] border-l-[1.5px] border-white/20 z-20 pointer-events-none" />
+      <div className="absolute top-[72px] right-6 w-14 h-14 border-t-[1.5px] border-r-[1.5px] border-white/20 z-20 pointer-events-none" />
+      <div className="absolute bottom-6 left-6 w-14 h-14 border-b-[1.5px] border-l-[1.5px] border-white/20 z-20 pointer-events-none" />
+      <div className="absolute bottom-6 right-6 w-14 h-14 border-b-[1.5px] border-r-[1.5px] border-white/20 z-20 pointer-events-none" />
+
+      {/* Corner Dots */}
+      <div className="absolute top-[72px] left-6 w-1.5 h-1.5 bg-white/40 rounded-full -translate-x-[2px] -translate-y-[2px] z-20" />
+      <div className="absolute top-[72px] right-6 w-1.5 h-1.5 bg-white/40 rounded-full translate-x-[2px] -translate-y-[2px] z-20" />
+      <div className="absolute bottom-6 left-6 w-1.5 h-1.5 bg-white/40 rounded-full -translate-x-[2px] translate-y-[2px] z-20" />
+      <div className="absolute bottom-6 right-6 w-1.5 h-1.5 bg-white/40 rounded-full translate-x-[2px] translate-y-[2px] z-20" />
+
+      {/* Main Content — z-10, above canvas */}
+      <div className="relative z-10 flex-1 flex flex-col justify-start w-full pt-24">
+        <div className="w-full max-w-7xl mx-auto px-10 xl:px-16 space-y-8" style={{ filter: "drop-shadow(0 4px 32px rgba(0,0,0,0.8))" }}>
+
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-white/25 bg-black/40 backdrop-blur-sm text-xs font-medium text-white/70"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-white/80 animate-pulse" />
+            AI-Powered Mind OS · Now in Beta
+          </motion.div>
+
+          {/* Headline */}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            className="text-5xl md:text-6xl xl:text-7xl font-bold font-serif tracking-tight leading-none whitespace-nowrap"
+          >
+            <span className="text-white">The OS for </span>
+            <span className="bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">Your Mind.</span>
+          </motion.h1>
+
+          {/* Divider */}
+          <div className="w-full h-px bg-gradient-to-r from-white/15 via-white/5 to-transparent" />
+
+          {/* Two columns */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="flex items-start justify-between gap-16"
+          >
+            {/* LEFT */}
+            <div className="space-y-6 max-w-md">
+              <p className="text-lg text-white/65 font-light leading-relaxed">
+                Capture ideas. Analyze patterns. Extract intelligence.<br />
+                The cognitive layer between your mind and the world.
+              </p>
+              <div className="flex items-center gap-4">
+                <button className="group relative px-8 py-3.5 rounded-full bg-white text-black font-bold text-sm transition-all duration-300 active:scale-95 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] flex items-center gap-2 overflow-hidden">
+                  <span className="relative z-10">Start Thinking Free</span>
+                  <span className="relative z-10 group-hover:translate-x-1 transition-transform duration-200">→</span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/[0.04] to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
+                </button>
+                <button className="px-8 py-3.5 rounded-full border border-white/30 text-white/70 font-medium text-sm hover:border-white/60 hover:text-white transition-all duration-300 bg-black/20 backdrop-blur-sm">
+                  See How It Works
+                </button>
+              </div>
+            </div>
+
+            {/* RIGHT */}
+            <div className="grid grid-cols-2 gap-4 min-w-[360px]">
+              {[
+                { value: "Neural AI", label: "Real-time thought mapping" },
+                { value: "E2E",       label: "Zero-knowledge encryption" },
+                { value: "∞ Memory", label: "Vector-embedded recall" },
+                { value: "0ms",       label: "Edge runtime processing" },
+              ].map((s) => (
+                <div key={s.value} className="p-4 rounded-2xl bg-black/35 backdrop-blur-md border border-white/10">
+                  <div className="text-lg font-bold font-serif text-white mb-1">{s.value}</div>
+                  <div className="text-[11px] text-white/45 leading-snug">{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Scroll Indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.3 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5 pointer-events-none"
+      >
+        <span className="text-[9px] text-white/15 uppercase tracking-[0.35em]">Scroll</span>
+        <motion.div
+          animate={{ y: [0, 5, 0] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          className="w-px h-8 bg-gradient-to-b from-white/20 to-transparent"
+        />
+      </motion.div>
+    </section>
+  );
+};
+
 
 // WRAPPER COMPONENT TO HANDLE SCROLL LOGIC
 const NarrativeFlowLines = () => {

@@ -1,0 +1,17 @@
+src/app/manifesto/page.tsx(162,32): error TS7006: Parameter 'idx' implicitly has an 'any' type.
+src/app/manifesto/page.tsx(162,37): error TS7006: Parameter 'title' implicitly has an 'any' type.
+src/app/manifesto/page.tsx(162,44): error TS7006: Parameter 'desc' implicitly has an 'any' type.
+src/app/manifesto/page.tsx(435,96): error TS2353: Object literal may only specify known properties, and 'direction' does not exist in type 'ValueTransition'.
+src/components/journal/DateNavigator.tsx(66,25): error TS2353: Object literal may only specify known properties, and 'selected' does not exist in type '{ hasEntry?: string | undefined; }'.
+src/components/JournalGrid.tsx(42,25): error TS2322: Type '{ children: Element; className: string; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & GlassCardProps'.
+  Property 'onClick' does not exist on type 'IntrinsicAttributes & GlassCardProps'.
+src/components/OnboardingModal.tsx(80,36): error TS2322: Type '{ children: Element[]; gradient: true; className: string; }' is not assignable to type 'IntrinsicAttributes & GlassCardProps'.
+  Property 'gradient' does not exist on type 'IntrinsicAttributes & GlassCardProps'.
+src/components/SemanticSearch.tsx(202,26): error TS2741: Property 'isOpen' is missing in type '{ dream: any; onClose: () => void; }' but required in type 'DreamInsightModalProps'.
+src/components/ui/ShinyButton.tsx(18,10): error TS2322: Type '{ children: Element[]; disabled?: boolean | undefined; form?: string | undefined; formAction?: string | ((formData: FormData) => void | Promise<void>) | undefined; ... 286 more ...; className: string; }' is not assignable to type 'Omit<HTMLMotionProps<"button">, "ref">'.
+  Types of property 'onDrag' are incompatible.
+    Type 'DragEventHandler<HTMLButtonElement> | undefined' is not assignable to type '((event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => void) | undefined'.
+      Type 'DragEventHandler<HTMLButtonElement>' is not assignable to type '(event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => void'.
+        Types of parameters 'event' and 'event' are incompatible.
+          Type 'MouseEvent | TouchEvent | PointerEvent' is not assignable to type 'DragEvent<HTMLButtonElement>'.
+            Type 'MouseEvent' is missing the following properties from type 'DragEvent<HTMLButtonElement>': dataTransfer, nativeEvent, isDefaultPrevented, isPropagationStopped, persist
