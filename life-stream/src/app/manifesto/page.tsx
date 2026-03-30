@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -8,69 +8,6 @@ import ZuniosLogo from "@/components/ZuniosLogo";
 
 const QUOTE = "The mind is not a vessel to fill. It is an engine to ignite.";
 const EXPO_OUT = [0.16, 1, 0.3, 1] as const;
-
-// ─── MAGNETIC VECTOR FIELD ────────────────────────────────────────────────────
-
-function VectorFieldCanvas() {
-    const canvasRef = useRef<HTMLCanvasElement>(null);
-    const mouseRef = useRef({ x: -9999, y: -9999 });
-    const rafRef = useRef<number>(0);
-
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext("2d")!;
-
-        const resize = () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        };
-        resize();
-        window.addEventListener("resize", resize);
-        window.addEventListener("mousemove", (e) => {
-            mouseRef.current = { x: e.clientX, y: e.clientY };
-        });
-
-        const COLS = 28, ROWS = 20, DASH_LEN = 13;
-
-        const draw = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const gapX = canvas.width / COLS;
-            const gapY = canvas.height / ROWS;
-            const { x: mx, y: my } = mouseRef.current;
-
-            for (let col = 0; col < COLS; col++) {
-                for (let row = 0; row < ROWS; row++) {
-                    const px = gapX * col + gapX / 2;
-                    const py = gapY * row + gapY / 2;
-                    const dx = px - mx, dy = py - my;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    const influence = Math.max(0, 1 - dist / 360);
-                    const opacity = influence * 0.75;
-                    if (opacity < 0.01) continue;
-                    const angle = Math.atan2(dy, dx);
-                    const len = (DASH_LEN + influence * 6) / 2;
-                    ctx.beginPath();
-                    ctx.moveTo(px - Math.cos(angle) * len, py - Math.sin(angle) * len);
-                    ctx.lineTo(px + Math.cos(angle) * len, py + Math.sin(angle) * len);
-                    ctx.strokeStyle = `rgba(255,255,255,${opacity.toFixed(3)})`;
-                    ctx.lineWidth = 0.9;
-                    ctx.lineCap = "round";
-                    ctx.stroke();
-                }
-            }
-            rafRef.current = requestAnimationFrame(draw);
-        };
-        draw();
-
-        return () => {
-            cancelAnimationFrame(rafRef.current);
-            window.removeEventListener("resize", resize);
-        };
-    }, []);
-
-    return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-[1]" aria-hidden />;
-}
 
 // ─── SCAN LINE REVEAL ─────────────────────────────────────────────────────────
 
@@ -134,8 +71,6 @@ export default function ManifestoPage() {
 
     return (
         <div className="bg-[#080808] text-white min-h-screen overflow-hidden selection:bg-white/20 selection:text-black">
-
-            <VectorFieldCanvas />
 
             {/* One-shot scan line on load */}
             <AnimatePresence>
