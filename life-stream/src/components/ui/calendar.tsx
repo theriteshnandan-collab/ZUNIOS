@@ -129,10 +129,10 @@ function Calendar({
                                     isOutside && "text-zinc-700 opacity-40 hover:bg-white/5",
 
                                     // Today's Date
-                                    isToday && !isSelected && "bg-blue-600/20 text-blue-200 ring-1 ring-blue-500",
+                                    isToday && !isSelected && "ring-1 ring-white/20 text-white/70",
 
-                                    // Selected State (Overrides everything) - Aether Cyan
-                                    isSelected && "bg-cyan-500 text-black font-bold shadow-lg shadow-cyan-500/30 hover:bg-cyan-400",
+                                    // Selected State — monochrome ring, no filled blob
+                                    isSelected && "ring-1 ring-white bg-white/10 text-white font-semibold",
                                 )}
                             >
                                 {format(day, "d")}
@@ -141,7 +141,7 @@ function Calendar({
                             {/* Modifiers (Has Entry Dot) */}
                             {hasEntry && !isSelected && (
                                 <div className={cn(
-                                    "absolute bottom-1 w-1 h-1 rounded-full bg-cyan-400",
+                                    "absolute bottom-1 w-1 h-1 rounded-full bg-white/40",
                                     modifiersClassNames?.hasEntry
                                 )} />
                             )}
