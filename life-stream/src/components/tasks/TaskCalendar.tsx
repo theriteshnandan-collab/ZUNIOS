@@ -45,8 +45,8 @@ export default function TaskCalendar({ tasks, selectedDate, onSelectDate }: Task
                         cell: "text-center p-0 relative w-full aspect-square focus-within:relative focus-within:z-20",
                         day: "w-full h-full text-sm p-0 font-medium text-white/70 hover:bg-white/10 rounded-full transition-all data-[selected]:shadow-none",
 
-                        // States (Aether Theme: Cyan/Teal)
-                        day_selected: "bg-cyan-500 text-black font-bold hover:bg-cyan-400 focus:bg-cyan-500 shadow-[0_0_15px_rgba(6,182,212,0.6)] scale-90 z-10 rounded-full",
+                        // States (Monochrome Luxury Theme)
+                        day_selected: "bg-white text-black font-bold hover:bg-zinc-200 focus:bg-white shadow-[0_0_15px_rgba(255,255,255,0.4)] scale-90 z-10 rounded-full",
                         day_today: "bg-white/5 text-white border border-white/20",
                         day_outside: "text-muted-foreground/20 opacity-20",
                         day_disabled: "text-muted-foreground opacity-20",
@@ -56,7 +56,7 @@ export default function TaskCalendar({ tasks, selectedDate, onSelectDate }: Task
                         hasEntry: (d) => !!taskDayMap[normalizeDateKey(d) || '']
                     }}
                     modifiersClassNames={{
-                        hasEntry: "relative after:absolute after:bottom-1.5 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-emerald-400 after:rounded-full after:shadow-[0_0_5px_rgba(52,211,153,0.8)]"
+                        hasEntry: "relative after:absolute after:bottom-1.5 after:left-1/2 after:-translate-x-1/2 after:w-1 after:h-1 after:bg-white after:rounded-full after:shadow-[0_0_5px_rgba(255,255,255,0.5)]"
                     }}
                 />
             </GlassCard>

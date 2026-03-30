@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
@@ -83,39 +83,39 @@ export default function TasksPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
+        <div className="min-h-screen bg-[#050505] selection:bg-white/20">
             {/* Header */}
-            <header className="sticky top-0 z-40 backdrop-blur-xl bg-gray-950/80 border-b border-white/5">
+            <header className="sticky top-0 z-40 backdrop-blur-xl bg-black/80 border-b border-white/5">
                 <div className="max-w-6xl mx-auto px-6 py-4">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
                             <Link
                                 href="/journal"
-                                className="p-2 rounded-xl hover:bg-white/10 text-white/60 hover:text-white transition-colors"
+                                className="p-2 rounded-xl hover:bg-white/10 text-white/50 hover:text-white transition-colors"
                             >
                                 <ArrowLeft className="w-5 h-5" />
                             </Link>
                             <div>
-                                <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-                                    <Target className="w-6 h-6 text-cyan-500" />
+                                <h1 className="text-2xl font-bold text-white flex items-center gap-2 tracking-tight">
+                                    <Target className="w-6 h-6 text-white" />
                                     Mission Control
                                 </h1>
-                                <p className="text-sm text-white/50">Turn thoughts into action</p>
+                                <p className="text-sm text-zinc-500 font-medium">Turn thoughts into action</p>
                             </div>
                         </div>
 
                         {/* View Toggle */}
-                        <div className="flex items-center gap-2 bg-white/5 rounded-xl p-1">
+                        <div className="flex items-center gap-2 bg-white/[0.03] border border-white/5 rounded-xl p-1">
                             <button
                                 onClick={() => setViewMode('kanban')}
-                                className={`p-2 rounded-lg transition-colors ${viewMode === 'kanban' ? 'bg-cyan-500/20 text-cyan-400' : 'text-white/40 hover:text-white'}`}
+                                className={`p-2 rounded-lg transition-colors ${viewMode === 'kanban' ? 'bg-white/10 text-white shadow-sm' : 'text-zinc-500 hover:text-white'}`}
                                 title="Board View"
                             >
                                 <LayoutGrid className="w-5 h-5" />
                             </button>
                             <button
                                 onClick={() => setViewMode('calendar')}
-                                className={`p-2 rounded-lg transition-colors ${viewMode === 'calendar' ? 'bg-cyan-500/20 text-cyan-400' : 'text-white/40 hover:text-white'}`}
+                                className={`p-2 rounded-lg transition-colors ${viewMode === 'calendar' ? 'bg-white/10 text-white shadow-sm' : 'text-zinc-500 hover:text-white'}`}
                                 title="Calendar View"
                             >
                                 <CalendarIcon className="w-5 h-5" />
@@ -132,14 +132,14 @@ export default function TasksPage() {
                 {/* View Render */}
                 {isLoading ? (
                     <div className="flex items-center justify-center py-20">
-                        <div className="animate-spin w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full" />
+                        <div className="animate-spin w-8 h-8 border-[3px] border-white/20 border-t-white rounded-full" />
                     </div>
                 ) : (
                     <div className="min-h-[400px]">
                         {viewMode === 'kanban' ? (
                             <div className="grid md:grid-cols-2 gap-6">
-                                <KanbanColumn title="To Do" tasks={todoTasks} color="gray" icon={Target} />
-                                <KanbanColumn title="Done" tasks={doneTasks} color="green" icon={CheckCircle} />
+                                <KanbanColumn title="To Do" tasks={todoTasks} icon={Target} />
+                                <KanbanColumn title="Done" tasks={doneTasks} icon={CheckCircle} />
                             </div>
                         ) : (
                             /* Unified Dashboard View (Default) */
@@ -147,10 +147,10 @@ export default function TasksPage() {
                                 {/* Left: Task Feed - CONTROLLED BY CALENDAR */}
                                 <div className="lg:col-span-2 space-y-4">
                                     <div className="flex items-center justify-between">
-                                        <h2 className="text-xl font-semibold text-white/80 pl-1 flex items-center gap-2">
+                                        <h2 className="text-2xl font-bold tracking-tight text-white pl-1 flex items-center gap-2">
                                             {selectedDate ? (
                                                 <>
-                                                    <span className="text-cyan-400">Briefing:</span>
+                                                    <span className="text-white/60">Briefing:</span>
                                                     {filteredTasks.length > 0 ? "Active Missions" : "No Missions"}
                                                 </>
                                             ) : (
@@ -160,7 +160,7 @@ export default function TasksPage() {
                                         {selectedDate && (
                                             <button
                                                 onClick={() => setSelectedDate(undefined)}
-                                                className="text-xs uppercase tracking-wider text-cyan-400 hover:text-white transition-colors"
+                                                className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 hover:text-white transition-colors"
                                             >
                                                 Show All
                                             </button>
@@ -178,17 +178,17 @@ export default function TasksPage() {
                                             <motion.div
                                                 initial={{ opacity: 0 }}
                                                 animate={{ opacity: 1 }}
-                                                className="text-center py-20 border border-white/5 rounded-2xl bg-white/5"
+                                                className="text-center py-24 border border-white/5 rounded-3xl bg-white/[0.02]"
                                             >
-                                                <Target className="w-16 h-16 text-white/10 mx-auto mb-4" />
-                                                <p className="text-white/50 mb-2">
+                                                <Target className="w-16 h-16 text-white/10 mx-auto mb-6" />
+                                                <p className="text-white/50 mb-2 font-medium">
                                                     {selectedDate ? "No operations scheduled for this day." : "No tasks found."}
                                                 </p>
-                                                <p className="text-sm text-white/30">Create a new mission above</p>
+                                                <p className="text-xs text-zinc-600">Create a new mission above</p>
                                                 {selectedDate && (
                                                     <button
                                                         onClick={() => setSelectedDate(undefined)}
-                                                        className="mt-4 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg text-sm text-white transition-colors"
+                                                        className="mt-6 px-6 py-2 border border-white/5 hover:border-white/20 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-semibold uppercase tracking-widest text-white transition-colors"
                                                     >
                                                         View All History
                                                     </button>
@@ -211,30 +211,32 @@ export default function TasksPage() {
                                             onSelectDate={setSelectedDate}
                                         />
 
-                                        {/* Sector Status (Neural Bento Upgrade) */}
-                                        <div className="relative group overflow-hidden bg-gradient-to-br from-white/[0.08] to-white/[0.02] border border-white/10 rounded-3xl p-6 backdrop-blur-xl shadow-[inset_0_1px_2px_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.5)] transition-all duration-500 hover:border-white/20">
-                                            <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none group-hover:bg-cyan-500/20 transition-colors duration-700" />
-                                            <h3 className="text-xs font-bold text-white/50 uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
-                                                <Target className="w-4 h-4 text-cyan-400" />
+                                        {/* Sector Status (Neural Bento Upgrade - Monochrome Level) */}
+                                        <div className="relative group overflow-hidden bg-black/40 border border-white/10 rounded-3xl p-6 backdrop-blur-xl shadow-[inset_0_1px_2px_rgba(255,255,255,0.05),0_8px_32px_rgba(0,0,0,0.8)] transition-all duration-500 hover:border-white/20">
+                                            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-[40px] -mr-16 -mt-16 pointer-events-none group-hover:bg-white/10 transition-colors duration-700" />
+                                            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay rounded-3xl z-0" />
+                                            
+                                            <h3 className="text-[10px] font-bold text-white/40 uppercase tracking-[0.2em] mb-6 flex items-center gap-2 relative z-10">
+                                                <Target className="w-3.5 h-3.5 text-white/80" />
                                                 Sector Status
                                             </h3>
                                             <div className="space-y-5 relative z-10">
                                                 <MetricRow label="Active Vectors" value={counts.todo} color="text-white" />
-                                                <MetricRow label="Neutralized" value={counts.done} color="text-cyan-400" />
-                                                <div className="pt-5 mt-5 border-t border-white/10 flex justify-between items-end relative">
-                                                    <div className="space-y-1">
-                                                        <span className="block text-[10px] uppercase tracking-[0.15em] text-white/40">Total Efficiency</span>
-                                                        <div className="w-16 h-1 bg-white/10 rounded-full overflow-hidden">
+                                                <MetricRow label="Neutralized" value={counts.done} color="text-zinc-400" />
+                                                <div className="pt-5 mt-5 border-t border-white/[0.05] flex justify-between items-end relative">
+                                                    <div className="space-y-1 w-full mr-4">
+                                                        <span className="block text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-600">Total Efficiency</span>
+                                                        <div className="w-full h-1 bg-white/[0.03] border border-white/[0.05] rounded-full overflow-hidden">
                                                             <motion.div 
                                                                 initial={{ width: 0 }}
                                                                 animate={{ width: `${counts.total > 0 ? (counts.done / counts.total) * 100 : 0}%` }}
                                                                 transition={{ duration: 1.5, ease: "circOut" }}
-                                                                className="h-full bg-cyan-400"
+                                                                className="h-full bg-gradient-to-r from-zinc-600 to-white shadow-[0_0_10px_rgba(255,255,255,0.5)]"
                                                             />
                                                         </div>
                                                     </div>
-                                                    <span className="text-3xl font-light tracking-tighter text-white">
-                                                        {counts.total > 0 ? Math.round((counts.done / counts.total) * 100) : 0}<span className="text-lg text-white/30 ml-0.5">%</span>
+                                                    <span className="text-4xl font-serif tracking-tighter text-white">
+                                                        {counts.total > 0 ? Math.round((counts.done / counts.total) * 100) : 0}<span className="text-xl text-white/20 ml-0.5">%</span>
                                                     </span>
                                                 </div>
                                             </div>
@@ -258,9 +260,9 @@ function FilterBadge({ label, active, onClick }: { label: string, active: boolea
     return (
         <button
             onClick={onClick}
-            className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${active
-                ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/50'
-                : 'bg-white/5 text-white/40 hover:bg-white/10 hover:text-white'
+            className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${active
+                ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.3)]'
+                : 'bg-white/5 text-zinc-500 border border-white/5 hover:bg-white/10 hover:text-white'
                 }`}
         >
             {label}
@@ -271,39 +273,29 @@ function FilterBadge({ label, active, onClick }: { label: string, active: boolea
 function MetricRow({ label, value, color }: { label: string, value: number, color: string }) {
     return (
         <div className="flex items-center justify-between">
-            <span className="text-white/60 text-sm">{label}</span>
-            <span className={`font-mono font-bold ${color}`}>{value}</span>
+            <span className="text-zinc-500 text-sm font-medium">{label}</span>
+            <span className={`font-mono text-xl tracking-tight ${color}`}>{value}</span>
         </div>
     );
 }
 
 // Kanban Column Component
-function KanbanColumn({ title, tasks, color, icon: Icon }: {
+function KanbanColumn({ title, tasks, icon: Icon }: {
     title: string;
     tasks: Task[];
-    color: 'purple' | 'green' | 'gray';
     icon: LucideIcon;
 }) {
-    const colorMap = {
-        purple: 'from-purple-500/[0.05] to-purple-500/[0.01] border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.05)]',
-        green: 'from-emerald-500/[0.05] to-emerald-500/[0.01] border-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.05)]',
-        gray: 'from-white/[0.05] to-white/[0.01] border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.02)]'
-    };
-
     return (
-        <div className={`relative rounded-3xl border bg-gradient-to-br p-6 backdrop-blur-xl transition-all duration-700 hover:shadow-[0_8px_40px_rgba(0,0,0,0.5)] hover:scale-[1.01] ${colorMap[color]}`}>
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay rounded-3xl z-0" />
+        <div className="relative rounded-3xl border border-white/10 bg-black/40 p-6 backdrop-blur-xl transition-all duration-700 hover:shadow-[0_8px_40px_rgba(0,0,0,0.8)] hover:border-white/20 hover:scale-[1.01] overflow-hidden group">
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none group-hover:from-white/[0.04] transition-colors duration-500" />
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.15] pointer-events-none mix-blend-overlay z-0" />
             
             <div className="flex items-center gap-3 mb-6 relative z-10">
-                <div className={`p-2 rounded-xl backdrop-blur-md border ${
-                    color === 'green' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' :
-                    color === 'purple' ? 'bg-purple-500/10 border-purple-500/20 text-purple-400' :
-                    'bg-white/5 border-white/10 text-white/50'
-                }`}>
+                <div className="p-2.5 rounded-xl backdrop-blur-md bg-white/5 border border-white/10 text-white group-hover:bg-white/10 transition-colors duration-500">
                     <Icon className="w-5 h-5" />
                 </div>
-                <h3 className="text-lg font-bold tracking-tight text-white/90">{title}</h3>
-                <div className="ml-auto flex items-center justify-center w-8 h-8 rounded-full bg-black/40 border border-white/5 shadow-[inset_0_1px_2px_rgba(255,255,255,0.05)] text-sm font-medium text-white/50">
+                <h3 className="text-2xl font-bold tracking-tight text-white">{title}</h3>
+                <div className="ml-auto flex items-center justify-center min-w-8 h-8 px-2 rounded-full bg-white/5 border border-white/10 shadow-[inset_0_1px_2px_rgba(255,255,255,0.05)] text-sm font-bold font-mono text-white/50 group-hover:text-white/90 transition-colors duration-500">
                     {tasks.length}
                 </div>
             </div>
@@ -315,7 +307,7 @@ function KanbanColumn({ title, tasks, color, icon: Icon }: {
                     ))}
                 </AnimatePresence>
                 {tasks.length === 0 && (
-                    <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center justify-center text-xs font-semibold uppercase tracking-[0.2em] text-white/20">
+                    <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex items-center justify-center text-[10px] font-bold uppercase tracking-[0.2em] text-white/20">
                         Zero Targets
                     </motion.p>
                 )}
@@ -342,7 +334,7 @@ function HardwareScrollCard({ task }: { task: Task }) {
             exit={{ opacity: 0, height: 0, scale: 0.8, filter: 'blur(10px)', transition: { duration: 0.4, ease: 'circOut' } }}
             ref={ref} 
             style={{ y, opacity, scale }} 
-            className="transform-gpu will-change-transform w-full drop-shadow-2xl"
+            className="transform-gpu will-change-transform w-full drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)]"
         >
             <TaskCard task={task} />
         </motion.div>

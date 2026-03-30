@@ -16,15 +16,15 @@ export function JournalStreakCard({ stats }: JournalStreakCardProps) {
 
     return (
         <div className={cn(
-            "relative overflow-hidden border rounded-3xl p-6 backdrop-blur-xl transition-all duration-500 hover:shadow-[0_8px_32px_rgba(0,0,0,0.5)] h-full group",
+            "relative overflow-hidden border rounded-3xl p-6 backdrop-blur-xl transition-all duration-500 hover:shadow-[0_8px_40px_rgba(0,0,0,0.9)] h-full group",
             isAtRisk
-                ? "bg-gradient-to-br from-orange-500/10 to-red-500/[0.02] border-orange-500/30 hover:border-orange-500/50 shadow-[inset_0_1px_2px_rgba(255,165,0,0.1)]"
-                : "bg-gradient-to-br from-white/[0.08] to-white/[0.02] border-white/10 hover:border-white/20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.1)]"
+                ? "bg-white/[0.05] border-white/40 ring-1 ring-white/20"
+                : "bg-black/40 border-white/10 hover:border-white/20 shadow-[inset_0_1px_2px_rgba(255,255,255,0.05)]"
         )}>
             {/* Ambient Void Glow */}
             <div className={cn(
                 "absolute top-0 right-0 p-12 blur-[60px] -z-10 group-hover:scale-110 transition-transform duration-1000 pointer-events-none",
-                isAtRisk ? "bg-orange-500/20" : "bg-cyan-500/10"
+                isAtRisk ? "bg-white/10 animate-pulse" : "bg-white/[0.02]"
             )} />
             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay rounded-3xl z-0" />
 
@@ -50,13 +50,13 @@ export function JournalStreakCard({ stats }: JournalStreakCardProps) {
             <div className="relative z-10 flex flex-col h-full">
                 {/* Header */}
                 <div className="flex items-center gap-2 mb-4">
-                    <div className={cn("p-1.5 rounded-lg border", isAtRisk ? "bg-orange-500/10 border-orange-500/20" : "bg-white/5 border-white/10")}>
-                        <Flame className={cn("w-4 h-4", stats.currentStreak > 0 ? (isAtRisk ? 'text-orange-400 animate-pulse' : 'text-cyan-400') : 'text-white/30')} />
+                    <div className={cn("p-1.5 rounded-lg border", isAtRisk ? "bg-white/10 border-white/20" : "bg-white/5 border-white/10")}>
+                        <Flame className={cn("w-4 h-4", stats.currentStreak > 0 ? (isAtRisk ? 'text-white animate-pulse' : 'text-zinc-300') : 'text-zinc-800')} />
                     </div>
-                    <span className="text-[10px] font-bold text-white/50 uppercase tracking-[0.2em]">Resonance</span>
+                    <span className="text-[10px] font-bold text-white/40 uppercase tracking-[0.2em]">Resonance</span>
                     {isAtRisk && (
-                        <span className="ml-auto px-2 py-0.5 bg-orange-500/20 text-orange-400 text-[10px] uppercase font-bold tracking-widest rounded-full animate-pulse border border-orange-500/30">
-                            Critical
+                        <span className="ml-auto px-2 py-0.5 bg-white text-black text-[10px] uppercase font-bold tracking-[0.2em] rounded-full animate-pulse">
+                            CRITICAL
                         </span>
                     )}
                 </div>
@@ -68,7 +68,7 @@ export function JournalStreakCard({ stats }: JournalStreakCardProps) {
                         initial={{ scale: 1.2, opacity: 0, filter: "blur(4px)" }}
                         animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
                         transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                        className={cn("text-5xl font-bold font-serif tracking-tighter drop-shadow-2xl", isAtRisk ? "text-orange-400" : "text-white")}
+                        className={cn("text-6xl font-bold font-serif tracking-tighter drop-shadow-2xl", isAtRisk ? "text-white" : "text-zinc-300")}
                     >
                         {stats.currentStreak}
                     </motion.span>
@@ -84,7 +84,7 @@ export function JournalStreakCard({ stats }: JournalStreakCardProps) {
                         icon={Trophy}
                         value={stats.longestStreak}
                         label="Peak"
-                        color="cyan"
+                        color="white"
                     />
                     <StatItem
                         icon={Calendar}
@@ -96,7 +96,7 @@ export function JournalStreakCard({ stats }: JournalStreakCardProps) {
                         icon={Zap}
                         value={stats.totalEntries}
                         label="Gross"
-                        color="purple"
+                        color="white"
                     />
                 </div>
             </div>
@@ -111,9 +111,9 @@ function StatItem({ icon: Icon, value, label, color }: {
     color: 'cyan' | 'purple' | 'white';
 }) {
     const colorMap = {
-        cyan: 'text-cyan-400',
-        purple: 'text-purple-400',
-        white: 'text-white/70'
+        cyan: 'text-zinc-400',
+        purple: 'text-zinc-400',
+        white: 'text-white'
     };
 
     return (

@@ -281,23 +281,23 @@ export default function JournalPage() {
                     </div>
 
                     {/* 2. Search & Filter Row */}
-                    <div className="flex flex-col md:flex-row gap-4 items-center justify-between sticky top-[70px] z-40 bg-[#0a0a0a]/90 backdrop-blur-xl p-4 rounded-2xl border border-white/10 shadow-[0_0_20px_rgba(168,85,247,0.15)] ring-1 ring-purple-500/20">
+                    <div className="flex flex-col md:flex-row gap-4 items-center justify-between sticky top-[70px] z-40 bg-[#0a0a0a]/90 backdrop-blur-xl p-4 rounded-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.8)]">
                         <div className="relative w-full md:w-96 group">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 group-focus-within:text-purple-400 transition-colors" />
+                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50 group-focus-within:text-white transition-colors" />
                             <Input
                                 placeholder="Search your mind..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="pl-10 bg-white/5 border-white/20 focus:border-purple-500/50 text-white placeholder:text-zinc-500 transition-all"
+                                className="pl-10 bg-white/5 border-white/20 focus:border-white/50 text-white placeholder:text-zinc-500 transition-all"
                             />
                         </div>
 
                         <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-hide">
                             <TabButton active={selectedTab === 'all'} onClick={() => setSelectedTab('all')} icon={LayoutGrid} label="All" count={dreams.length} />
-                            <TabButton active={selectedTab === 'dream'} onClick={() => setSelectedTab('dream')} icon={Moon} label="Visions" count={dreams.filter(d => d.category === 'dream').length} color="text-purple-400" />
-                            <TabButton active={selectedTab === 'idea'} onClick={() => setSelectedTab('idea')} icon={Lightbulb} label="Builds" count={dreams.filter(d => d.category === 'idea').length} color="text-amber-400" />
-                            <TabButton active={selectedTab === 'win'} onClick={() => setSelectedTab('win')} icon={Trophy} label="Logs" count={dreams.filter(d => d.category === 'win').length} color="text-emerald-400" />
-                            <TabButton active={selectedTab === 'thought'} onClick={() => setSelectedTab('thought')} icon={BrainCircuit} label="Thoughts" count={dreams.filter(d => d.category === 'thought').length} color="text-blue-400" />
+                            <TabButton active={selectedTab === 'dream'} onClick={() => setSelectedTab('dream')} icon={Moon} label="Visions" count={dreams.filter(d => d.category === 'dream').length} />
+                            <TabButton active={selectedTab === 'idea'} onClick={() => setSelectedTab('idea')} icon={Lightbulb} label="Builds" count={dreams.filter(d => d.category === 'idea').length} />
+                            <TabButton active={selectedTab === 'win'} onClick={() => setSelectedTab('win')} icon={Trophy} label="Logs" count={dreams.filter(d => d.category === 'win').length} />
+                            <TabButton active={selectedTab === 'thought'} onClick={() => setSelectedTab('thought')} icon={BrainCircuit} label="Thoughts" count={dreams.filter(d => d.category === 'thought').length} />
                         </div>
                     </div>
 
@@ -321,17 +321,17 @@ export default function JournalPage() {
                             <div className="space-y-8">
                                 {/* Focus Mode Header */}
                                 {selectedDate && (
-                                    <div className="flex items-center justify-between bg-purple-500/10 border border-purple-500/20 p-4 rounded-xl backdrop-blur-md">
+                                    <div className="flex items-center justify-between bg-white/[0.03] border border-white/10 p-4 rounded-xl backdrop-blur-md">
                                         <div className="flex items-center gap-3">
-                                            <div className="p-2 bg-purple-500/20 rounded-full">
-                                                <CalendarIcon className="w-5 h-5 text-purple-300" />
+                                            <div className="p-2 bg-white/5 rounded-full border border-white/10">
+                                                <CalendarIcon className="w-5 h-5 text-white/50" />
                                             </div>
                                             <div>
-                                                <h2 className="text-lg font-bold text-white">
+                                                <h2 className="text-lg font-bold text-white tracking-tight">
                                                     {format(selectedDate, "MMMM do, yyyy")}
                                                 </h2>
-                                                <p className="text-xs text-white/50">
-                                                    {viewDreams.length} Entries found
+                                                <p className="text-xs text-zinc-500 uppercase font-bold tracking-widest">
+                                                    {viewDreams.length} Units Recovered
                                                 </p>
                                             </div>
                                         </div>
@@ -339,9 +339,9 @@ export default function JournalPage() {
                                             variant="ghost"
                                             size="sm"
                                             onClick={() => setSelectedDate(undefined)}
-                                            className="hover:bg-purple-500/20 hover:text-purple-300"
+                                            className="hover:bg-white/10 hover:text-white text-[10px] uppercase font-bold tracking-widest"
                                         >
-                                            Clear Filter
+                                            Reset Filter
                                         </Button>
                                     </div>
                                 )}
@@ -416,16 +416,16 @@ function TabButton({ active, onClick, icon: Icon, label, count, color = "text-wh
 
 function Badge({ category }: { category?: string }) {
     const config: any = {
-        dream: { label: 'Vision', color: 'bg-purple-500/10 text-purple-300 border-purple-500/20' },
-        idea: { label: 'Build', color: 'bg-amber-500/10 text-amber-300 border-amber-500/20' },
-        win: { label: 'Log', color: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/20' },
-        thought: { label: 'Think', color: 'bg-blue-500/10 text-blue-300 border-blue-500/20' },
+        dream: { label: 'Vision', color: 'bg-white/5 text-zinc-300 border-white/10' },
+        idea: { label: 'Build', color: 'bg-white/5 text-zinc-300 border-white/10' },
+        win: { label: 'Log', color: 'bg-white/5 text-zinc-300 border-white/10' },
+        thought: { label: 'Think', color: 'bg-white/5 text-zinc-300 border-white/10' },
     };
 
     const style = config[category || 'thought'] || config.thought;
 
     return (
-        <span className={cn("text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border font-medium", style.color)}>
+        <span className={cn("text-[8px] uppercase tracking-[0.2em] px-2.5 py-0.5 rounded-full border font-bold", style.color)}>
             {style.label}
         </span>
     );

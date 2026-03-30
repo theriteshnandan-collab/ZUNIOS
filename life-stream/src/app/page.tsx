@@ -80,7 +80,7 @@ const FeatureSection = ({
   const sparkScaleX = useTransform(scrollYProgress, [0.3, 1], [0, 1]); // Sparks cleanly out
 
   return (
-    <div
+    <motion.div
       ref={containerRef}
       className={cn(
         "relative flex flex-col md:flex-row items-center gap-10 md:gap-24 py-24 max-w-6xl mx-auto px-8 group/section transform-gpu",
@@ -129,7 +129,7 @@ const FeatureSection = ({
                 <div className="w-2 h-2 rounded-full bg-[#28C840]" />
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
                 <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/50">LIVE</span>
               </div>
             </div>
@@ -160,7 +160,7 @@ const FeatureSection = ({
           <div className="h-[2px] w-16 bg-gradient-to-r from-black/30 to-transparent rounded-full" />
         </div>
       </motion.div>
-    </div>
+    </motion.div>
   );
 };
 
