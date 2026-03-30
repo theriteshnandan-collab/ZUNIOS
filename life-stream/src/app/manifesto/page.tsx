@@ -1,10 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import ZuniosLogo from "@/components/ZuniosLogo";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useTransform, useMotionTemplate } from "framer-motion";
 
 const QUOTE = "The mind is not a vessel to fill. It is an engine to ignite.";
 const EXPO_OUT = [0.16, 1, 0.3, 1] as const;
@@ -20,9 +17,7 @@ function ScanLine({ onDone }: { onDone: () => void }) {
             transition={{ duration: 1.1, ease: [0.4, 0, 0.2, 1], delay: 0.2 }}
             onAnimationComplete={onDone}
         >
-            {/* The sweep line */}
             <div className="w-full h-px bg-white/60" />
-            {/* Glow trail above it */}
             <div
                 className="w-full pointer-events-none"
                 style={{
@@ -67,11 +62,27 @@ export default function ManifestoPage() {
     const [scanDone, setScanDone] = useState(false);
     const [mounted, setMounted] = useState(false);
 
+    const containerRef = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ["start start", "end start"],
+    });
+
+    // Shrink, fade, blur as user scrolls down
+    const scale  = useTransform(scrollYProgress, [0, 0.5], [1, 0.82]);
+    const opacity = useTransform(scrollYProgress, [0, 0.45], [1, 0]);
+    const blurPx = useTransform(scrollYProgress, [0, 0.4], [0, 12]);
+    const filter = useMotionTemplate`blur(${blurPx}px)`;
+    const y      = useTransform(scrollYProgress, [0, 0.5], [0, -40]);
+
     useEffect(() => { setMounted(true); }, []);
 
     return (
-        <div className="bg-[#080808] text-white min-h-screen overflow-hidden selection:bg-white/20 selection:text-black">
-
+        <div
+            ref={containerRef}
+            className="bg-[#080808] text-white selection:bg-white/20 selection:text-black"
+            style={{ minHeight: "180vh" }}
+        >
             {/* One-shot scan line on load */}
             <AnimatePresence>
                 {mounted && !scanDone && (
@@ -79,71 +90,61 @@ export default function ManifestoPage() {
                 )}
             </AnimatePresence>
 
-            {/* Nav */}
-            <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-6">
-                <div className="flex items-center gap-5">
-                    <Link
-                        href="/journal"
-                        className="group flex items-center gap-2 text-white/30 hover:text-white transition-colors duration-300"
-                    >
-                        <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform duration-300" />
-                        <span className="text-[9px] font-mono font-bold uppercase tracking-[0.4em]">Core</span>
-                    </Link>
-                    <div className="h-3.5 w-px bg-white/10" />
-                    <ZuniosLogo size="sm" showText={false} />
-                </div>
+            {/* Manifesto label — top right, sits below FloatingNav */}
+            <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1.2, delay: 1.6 }}
+                className="fixed top-5 right-8 z-40 text-[9px] font-mono text-white/20 uppercase tracking-[0.55em] hidden md:block"
+            >
+                MANIFESTO — 001
+            </motion.p>
 
-                <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1.2, delay: 1.6 }}
-                    className="text-[9px] font-mono text-white/20 uppercase tracking-[0.55em]"
-                >
-                    ZUNIOS — MANIFESTO — 001
-                </motion.p>
-            </nav>
-
-            {/* Hero — full viewport centered */}
-            <main className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 text-center">
-
-                {/* Eyebrow */}
-                <motion.p
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={scanDone ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.7, ease: EXPO_OUT, delay: 0.1 }}
-                    className="text-[9px] font-mono text-white/20 uppercase tracking-[0.7em] mb-12"
-                >
-                    MIND OS
-                </motion.p>
-
-                {/* Main quote */}
-                <QuoteReveal text={QUOTE} revealed={scanDone} />
-
-                {/* Silver hairline — draws in after words */}
+            {/* Hero — sticky parallax */}
+            <div className="sticky top-0 min-h-screen flex flex-col items-center justify-center px-6 text-center pointer-events-none">
                 <motion.div
-                    initial={{ scaleX: 0, opacity: 0 }}
-                    animate={scanDone ? { scaleX: 1, opacity: 1 } : {}}
-                    transition={{ duration: 1.2, ease: EXPO_OUT, delay: 0.8 }}
-                    className="mt-14 w-24 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent origin-center"
-                />
-
-                {/* Source attribution */}
-                <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={scanDone ? { opacity: 1 } : {}}
-                    transition={{ duration: 1, delay: 1.6 }}
-                    className="mt-6 text-[9px] font-mono text-white/18 uppercase tracking-[0.6em]"
+                    style={{ scale, opacity, filter, y }}
+                    className="flex flex-col items-center"
                 >
-                    — Plutarch
-                </motion.p>
+                    {/* Eyebrow */}
+                    <motion.p
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={scanDone ? { opacity: 1, y: 0 } : {}}
+                        transition={{ duration: 0.7, ease: EXPO_OUT, delay: 0.1 }}
+                        className="text-[9px] font-mono text-white/20 uppercase tracking-[0.7em] mb-12"
+                    >
+                        MIND OS
+                    </motion.p>
 
-                {/* Breathing pulse at bottom */}
+                    {/* Main quote */}
+                    <QuoteReveal text={QUOTE} revealed={scanDone} />
+
+                    {/* Silver hairline */}
+                    <motion.div
+                        initial={{ scaleX: 0, opacity: 0 }}
+                        animate={scanDone ? { scaleX: 1, opacity: 1 } : {}}
+                        transition={{ duration: 1.2, ease: EXPO_OUT, delay: 0.8 }}
+                        className="mt-14 w-24 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent origin-center"
+                    />
+
+                    {/* Attribution */}
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={scanDone ? { opacity: 1 } : {}}
+                        transition={{ duration: 1, delay: 1.6 }}
+                        className="mt-6 text-[9px] font-mono text-white/20 uppercase tracking-[0.6em]"
+                    >
+                        — Plutarch
+                    </motion.p>
+                </motion.div>
+
+                {/* Breathing pulse */}
                 <motion.div
                     animate={{ opacity: [0, 0.3, 0], scale: [0.8, 1.4, 0.8] }}
                     transition={{ duration: 3.5, repeat: Infinity, delay: 2.5, ease: "easeInOut" }}
                     className="absolute bottom-12 w-1 h-1 rounded-full bg-white"
                 />
-            </main>
+            </div>
         </div>
     );
 }
