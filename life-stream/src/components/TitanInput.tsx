@@ -5,18 +5,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { predictMode } from "@/lib/auto-classifier";
 import { EntryMode, MODE_LABELS } from "@/lib/theme-config";
-import { Send, Sparkles, Eye, Zap, Target, Brain, Wand2, ArrowRight, Mic, MicOff } from "lucide-react";
+import { Sparkles, Eye, Zap, Target, Brain, Wand2, ArrowRight } from "lucide-react";
 import { getTemplatesForCategory, EntryTemplate } from "@/lib/entry-templates";
 import { Button } from "@/components/ui/button";
-import { useVoiceInput } from "@/hooks/useVoiceInput";
 
-// Mode configuration with Titan-aligned colors
+// Mode configuration — strict monochrome
 const MODE_CONFIG = {
-    dream: { icon: Eye, label: MODE_LABELS.dream.name, color: 'text-violet-400' },
-    idea: { icon: Zap, label: MODE_LABELS.idea.name, color: 'text-amber-400' },
-    win: { icon: Target, label: MODE_LABELS.win.name, color: 'text-emerald-400' },
-    journal: { icon: Brain, label: MODE_LABELS.journal.name, color: 'text-blue-400' },
-    thought: { icon: Brain, label: MODE_LABELS.thought.name, color: 'text-zinc-300' }
+    dream:   { icon: Eye,    label: MODE_LABELS.dream.name,   color: 'text-white/70' },
+    idea:    { icon: Zap,    label: MODE_LABELS.idea.name,    color: 'text-white/70' },
+    win:     { icon: Target, label: MODE_LABELS.win.name,     color: 'text-white/70' },
+    journal: { icon: Brain,  label: MODE_LABELS.journal.name, color: 'text-white/70' },
+    thought: { icon: Brain,  label: MODE_LABELS.thought.name, color: 'text-white/50' },
 };
 
 interface TitanInputProps {
@@ -49,48 +48,6 @@ export default function TitanInput({
 
     const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Voice Input Integration
-    const { isListening, transcript, startListening, stopListening, resetTranscript, hasSupport } = useVoiceInput();
-
-    // Sync Voice Transcript with Text
-    // Sync Voice Transcript with Text
-    useEffect(() => {
-        if (transcript) {
-            setText(prev => {
-                // Simple append logic for now
-                // We need to be careful: transcript updates continuously.
-                // If we append `transcript` every time it updates, we'll duplicate text.
-                // WEIRDNESS: react-speech-recognition usually gives the FULL transcript of the session.
-                // So replacing might be correct IF we are in "Voice Mode" only.
-                // But mixed mode is better.
-
-                // Better approach: When transcript updates, we only want the *diff* or just trust the user
-                // to not type while speaking.
-                // Actually, let's keep it simple: If isListening, text = initialTextBeforeRecording + transcript.
-                return prev;
-            });
-        }
-    }, [transcript]);
-
-    // Refined Logic (Need state to hold text before recording started)
-    const [textBeforeRecording, setTextBeforeRecording] = useState("");
-
-    useEffect(() => {
-        if (isListening) {
-            setTextBeforeRecording(text);
-        } else {
-            // When stopping, finalized text is already in `text`
-        }
-    }, [isListening]);
-
-    useEffect(() => {
-        if (isListening && transcript) {
-            // text = (what was there) + (space) + (current transcript)
-            const spacer = textBeforeRecording && !textBeforeRecording.endsWith(' ') ? ' ' : '';
-            setText(`${textBeforeRecording}${spacer}${transcript}`);
-            setIsTyping(true);
-        }
-    }, [transcript, isListening, textBeforeRecording]);
 
     useEffect(() => {
         setPredictedMode(initialMode);
@@ -156,44 +113,10 @@ export default function TitanInput({
     const activeModeConfig = MODE_CONFIG[predictedMode] || MODE_CONFIG.thought;
     const templates = getTemplatesForCategory(predictedMode);
 
-    // Typewriter placeholder
-    const [placeholder, setPlaceholder] = useState("");
-    const [placeholderIndex, setPlaceholderIndex] = useState(0);
-    const [charIndex, setCharIndex] = useState(0);
+    const placeholder = "What's on your mind?";
 
-    const PLACEHOLDERS = [
-        "What's on your mind?",
-        "Describe your vision...",
-        "Log a moment...",
-        "Share an idea..."
-    ];
-
-    useEffect(() => {
-        const currentText = PLACEHOLDERS[placeholderIndex];
-
-        if (charIndex < currentText.length) {
-            const timeout = setTimeout(() => {
-                setPlaceholder(prev => prev + currentText[charIndex]);
-                setCharIndex(prev => prev + 1);
-            }, 50 + Math.random() * 30);
-            return () => clearTimeout(timeout);
-        } else {
-            const timeout = setTimeout(() => {
-                setPlaceholder("");
-                setCharIndex(0);
-                setPlaceholderIndex(prev => (prev + 1) % PLACEHOLDERS.length);
-            }, 3000);
-            return () => clearTimeout(timeout);
-        }
-    }, [charIndex, placeholderIndex]);
-
-    // Glow animation speed based on state
-    const glowAnimationDuration = isListening ? "1s" : isTyping ? "1.5s" : isFocused ? "3s" : "4s";
-
-    const getGlowGradient = () => {
-        if (isListening) return "linear-gradient(90deg, #ef4444 0%, #fca5a5 50%, #b91c1c 100%)";
-        return "linear-gradient(90deg, rgba(220,220,220,0.4) 0%, rgba(255,255,255,0.6) 50%, rgba(200,200,200,0.4) 100%)";
-    };
+    const glowAnimationDuration = isTyping ? "1.5s" : isFocused ? "3s" : "4s";
+    const glowGradient = "linear-gradient(90deg, rgba(220,220,220,0.3) 0%, rgba(255,255,255,0.55) 50%, rgba(200,200,200,0.3) 100%)";
 
     return (
         <div className="w-full relative z-50">
@@ -211,7 +134,7 @@ export default function TitanInput({
                 <div
                     className="w-full h-full rounded-full"
                     style={{
-                        background: getGlowGradient(),
+                        background: glowGradient,
                         filter: "blur(60px)",
                         animation: `titan-breathe ${glowAnimationDuration} ease-in-out infinite`
                     }}
@@ -300,30 +223,6 @@ export default function TitanInput({
 
                     {/* Action Buttons */}
                     <div className="flex items-center gap-2">
-                        {/* Voice Button (Sidelines/Disabled per user request) */}
-                        {/* {hasSupport && (
-                            <Button
-                                size="icon"
-                                variant="ghost"
-                                onClick={() => {
-                                    if (isListening) {
-                                        stopListening();
-                                    } else {
-                                        resetTranscript();
-                                        startListening();
-                                    }
-                                }}
-                                className={cn(
-                                    "h-9 w-9 rounded-full transition-all duration-300",
-                                    isListening
-                                        ? "text-red-400 bg-red-500/10 animate-pulse hover:bg-red-500/20"
-                                        : "text-zinc-500 hover:text-white hover:bg-white/[0.05]"
-                                )}
-                            >
-                                {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-                            </Button>
-                        )} */}
-
                         {/* Submit Button */}
                         <Button
                             size="icon"

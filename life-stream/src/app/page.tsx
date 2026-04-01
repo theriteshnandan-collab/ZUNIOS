@@ -348,16 +348,16 @@ const CinematicHero = () => {
             </div>
 
             {/* RIGHT */}
-            <div className="grid grid-cols-2 gap-4 min-w-[360px]">
+            <div className="grid grid-cols-2 gap-3 min-w-[340px]">
               {[
                 { value: "Neural AI", label: "Real-time thought mapping" },
                 { value: "E2E",       label: "Zero-knowledge encryption" },
                 { value: "∞ Memory", label: "Vector-embedded recall" },
                 { value: "0ms",       label: "Edge runtime processing" },
               ].map((s) => (
-                <div key={s.value} className="p-4 rounded-2xl bg-black/35 backdrop-blur-md border border-white/10">
-                  <div className="text-lg font-bold font-serif text-white mb-1">{s.value}</div>
-                  <div className="text-[11px] text-white/45 leading-snug">{s.label}</div>
+                <div key={s.value} className="p-4 rounded-2xl bg-black/40 backdrop-blur-md border border-white/[0.08] hover:border-white/[0.16] transition-colors duration-300">
+                  <div className="text-base font-bold font-serif text-white/90 mb-1">{s.value}</div>
+                  <div className="text-[10px] text-white/35 leading-snug tracking-wide">{s.label}</div>
                 </div>
               ))}
             </div>
@@ -507,28 +507,16 @@ function HomeContent() {
 
   useAppBadge(incompleteCount);
 
-  const [streak, setStreak] = useState(0);
-
-  // Brick 9.5: Real Streak Logic
+  // Track visit streak in localStorage (used by analytics)
   useEffect(() => {
     const lastVisit = localStorage.getItem('last_visit_date');
     const currentStreak = parseInt(localStorage.getItem('current_streak') || '0');
     const today = new Date().toDateString();
-
-    if (lastVisit === today) {
-      setStreak(currentStreak);
-    } else {
+    if (lastVisit !== today) {
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
-
-      if (lastVisit === yesterday.toDateString()) {
-        const newStreak = currentStreak + 1;
-        setStreak(newStreak);
-        localStorage.setItem('current_streak', newStreak.toString());
-      } else {
-        setStreak(1); // Reset or Start
-        localStorage.setItem('current_streak', '1');
-      }
+      const newStreak = lastVisit === yesterday.toDateString() ? currentStreak + 1 : 1;
+      localStorage.setItem('current_streak', newStreak.toString());
       localStorage.setItem('last_visit_date', today);
     }
   }, []);

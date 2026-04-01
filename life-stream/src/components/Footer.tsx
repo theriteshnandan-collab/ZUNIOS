@@ -98,7 +98,7 @@ export default function Footer() {
         <footer className="relative w-full hidden md:block overflow-hidden bg-black">
 
             {/* ══════ CINEMATIC CLOSING — "Cogito" ══════ */}
-            <section className="relative py-40 flex items-center justify-center overflow-hidden bg-black">
+            <section className="relative py-24 md:py-36 flex items-center justify-center overflow-hidden bg-black">
 
                 {/* Magnetic vector field — covers full section bg */}
                 <CogitoBg />
@@ -176,20 +176,20 @@ export default function Footer() {
                             </p>
                             {/* Social row */}
                             <div className="flex items-center gap-3 pt-2">
-                                <Link href="https://x.com/zunioscodes" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center hover:bg-white/[0.12] hover:border-white/25 transition-all group">
-                                    <svg role="img" viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 text-white/40 group-hover:text-white transition-colors" xmlns="http://www.w3.org/2000/svg">
+                                <Link href="https://x.com/zunioscodes" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center hover:bg-white/[0.09] hover:border-white/[0.18] transition-all duration-300 group">
+                                    <svg role="img" viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 text-white/30 group-hover:text-white/80 transition-colors duration-300" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
                                     </svg>
                                 </Link>
-                                <Link href="mailto:zunios.codes@gmail.com" className="w-9 h-9 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center hover:bg-white/[0.12] hover:border-white/25 transition-all group">
-                                    <Mail className="w-3.5 h-3.5 text-white/40 group-hover:text-white transition-colors" />
+                                <Link href="mailto:zunios.codes@gmail.com" className="w-9 h-9 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center hover:bg-white/[0.09] hover:border-white/[0.18] transition-all duration-300 group">
+                                    <Mail className="w-3.5 h-3.5 text-white/30 group-hover:text-white/80 transition-colors duration-300" />
                                 </Link>
                             </div>
                         </div>
 
                         {/* Navigation */}
                         <div className="space-y-5">
-                            <h3 className="text-[11px] font-bold text-white/50 uppercase tracking-[0.25em]">Explore</h3>
+                            <h3 className="text-[10px] font-bold text-white/30 uppercase tracking-[0.35em]">Explore</h3>
                             <ul className="space-y-3">
                                 {[
                                     { label: "New Entry", href: "/" },
@@ -209,7 +209,7 @@ export default function Footer() {
 
                         {/* Status */}
                         <div className="space-y-5">
-                            <h3 className="text-[11px] font-bold text-white/50 uppercase tracking-[0.25em]">System</h3>
+                            <h3 className="text-[10px] font-bold text-white/30 uppercase tracking-[0.35em]">System</h3>
                             <div className="space-y-4">
                                 <div className="flex items-center gap-2.5">
                                     <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.4)]" />

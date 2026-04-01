@@ -167,7 +167,7 @@ export default function TasksPage() {
                                         )}
                                     </div>
 
-                                    <div className="hidden lg:flex items-center gap-2 mb-4">
+                                    <div className="flex items-center gap-2 mb-4 flex-wrap">
                                         <FilterBadge label="All" active={filter === 'all'} onClick={() => setFilter('all')} />
                                         <FilterBadge label="To Do" active={filter === 'todo'} onClick={() => setFilter('todo')} />
                                         <FilterBadge label="Done" active={filter === 'done'} onClick={() => setFilter('done')} />
@@ -230,7 +230,7 @@ export default function TasksPage() {
                                                             <motion.div 
                                                                 initial={{ width: 0 }}
                                                                 animate={{ width: `${counts.total > 0 ? (counts.done / counts.total) * 100 : 0}%` }}
-                                                                transition={{ duration: 1.5, ease: "circOut" }}
+                                                                transition={{ duration: 1.2, ease: "easeOut" }}
                                                                 className="h-full bg-gradient-to-r from-zinc-600 to-white shadow-[0_0_10px_rgba(255,255,255,0.5)]"
                                                             />
                                                         </div>
@@ -260,9 +260,9 @@ function FilterBadge({ label, active, onClick }: { label: string, active: boolea
     return (
         <button
             onClick={onClick}
-            className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all ${active
-                ? 'bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.3)]'
-                : 'bg-white/5 text-zinc-500 border border-white/5 hover:bg-white/10 hover:text-white'
+            className={`px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest transition-all duration-200 ${active
+                ? 'bg-white/[0.10] text-white border border-white/20'
+                : 'bg-transparent text-white/30 border border-white/[0.08] hover:bg-white/[0.06] hover:text-white/60'
                 }`}
         >
             {label}

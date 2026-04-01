@@ -162,10 +162,16 @@ export default function JournalPage() {
         }
     }, [authLoading, user?.id]);
 
-    const handleDelete = async (id: string, e?: React.MouseEvent) => {
+    const handleDelete = (id: string, e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
-        if (!confirm("Are you sure you want to want to delete this memory?")) return;
+        toast("Erase this memory?", {
+            description: "This cannot be undone.",
+            action: { label: "Erase", onClick: () => executeDelete(id) },
+            duration: 5000,
+        });
+    };
 
+    const executeDelete = async (id: string) => {
         setDeletingId(id);
 
         let error;
@@ -416,10 +422,10 @@ function TabButton({ active, onClick, icon: Icon, label, count, color = "text-wh
 
 function Badge({ category }: { category?: string }) {
     const config: any = {
-        dream: { label: 'Vision', color: 'bg-white/5 text-zinc-300 border-white/10' },
-        idea: { label: 'Build', color: 'bg-white/5 text-zinc-300 border-white/10' },
-        win: { label: 'Log', color: 'bg-white/5 text-zinc-300 border-white/10' },
-        thought: { label: 'Think', color: 'bg-white/5 text-zinc-300 border-white/10' },
+        dream:   { label: 'Vision',  color: 'bg-white/[0.06] text-white/60 border-white/[0.12]' },
+        idea:    { label: 'Build',   color: 'bg-white/[0.04] text-white/40 border-white/[0.08]' },
+        win:     { label: 'Log',     color: 'bg-white/[0.08] text-white/70 border-white/[0.15]' },
+        thought: { label: 'Think',   color: 'bg-transparent text-white/30 border-white/[0.06]' },
     };
 
     const style = config[category || 'thought'] || config.thought;
