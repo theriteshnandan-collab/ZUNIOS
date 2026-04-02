@@ -28,7 +28,7 @@ export default function ZuniosLogo({ size = "md", showText = true, className }: 
     const currentSize = sizeMap[size];
 
     return (
-        <div className={cn("flex items-center gap-3 group px-1", className)}>
+        <div className={cn("flex items-center gap-3 group px-1", className)} aria-label="Zunios Logo">
             {/* The SVG Mark */}
             <div className={cn(
                 "relative flex items-center justify-center transition-all duration-500 ease-in-out",

@@ -64,7 +64,16 @@ export default function JournalPage() {
     const supabase = createClient(); // Initialize standard client
     const [selectedTab, setSelectedTab] = useState('all');
     const [isExportOpen, setIsExportOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState(""); // Added missing state
+    const [searchQuery, setSearchQuery] = useState("");
+    const [debouncedSearch, setDebouncedSearch] = useState("");
+
+    // Debounce search query
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(searchQuery);
+        }, 300);
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
 
     // XP & Leveling
     const { tasks, fetchTasks } = useTaskStore();
@@ -211,14 +220,19 @@ export default function JournalPage() {
     };
 
     // Unified "Think" filter
-    const filteredDreams = selectedTab === 'all'
+    const filteredDreams = (selectedTab === 'all'
         ? dreams
         : dreams.filter(d => {
             if (selectedTab === 'thought') {
                 return d.category === 'thought' || d.category === 'journal' || !d.category;
             }
             return d.category === selectedTab;
-        });
+        })
+    ).filter(d =>
+        d.content.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        d.interpretation?.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        d.theme?.toLowerCase().includes(debouncedSearch.toLowerCase())
+    );
 
     const handleDateSelect = (date: Date) => {
         // Toggle: if clicking the same date, clear it. Else set it.
@@ -317,17 +331,21 @@ export default function JournalPage() {
                                 <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
                                     <Sparkles className="w-8 h-8 text-white/20" />
                                 </div>
-                                <h3 className="text-xl font-medium text-white/50">No memories found</h3>
-                                <p className="text-sm text-white/30 mt-2">Start capturing your journey to see it here.</p>
+                                <h3 className="text-xl font-medium text-white/50">Your vault is empty.</h3>
+                                <p className="text-sm text-white/30 mt-2">Begin archiving your visions to see them here.</p>
                                 <Button asChild className="mt-6 bg-white/10 hover:bg-white/20 text-white border-0">
                                     <Link href="/">Create New Entry</Link>
                                 </Button>
                             </div>
                         ) : (
                             <div className="space-y-8">
-                                {/* Focus Mode Header */}
+                                 {/* Focus Mode Header */}
                                 {selectedDate && (
-                                    <div className="flex items-center justify-between bg-white/[0.03] border border-white/10 p-4 rounded-xl backdrop-blur-md">
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="mb-8 flex items-center justify-between bg-white/[0.03] border border-white/10 p-4 rounded-xl backdrop-blur-md"
+                                    >
                                         <div className="flex items-center gap-3">
                                             <div className="p-2 bg-white/5 rounded-full border border-white/10">
                                                 <CalendarIcon className="w-5 h-5 text-white/50" />
@@ -349,7 +367,7 @@ export default function JournalPage() {
                                         >
                                             Reset Filter
                                         </Button>
-                                    </div>
+                                    </motion.div>
                                 )}
 
                                 {sortedKeys.map((dateKey) => (

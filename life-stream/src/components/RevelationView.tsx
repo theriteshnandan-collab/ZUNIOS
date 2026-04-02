@@ -15,7 +15,12 @@ export default function RevelationView({ result, onClose, onSave, isSaving }: Re
     if (!result) return null;
 
     return (
-        <div className="fixed inset-0 z-50 bg-[#080808] text-white overflow-y-auto">
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-[#080808] text-white overflow-y-auto"
+        >
             {/* Close/Back Button */}
             <div className="absolute top-6 left-6 z-50">
                 <Button
@@ -89,6 +94,6 @@ export default function RevelationView({ result, onClose, onSave, isSaving }: Re
                     </motion.div>
                 </div>
             </div>
-        </div>
+        </motion.div>
     );
 }

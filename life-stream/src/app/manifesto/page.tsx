@@ -80,8 +80,8 @@ export default function ManifestoPage() {
     return (
         <div
             ref={containerRef}
-            className="bg-[#080808] text-white selection:bg-white/20 selection:text-black"
-            style={{ minHeight: "180vh" }}
+            className="bg-[#080808] text-white selection:bg-white/20 selection:text-black md:min-h-[180vh]"
+            style={{ minHeight: "100vh" }}
         >
             {/* One-shot scan line on load */}
             <AnimatePresence>
@@ -134,7 +134,7 @@ export default function ManifestoPage() {
                         transition={{ duration: 1, delay: 1.6 }}
                         className="mt-6 text-[9px] font-mono text-white/20 uppercase tracking-[0.6em]"
                     >
-                        — Plutarch
+                        — Zunios
                     </motion.p>
                 </motion.div>
 
@@ -144,6 +144,31 @@ export default function ManifestoPage() {
                     transition={{ duration: 3.5, repeat: Infinity, delay: 2.5, ease: "easeInOut" }}
                     className="absolute bottom-12 w-1 h-1 rounded-full bg-white"
                 />
+            </div>
+
+            {/* Bottom CTA — appears at the very end of scroll */}
+            <div className="relative z-10 flex flex-col items-center justify-center pb-40 px-6 bg-[#080808]">
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                    className="flex flex-col items-center space-y-10"
+                >
+                    <div className="w-px h-32 bg-gradient-to-b from-transparent via-white/20 to-transparent" />
+                    <div className="space-y-4 text-center">
+                        <p className="text-white/20 font-mono text-[9px] uppercase tracking-[0.6em]">System Initialization</p>
+                        <h2 className="text-4xl md:text-6xl font-serif font-medium tracking-tight">Ready to begin?</h2>
+                    </div>
+                    <motion.a
+                        href="/#titan-input"
+                        whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(255,255,255,0.15)" }}
+                        whileTap={{ scale: 0.95 }}
+                        className="px-10 py-4 rounded-full bg-white text-black font-bold text-sm transition-all duration-500"
+                    >
+                        Initialize Mind OS →
+                    </motion.a>
+                </motion.div>
             </div>
         </div>
     );

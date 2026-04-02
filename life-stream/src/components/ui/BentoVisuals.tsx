@@ -269,7 +269,8 @@ export const SyncVisual = () => {
 
   useEffect(() => {
     injectKeyframes();
-    const dataInterval = setInterval(() => {
+
+    const updateData = () => {
       setScore(s => {
         const delta = [-2, -1, 0, 1, 2][Math.floor(Math.random() * 5)];
         return Math.min(100, Math.max(80, s + delta));
@@ -279,8 +280,13 @@ export const SyncVisual = () => {
         value: Math.min(m.maxVal, Math.max(60, m.value + [-3, -1, 0, 1, 3][Math.floor(Math.random() * 5)])),
       })));
       setStatusText(["ALL SYSTEMS NOMINAL", "COGNITIVE PEAK", "SYNC COMPLETE", "OPTIMIZING..."][Math.floor(Math.random() * 4)]);
-    }, 2500);
-    return () => clearInterval(dataInterval);
+
+      // Schedule next update with randomized interval (1.5s - 4s)
+      timeoutId = setTimeout(updateData, 1500 + Math.random() * 2500);
+    };
+
+    let timeoutId = setTimeout(updateData, 2500);
+    return () => clearTimeout(timeoutId);
   }, []);
 
   const cx = 50, cy = 50;
@@ -289,7 +295,7 @@ export const SyncVisual = () => {
   return (
     <div className="absolute inset-0 bg-[#030308] overflow-hidden">
       {/* Subtle radial grid */}
-      <svg className="absolute inset-0 w-full h-full opacity-[0.025]" viewBox="0 0 100 100">
+      <svg className="absolute inset-0 w-full h-full opacity-[0.05]" viewBox="0 0 100 100">
         {[15, 25, 35, 45].map(r => (
           <circle key={r} cx="50" cy="50" r={r} fill="none" stroke="white" strokeWidth="0.15" />
         ))}

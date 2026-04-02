@@ -292,6 +292,8 @@
     -webkit-tap-highlight-color: transparent;
     scroll-behavior: smooth;
     /* Brick 13: Smooth Scroll */
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted-foreground) / 0.2) transparent;
   }
 
   body {

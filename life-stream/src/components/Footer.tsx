@@ -135,7 +135,7 @@ export default function Footer() {
                     </h2>
 
                     <p className="text-lg md:text-xl text-white/40 font-serif leading-relaxed max-w-xl mx-auto italic">
-                        &ldquo;I think, therefore I am. Your thoughts create your reality. Zunios helps you master them.&rdquo;
+                        &ldquo;I think, therefore I am. Master your mind. Shape your reality.&rdquo;
                     </p>
 
                     <div className="w-20 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent mx-auto" />
@@ -172,7 +172,7 @@ export default function Footer() {
                                 <ZuniosLogo size="sm" showText={true} />
                             </Link>
                             <p className="text-sm text-white/30 leading-relaxed max-w-[260px]">
-                                The operating system for your consciousness. Think deeper, live sharper.
+                                Master your mind. Shape your reality.
                             </p>
                             {/* Social row */}
                             <div className="flex items-center gap-3 pt-2">
@@ -217,7 +217,7 @@ export default function Footer() {
                                 </div>
                                 <div className="flex items-center gap-2.5">
                                     <div className="w-2 h-2 rounded-full bg-white/30" />
-                                    <span className="text-sm text-white/30">v2.0 Beta</span>
+                                    <span className="text-sm text-white/30">v2.0</span>
                                 </div>
                                 <div className="flex items-center gap-2.5">
                                     <div className="w-2 h-2 rounded-full bg-white/20" />
@@ -229,7 +229,7 @@ export default function Footer() {
 
                     {/* Bottom bar */}
                     <div className="mt-16 pt-8 border-t border-white/[0.06] flex flex-col md:flex-row items-center justify-between gap-4">
-                        <p className="text-xs text-white/20">&copy; 2026 Zunios Systems. All rights reserved.</p>
+                        <p className="text-xs text-white/20">&copy; {new Date().getFullYear()} Zunios Systems. All rights reserved.</p>
                         <p className="text-xs text-white/20 flex items-center gap-1.5">
                             Made with <Heart className="w-3 h-3 text-white/50 fill-white/50 inline" /> by <span className="text-white/40 font-medium">Zunios Team</span>
                         </p>

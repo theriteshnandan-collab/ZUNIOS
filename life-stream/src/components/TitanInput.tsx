@@ -184,6 +184,23 @@ export default function TitanInput({
                     disabled={isAnalyzing}
                 />
 
+                {/* Loading state overlay */}
+                <AnimatePresence>
+                    {isAnalyzing && (
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-md"
+                        >
+                            <Sparkles className="w-8 h-8 text-white animate-pulse mb-3" />
+                            <p className="text-sm font-mono text-white/70 uppercase tracking-[0.2em] animate-pulse">
+                                Analyzing your vision...
+                            </p>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
                 {/* Bottom Toolbar */}
                 <div className="relative z-10 flex items-center justify-between px-4 pb-4">
                     {/* Mode Indicator & Tools */}
@@ -243,7 +260,10 @@ export default function TitanInput({
                             {isAnalyzing ? (
                                 <Sparkles className="w-5 h-5 animate-spin" />
                             ) : (
-                                <ArrowRight className="w-5 h-5" />
+                                <div className="flex items-center gap-1.5">
+                                    <span className="text-[10px] font-mono text-black/40 mr-1 hidden sm:block">⌘↵</span>
+                                    <ArrowRight className="w-5 h-5" />
+                                </div>
                             )}
                         </Button>
                     </div>

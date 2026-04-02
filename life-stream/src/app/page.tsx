@@ -174,10 +174,10 @@ const StatsStrip = () => (
     className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto px-8 py-16"
   >
     {[
-      { value: "AI", label: "Neural Analysis" },
-      { value: "E2E", label: "Encrypted" },
-      { value: "∞", label: "Memory Bank" },
-      { value: "0ms", label: "Local Processing" },
+      { value: "Neural Analysis", label: "Real-time thought mapping" },
+      { value: "Encrypted",       label: "Zero-knowledge security" },
+      { value: "Infinite Memory", label: "Vector-embedded recall" },
+      { value: "Instant",         label: "Edge runtime processing" },
     ].map((stat) => (
       <div key={stat.label} className="text-center group">
         <div className="text-4xl md:text-5xl font-bold font-serif text-[#050505] mb-2 group-hover:text-black/70 transition-colors duration-500">
@@ -315,6 +315,17 @@ const CinematicHero = () => {
             <span className="bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">Your Mind.</span>
           </motion.h1>
 
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="max-w-2xl"
+          >
+            <p className="text-sm md:text-base text-white/40 leading-relaxed font-medium">
+              Zunios is your cognitive peripheral. It captures the raw flow of your thoughts, ideas, and visions into a secure neural vault. Through advanced pattern analysis, it transforms your mental entropy into structured intelligence.
+            </p>
+          </motion.div>
+
           {/* Divider */}
           <div className="w-full h-px bg-gradient-to-r from-white/15 via-white/5 to-transparent" />
 
@@ -350,10 +361,10 @@ const CinematicHero = () => {
             {/* RIGHT */}
             <div className="grid grid-cols-2 gap-3 min-w-[340px]">
               {[
-                { value: "Neural AI", label: "Real-time thought mapping" },
-                { value: "E2E",       label: "Zero-knowledge encryption" },
-                { value: "∞ Memory", label: "Vector-embedded recall" },
-                { value: "0ms",       label: "Edge runtime processing" },
+                { value: "Neural Analysis", label: "Real-time thought mapping" },
+                { value: "Encrypted",       label: "Zero-knowledge security" },
+                { value: "Infinite Memory", label: "Vector-embedded recall" },
+                { value: "Instant",         label: "Edge runtime processing" },
               ].map((s) => (
                 <div key={s.value} className="p-4 rounded-2xl bg-black/40 backdrop-blur-md border border-white/[0.08] hover:border-white/[0.16] transition-colors duration-300">
                   <div className="text-base font-bold font-serif text-white/90 mb-1">{s.value}</div>
@@ -506,6 +517,7 @@ function HomeContent() {
   const incompleteCount = tasks.filter(t => t.status === 'todo' || t.status === 'in_progress').length;
 
   useAppBadge(incompleteCount);
+  const { scrollYProgress } = useScroll();
 
   // Track visit streak in localStorage (used by analytics)
   useEffect(() => {
@@ -740,6 +752,12 @@ function HomeContent() {
   // MAIN VIEW
   return (
     <ParticleBackground>
+      {/* Scroll Progress Bar */}
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-1 bg-white/20 z-[100] origin-left"
+        style={{ scaleX: scrollYProgress }}
+      />
+
       <div className="min-h-screen flex flex-col items-center relative z-10">
 
         {isLoading && <DreamLoader mode={mode} />}

@@ -18,6 +18,20 @@ type ViewMode = 'list' | 'kanban' | 'calendar';
 export default function TasksPage() {
     const { tasks, isLoading, fetchTasks, getTaskCount, addTask, toggleComplete, deleteTask } = useTaskStore();
     const [viewMode, setViewMode] = useState<ViewMode>('list');
+
+    // Persistence: Read mode on mount
+    useEffect(() => {
+        const savedMode = localStorage.getItem('tasks_view_mode') as ViewMode;
+        if (savedMode && ['list', 'kanban', 'calendar'].includes(savedMode)) {
+            setViewMode(savedMode);
+        }
+    }, []);
+
+    // Persistence: Write mode on change
+    const handleSetViewMode = (mode: ViewMode) => {
+        setViewMode(mode);
+        localStorage.setItem('tasks_view_mode', mode);
+    };
     const [filter, setFilter] = useState<'all' | 'todo' | 'done'>('all');
 
     // CALENDAR CONNECTION: Lifted State
@@ -107,14 +121,14 @@ export default function TasksPage() {
                         {/* View Toggle */}
                         <div className="flex items-center gap-2 bg-white/[0.03] border border-white/5 rounded-xl p-1">
                             <button
-                                onClick={() => setViewMode('kanban')}
+                                onClick={() => handleSetViewMode('kanban')}
                                 className={`p-2 rounded-lg transition-colors ${viewMode === 'kanban' ? 'bg-white/10 text-white shadow-sm' : 'text-zinc-500 hover:text-white'}`}
                                 title="Board View"
                             >
                                 <LayoutGrid className="w-5 h-5" />
                             </button>
                             <button
-                                onClick={() => setViewMode('calendar')}
+                                onClick={() => handleSetViewMode('calendar')}
                                 className={`p-2 rounded-lg transition-colors ${viewMode === 'calendar' ? 'bg-white/10 text-white shadow-sm' : 'text-zinc-500 hover:text-white'}`}
                                 title="Calendar View"
                             >
