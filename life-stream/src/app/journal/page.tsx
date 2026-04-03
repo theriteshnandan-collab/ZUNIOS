@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 import { createClient } from "@/utils/supabase/client"; // Use standard client for sessions
 import Link from "next/link";

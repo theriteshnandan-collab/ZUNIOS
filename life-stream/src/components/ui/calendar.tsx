@@ -107,32 +107,31 @@ function Calendar({
                     </div>
                 ))}
 
-                {/* Main Grid Dates */}
+                {/* Main Grid Dates — Tightened for Obsidian Silence */}
                 {calendarDays.map((day, dayIdx) => {
                     const isSelected = selected && isSameDay(day, selected);
                     const isToday = isSameDay(day, today);
                     const isOutside = !isSameMonth(day, currentMonth);
                     const hasEntry = modifiers?.hasEntry?.(day);
 
-                    // 3. Styling & States
                     return (
-                        <div key={day.toString()} className="flex justify-center items-center h-9 w-9 md:h-6 md:w-6 relative">
+                        <div key={day.toString()} className="flex justify-center items-center h-7 w-7 relative overflow-visible">
                             <button
                                 onClick={() => onSelect?.(day)}
                                 className={cn(
-                                    "h-7 w-7 md:h-6 md:w-6 rounded-full flex items-center justify-center text-xs md:text-[10px] transition-all relative z-10 touch-target",
+                                    "h-5 w-5 rounded-[4px] flex items-center justify-center text-[10px] transition-all relative z-10",
 
-                                    // Normal State (Current Month)
-                                    !isOutside && "text-white hover:bg-white/10",
+                                    // Normal State
+                                    !isOutside && "text-white/40 hover:bg-white/10 hover:text-white",
 
-                                    // Padding Dates (Outside)
-                                    isOutside && "text-zinc-700 opacity-40 hover:bg-white/5",
+                                    // Padding Dates
+                                    isOutside && "text-zinc-800 opacity-20",
 
-                                    // Today's Date
-                                    isToday && !isSelected && "ring-1 ring-white/20 text-white/70",
+                                    // Today's Date — Subtle underline instead of ring to avoid bulk
+                                    isToday && !isSelected && "text-white/60 after:content-[''] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-2 after:h-[1px] after:bg-white/40",
 
-                                    // Selected State — monochrome ring, no filled blob
-                                    isSelected && "ring-1 ring-white bg-white/10 text-white font-semibold",
+                                    // Selected State — Minimalist curated square
+                                    isSelected && "bg-white/20 text-white font-bold ring-1 ring-white/30",
                                 )}
                             >
                                 {format(day, "d")}

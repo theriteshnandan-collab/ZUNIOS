@@ -189,6 +189,15 @@ const StatsStrip = () => (
 );
 
 const CinematicHero = () => {
+  const [activeSpec, setActiveSpec] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveSpec(prev => (prev + 1) % 4);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section 
       className="relative w-full min-h-screen flex flex-col overflow-hidden hidden md:flex"
@@ -237,26 +246,43 @@ const CinematicHero = () => {
               { value: "Encrypted",       label: "Zero-knowledge security",   icon: Shield },
               { value: "Infinite Memory", label: "Vector-embedded recall",    icon: Database },
               { value: "Instant",         label: "Edge runtime processing",   icon: Zap },
-            ].map((s, idx) => (
-              <motion.div 
-                key={s.value} 
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6 + (idx * 0.1) }}
-                className="group relative pr-10 py-3 text-right"
-              >
-                {/* Connection Node — Zinc Glow */}
-                <div className="absolute right-[-3.5px] top-1/2 -translate-y-1/2 w-[7px] h-[7px] rounded-full bg-zinc-600/60 border border-zinc-400/40 group-hover:bg-zinc-100 group-hover:shadow-[0_0_10px_rgba(255,255,255,0.4)] transition-all duration-300" />
-                
-                <div className="flex flex-col items-end">
-                  <div className="flex items-center gap-3 mb-1">
-                    <span className="text-sm font-bold tracking-tight text-zinc-200 group-hover:text-white transition-colors uppercase leading-none">{s.value}</span>
-                    <s.icon className="w-4 h-4 text-zinc-500 group-hover:text-zinc-200 transition-colors" />
+            ].map((s, idx) => {
+              const isAutoActive = activeSpec === idx;
+              return (
+                <motion.div 
+                  key={s.value} 
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.6 + (idx * 0.1) }}
+                  className="group relative pr-10 py-3 text-right"
+                >
+                  {/* Connection Node — Zinc Glow */}
+                  <div className={cn(
+                    "absolute right-[-3.5px] top-1/2 -translate-y-1/2 w-[7px] h-[7px] rounded-full transition-all duration-700",
+                    isAutoActive 
+                      ? "bg-zinc-100 shadow-[0_0_12px_rgba(255,255,255,0.5)] scale-110" 
+                      : "bg-zinc-600/60 border border-zinc-400/40 group-hover:bg-zinc-100 group-hover:shadow-[0_0_10px_rgba(255,255,255,0.4)]"
+                  )} />
+                  
+                  <div className="flex flex-col items-end">
+                    <div className="flex items-center gap-3 mb-1">
+                      <span className={cn(
+                        "text-sm font-bold tracking-tight uppercase leading-none transition-all duration-700",
+                        isAutoActive ? "text-white translate-x-[-2px]" : "text-zinc-200 group-hover:text-white"
+                      )}>{s.value}</span>
+                      <s.icon className={cn(
+                        "w-4 h-4 transition-all duration-700",
+                        isAutoActive ? "text-white scale-110" : "text-zinc-500 group-hover:text-zinc-200"
+                      )} />
+                    </div>
+                    <div className={cn(
+                      "text-[11px] font-medium leading-none transition-all duration-700",
+                      isAutoActive ? "text-zinc-300" : "text-zinc-500 group-hover:text-zinc-400"
+                    )}>{s.label}</div>
                   </div>
-                  <div className="text-[11px] font-medium text-zinc-500 leading-none transition-colors group-hover:text-zinc-400">{s.label}</div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </motion.div>
 
           {/* Badge */}
