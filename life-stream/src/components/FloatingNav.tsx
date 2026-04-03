@@ -43,12 +43,12 @@ export default function FloatingNav() {
                         <ZuniosLogo size="md" showText={true} />
                     </Link>
 
-                    {/* Nav Items */}
+                    {/* Nav Items — Precision Island Architecture */}
                     <motion.nav
                         initial={{ y: 100, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }} // Physics
-                        className="flex items-center gap-2 p-2 rounded-full border border-white/10 bg-black/40 backdrop-blur-2xl shadow-2xl shadow-black/50"
+                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                        className="flex items-center gap-0.5 p-1 rounded-full border border-white/20 bg-black/80 backdrop-blur-3xl shadow-lg shadow-black/40 h-11"
                     >
                         {navItems.map(link => {
                             const isActive = pathname === link.href;
@@ -62,18 +62,18 @@ export default function FloatingNav() {
                                     className="relative group"
                                 >
                                     <div className={cn(
-                                        "relative z-10 p-4 rounded-full transition-all duration-300 touch-manipulation", // Hit Area 48px+ (p-4 + icon)
-                                        isActive ? "text-white bg-white/[0.12]" : "text-white/40 hover:text-white hover:bg-white/[0.06]",
-                                        "active:scale-90" // Tactile feedback
+                                        "relative z-10 p-2.5 rounded-full transition-all duration-300", 
+                                        isActive ? "text-white bg-white/[0.08]" : "text-white/40 hover:text-white hover:bg-white/[0.04]",
+                                        "active:scale-95"
                                     )}>
-                                        <link.icon className={cn("w-6 h-6", isActive && "stroke-[2.5px]")} />
+                                        <link.icon className={cn("w-5 h-5", isActive && "stroke-[2.2px]")} />
                                     </div>
 
-                                    {/* Active Glow */}
+                                    {/* Active Glow — Tighter & Subtler */}
                                     {isActive && (
                                         <motion.div
                                             layoutId="nav-glow"
-                                            className="absolute inset-0 bg-white/[0.08] blur-lg rounded-full -z-10"
+                                            className="absolute inset-0 bg-white/[0.05] blur-md rounded-full -z-10"
                                             transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                                         />
                                     )}
