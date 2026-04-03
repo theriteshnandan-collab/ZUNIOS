@@ -13,23 +13,11 @@ function injectKeyframes() {
   INJECTED.done = true;
   const style = document.createElement("style");
   style.textContent = `
-    @keyframes bv-spin { to { transform: rotate(360deg); } }
-    @keyframes bv-spin-r { to { transform: rotate(-360deg); } }
-    @keyframes bv-pulse { 0%,100% { opacity:0.3; transform:scale(1); } 50% { opacity:1; transform:scale(1.15); } }
-    @keyframes bv-sweep { from { left:0%; } to { left:100%; } }
-    @keyframes bv-float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-8px); } }
-    @keyframes bv-glow-pulse { 0%,100% { box-shadow:0 0 8px rgba(255,255,255,0.15); } 50% { box-shadow:0 0 24px rgba(255,255,255,0.35); } }
-    @keyframes bv-rain { from { transform:translateY(-100%); } to { transform:translateY(100%); } }
-    @keyframes bv-ring-expand { from { transform:translate(-50%,-50%) scale(0.3); opacity:0.6; } to { transform:translate(-50%,-50%) scale(1.8); opacity:0; } }
-    @keyframes bv-scan { 0%,100% { top:15%; } 50% { top:85%; } }
-    @keyframes bv-ecg-sweep { from { left:-2%; } to { left:102%; } }
-    @keyframes bv-dash { to { stroke-dashoffset: -20; } }
-    @keyframes bv-orbit { to { transform: rotate(360deg) translateX(var(--orbit-r)) rotate(-360deg); } }
-    @keyframes bv-signal { 0% { offset-distance:0%; opacity:0; } 15% { opacity:1; } 85% { opacity:1; } 100% { offset-distance:100%; opacity:0; } }
-    @keyframes bv-typewriter { from { width:0; } to { width:100%; } }
-    @keyframes bv-radial-bar { 0%,100% { transform:scaleY(var(--bar-min)); } 50% { transform:scaleY(var(--bar-max)); } }
-    @keyframes bv-hex-flash { 0%,100% { opacity:0.03; } 50% { opacity:0.15; } }
-    @keyframes bv-verified-burst { 0% { transform:translate(-50%,-50%) scale(0); opacity:1; } 100% { transform:translate(-50%,-50%) scale(3); opacity:0; } }
+    @keyframes bv-lattice-spin { from { transform: rotate3d(1, 1, 1, 0deg); } to { transform: rotate3d(1, 1, 1, 360deg); } }
+    @keyframes bv-pulse-zinc { 0%,100% { fill: rgba(161,161,170,0.3); } 50% { fill: rgba(244,244,245,0.8); } }
+    @keyframes bv-scanner-sweep { 0% { transform: translateY(-20%); opacity: 0; } 10% { opacity: 0.4; } 90% { opacity: 0.4; } 100% { transform: translateY(120%); opacity: 0; } }
+    @keyframes bv-hex-stream { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+    @keyframes bv-node-firing { 0% { fill: #71717a; filter: none; } 10% { fill: #f4f4f5; filter: drop-shadow(0 0 8px #fff); } 30% { fill: #71717a; filter: none; } }
   `;
   document.head.appendChild(style);
 }
@@ -39,207 +27,127 @@ function injectKeyframes() {
    ════════════════════════════════════════════════════════════════ */
 
 // Geometric wireframe vertices for the brain mesh (icosphere-like)
-const MESH_POINTS = [
-  { x: 50, y: 50 }, // center
-  // Inner hexagon
-  { x: 50, y: 32 }, { x: 65, y: 41 }, { x: 65, y: 59 },
-  { x: 50, y: 68 }, { x: 35, y: 59 }, { x: 35, y: 41 },
-  // Outer hexagon
-  { x: 50, y: 18 }, { x: 72, y: 28 }, { x: 80, y: 50 },
-  { x: 72, y: 72 }, { x: 50, y: 82 }, { x: 28, y: 72 },
-  { x: 20, y: 50 }, { x: 28, y: 28 },
+const LATTICE_POINTS = [
+  { x: 50, y: 50, z: 0 }, // core
+  // Front face
+  { x: 50, y: 30, z: 20 }, { x: 70, y: 45, z: 20 }, { x: 62, y: 70, z: 20 },
+  { x: 38, y: 70, z: 20 }, { x: 30, y: 45, z: 20 },
+  // Back face
+  { x: 50, y: 20, z: -20 }, { x: 80, y: 45, z: -20 }, { x: 68, y: 80, z: -20 },
+  { x: 32, y: 80, z: -20 }, { x: 20, y: 45, z: -20 },
 ];
 
-// Mesh connections (inner hex + outer hex + cross connections)
-const MESH_EDGES: [number, number][] = [
-  // Center to inner
-  [0,1],[0,2],[0,3],[0,4],[0,5],[0,6],
-  // Inner ring
-  [1,2],[2,3],[3,4],[4,5],[5,6],[6,1],
-  // Inner to outer
-  [1,7],[1,8],[2,8],[2,9],[3,9],[3,10],[4,10],[4,11],[5,11],[5,12],[6,12],[6,13],[1,14],[6,14],[1,7],
-  // Outer ring
-  [7,8],[8,9],[9,10],[10,11],[11,12],[12,13],[13,14],[14,7],
+const LATTICE_EDGES: [number, number][] = [
+  [0,1],[0,2],[0,3],[0,4],[0,5],
+  [1,2],[2,3],[3,4],[4,5],[5,1],
+  [1,6],[2,7],[3,8],[4,9],[5,10],
+  [6,7],[7,8],[8,9],[9,10],[10,6],
 ];
 
-// Data labels that orbit around the core
-const DATA_LABELS = [
-  { text: "PATTERN", angle: 0, r: 42 },
-  { text: "MEMORY", angle: 72, r: 40 },
-  { text: "SYNAPSE", angle: 144, r: 43 },
-  { text: "CORTEX", angle: 216, r: 41 },
-  { text: "SIGNAL", angle: 288, r: 42 },
+const HEX_STREAMS = [
+  "0x7F B1 D9 E0", "ACTIVE_INF", "CORE_Z_94", "LATTICE_OK", "MEM_VECT_0", "Z-OS_INF"
 ];
 
 export const NeuralVisual = () => {
-  const [activeEdge, setActiveEdge] = useState(0);
-  const [pulseRing, setPulseRing] = useState(0);
+    const [firingNode, setFiringNode] = useState(0);
 
-  useEffect(() => {
-    injectKeyframes();
-    // Cycle through edge groups for the "thinking" effect
-    const edgeInterval = setInterval(() => {
-      setActiveEdge(e => (e + 1) % 5);
-    }, 1800);
-    // Pulse rings emanating from center
-    const pulseInterval = setInterval(() => {
-      setPulseRing(p => (p + 1) % 100);
-    }, 3000);
-    return () => { clearInterval(edgeInterval); clearInterval(pulseInterval); };
-  }, []);
+    useEffect(() => {
+        injectKeyframes();
+        const interval = setInterval(() => {
+            setFiringNode(Math.floor(Math.random() * LATTICE_POINTS.length));
+        }, 800);
+        return () => clearInterval(interval);
+    }, []);
 
-  // Determine which edges are "active" based on current group
-  const activeEdges = useMemo(() => {
-    const groupSize = Math.ceil(MESH_EDGES.length / 5);
-    const start = activeEdge * groupSize;
-    return new Set(MESH_EDGES.slice(start, start + groupSize).map((_, i) => start + i));
-  }, [activeEdge]);
-
-  return (
-    <div className="absolute inset-0 bg-[#030308] overflow-hidden">
-      {/* Hexagonal grid background */}
-      <svg className="absolute inset-0 w-full h-full opacity-[0.04]" viewBox="0 0 100 100">
-        {Array.from({ length: 8 }).map((_, row) =>
-          Array.from({ length: 6 }).map((_, col) => {
-            const cx = 10 + col * 16 + (row % 2) * 8;
-            const cy = 8 + row * 12;
-            const r = 5;
-            const pts = Array.from({ length: 6 }, (_, a) => {
-              const angle = (Math.PI / 3) * a - Math.PI / 6;
-              return `${cx + r * Math.cos(angle)},${cy + r * Math.sin(angle)}`;
-            });
-            return <polygon key={`${row}-${col}`} points={pts.join(' ')} fill="none" stroke="white" strokeWidth="0.15" />;
-          })
-        )}
-      </svg>
-
-      {/* Radial glow from center */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_50%,rgba(120,140,255,0.08)_0%,transparent_50%)]" />
-
-      {/* Energy pulse rings */}
-      {[0, 1, 2].map(i => (
-        <div key={`pulse-${i}`} className="absolute left-1/2 top-1/2 rounded-full border pointer-events-none"
-          style={{
-            width: 80, height: 80, marginLeft: -40, marginTop: -40,
-            borderColor: 'rgba(140,160,255,0.12)',
-            animation: `bv-ring-expand 4s ease-out infinite`,
-            animationDelay: `${i * 1.3}s`,
-          }} />
-      ))}
-
-      {/* Main wireframe mesh */}
-      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
-        <defs>
-          <filter id="edge-glow">
-            <feGaussianBlur stdDeviation="0.6" result="blur" />
-            <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-          </filter>
-          <radialGradient id="core-grad" cx="50%" cy="50%">
-            <stop offset="0%" stopColor="rgba(180,190,255,0.3)" />
-            <stop offset="100%" stopColor="rgba(180,190,255,0)" />
-          </radialGradient>
-        </defs>
-
-        {/* Core glow circle */}
-        <circle cx="50" cy="50" r="12" fill="url(#core-grad)" />
-
-        {/* Mesh edges */}
-        {MESH_EDGES.map(([a, b], i) => {
-          const pa = MESH_POINTS[a], pb = MESH_POINTS[b];
-          const isActive = activeEdges.has(i);
-          return (
-            <line key={`e-${i}`}
-              x1={pa.x} y1={pa.y} x2={pb.x} y2={pb.y}
-              stroke={isActive ? "rgba(160,175,255,0.5)" : "rgba(255,255,255,0.08)"}
-              strokeWidth={isActive ? 0.4 : 0.15}
-              filter={isActive ? "url(#edge-glow)" : undefined}
-              style={{ transition: "stroke 0.8s, stroke-width 0.8s" }}
-            />
-          );
-        })}
-
-        {/* Mesh vertices */}
-        {MESH_POINTS.map((p, i) => (
-          <g key={`v-${i}`}>
-            <circle cx={p.x} cy={p.y} r={i === 0 ? 2.5 : i <= 6 ? 1.2 : 0.7}
-              fill={i === 0 ? "rgba(200,210,255,0.9)" : "rgba(255,255,255,0.5)"}
-              style={{ transition: "fill 0.5s" }} />
-            {i === 0 && (
-              <circle cx={p.x} cy={p.y} r="4" fill="none" stroke="rgba(160,175,255,0.2)" strokeWidth="0.3"
-                style={{ animation: 'bv-pulse 2.5s ease-in-out infinite' }} />
-            )}
-          </g>
-        ))}
-
-        {/* 3 concentric rotating rings — atom style */}
-        <g style={{ transformOrigin: '50px 50px', animation: 'bv-spin 12s linear infinite' }}>
-          <ellipse cx="50" cy="50" rx="30" ry="10" fill="none" stroke="rgba(140,160,255,0.12)" strokeWidth="0.25"
-            strokeDasharray="2 4" />
-          <circle cx="80" cy="50" r="1.2" fill="rgba(160,180,255,0.7)" />
-        </g>
-        <g style={{ transformOrigin: '50px 50px', animation: 'bv-spin-r 18s linear infinite' }}>
-          <ellipse cx="50" cy="50" rx="10" ry="30" fill="none" stroke="rgba(140,160,255,0.08)" strokeWidth="0.2"
-            strokeDasharray="1.5 3" />
-          <circle cx="50" cy="20" r="1" fill="rgba(160,180,255,0.5)" />
-        </g>
-        <g style={{ transformOrigin: '50px 50px', animation: 'bv-spin 25s linear infinite', transform: 'rotate(60deg)' }}>
-          <ellipse cx="50" cy="50" rx="28" ry="8" fill="none" stroke="rgba(140,160,255,0.06)" strokeWidth="0.2"
-            strokeDasharray="3 5" />
-          <circle cx="78" cy="50" r="0.8" fill="rgba(160,180,255,0.4)" />
-        </g>
-
-        {/* Signal pulse traveling from center outward */}
-        <circle r="0.8" fill="rgba(180,200,255,0.8)" filter="url(#edge-glow)">
-          <animateMotion dur="3s" repeatCount="indefinite"
-            path={`M50,50 L${MESH_POINTS[1].x},${MESH_POINTS[1].y} L${MESH_POINTS[7].x},${MESH_POINTS[7].y}`} />
-          <animate attributeName="opacity" values="0;1;1;0" dur="3s" repeatCount="indefinite" />
-        </circle>
-        <circle r="0.6" fill="rgba(180,200,255,0.6)">
-          <animateMotion dur="3s" repeatCount="indefinite" begin="1s"
-            path={`M50,50 L${MESH_POINTS[3].x},${MESH_POINTS[3].y} L${MESH_POINTS[10].x},${MESH_POINTS[10].y}`} />
-          <animate attributeName="opacity" values="0;0.8;0.8;0" dur="3s" repeatCount="indefinite" begin="1s" />
-        </circle>
-        <circle r="0.5" fill="rgba(180,200,255,0.5)">
-          <animateMotion dur="3.5s" repeatCount="indefinite" begin="2s"
-            path={`M50,50 L${MESH_POINTS[5].x},${MESH_POINTS[5].y} L${MESH_POINTS[12].x},${MESH_POINTS[12].y}`} />
-          <animate attributeName="opacity" values="0;0.7;0.7;0" dur="3.5s" repeatCount="indefinite" begin="2s" />
-        </circle>
-      </svg>
-
-      {/* Floating data labels */}
-      {DATA_LABELS.map((label, i) => {
-        const rad = (label.angle * Math.PI) / 180;
-        const x = 50 + label.r * Math.cos(rad);
-        const y = 50 + label.r * Math.sin(rad);
-        return (
-          <div key={`dl-${i}`} className="absolute pointer-events-none" style={{
-            left: `${x}%`, top: `${y}%`,
-            transform: 'translate(-50%, -50%)',
-            animation: `bv-float ${3 + i * 0.5}s ease-in-out infinite`,
-            animationDelay: `${i * 0.4}s`,
-          }}>
-            <div className="text-[5px] font-mono text-white/15 uppercase tracking-[0.2em] whitespace-nowrap">
-              {label.text}
+    return (
+        <div className="absolute inset-0 bg-black overflow-hidden group">
+            {/* Background Hex-Stream Readout (Scrolling ghost text) */}
+            <div className="absolute inset-y-0 right-2 w-16 opacity-10 pointer-events-none flex flex-col font-mono text-[7px] text-zinc-500 overflow-hidden">
+                <div className="flex flex-col animate-[bv-hex-stream_10s_linear_infinite]">
+                    {[...HEX_STREAMS, ...HEX_STREAMS, ...HEX_STREAMS].map((s, i) => (
+                        <div key={i} className="py-1 tracking-widest">{s}</div>
+                    ))}
+                </div>
             </div>
-          </div>
-        );
-      })}
 
-      {/* HUD */}
-      <div className="absolute top-3 left-3 z-30 space-y-1">
-        <div className="text-[7px] text-white/20 uppercase tracking-[0.25em] font-mono">AI Core v4.2</div>
-        <div className="flex items-center gap-1.5">
-          <div className="w-1.5 h-1.5 rounded-full bg-[#8CA0FF]/60" style={{ animation: 'bv-pulse 1.5s infinite' }} />
-          <span className="text-[8px] text-[#8CA0FF]/40 font-mono">INFERENCE ACTIVE</span>
+            {/* Tactical Grid Overlay */}
+            <div 
+                className="absolute inset-0 z-0 opacity-[0.03] pointer-events-none"
+                style={{
+                    backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
+                    backgroundSize: '16px 16px'
+                }}
+            />
+
+            {/* Laser Scanner Sweep */}
+            <div className="absolute inset-x-0 h-[2px] z-10 bg-gradient-to-r from-transparent via-zinc-400 to-transparent animate-[bv-scanner-sweep_4s_ease-in-out_infinite]" />
+
+            {/* Geometric Lattice Container — perspective field */}
+            <div className="absolute inset-0 flex items-center justify-center p-8">
+                <motion.div 
+                    className="relative w-48 h-48 flex items-center justify-center"
+                    animate={{ rotateZ: 360 }}
+                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                >
+                    <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible drop-shadow-[0_0_20px_rgba(255,255,255,0.05)]">
+                        <defs>
+                            <radialGradient id="zinc-glow" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stopColor="rgba(244,244,245,0.3)" />
+                                <stop offset="100%" stopColor="rgba(244,244,245,0)" />
+                            </radialGradient>
+                        </defs>
+
+                        {/* Central Neural Glimmer */}
+                        <circle cx="50" cy="50" r="14" fill="url(#zinc-glow)" className="animate-pulse" />
+                        <circle cx="50" cy="50" r="2" fill="#fff" className="animate-pulse" />
+
+                        {/* Connection Edges */}
+                        {LATTICE_EDGES.map(([a, b], idx) => (
+                            <line 
+                                key={idx}
+                                x1={LATTICE_POINTS[a].x} y1={LATTICE_POINTS[a].y}
+                                x2={LATTICE_POINTS[b].x} y2={LATTICE_POINTS[b].y}
+                                stroke="rgba(161,161,170,0.15)"
+                                strokeWidth="0.5"
+                                className="transition-all duration-700"
+                            />
+                        ))}
+
+                        {/* Nodes / Firing Synapses */}
+                        {LATTICE_POINTS.map((p, idx) => (
+                            <circle 
+                                key={idx}
+                                cx={p.x} cy={p.y}
+                                r={idx === 0 ? 3 : 1.2}
+                                className={cn(
+                                    "transition-all duration-300",
+                                    firingNode === idx ? "animate-[bv-node-firing_0.8s_ease-out_infinite]" : "fill-zinc-600"
+                                )}
+                            />
+                        ))}
+
+                        {/* Atomic Orbits — Silver Titanium Cage */}
+                        <ellipse cx="50" cy="50" rx="35" ry="12" fill="none" stroke="rgba(161,161,170,0.12)" strokeWidth="0.3" strokeDasharray="4 8" className="animate-[bv-spin_20s_linear_infinite]" />
+                        <ellipse cx="50" cy="50" rx="12" ry="35" fill="none" stroke="rgba(161,161,170,0.12)" strokeWidth="0.3" strokeDasharray="4 8" className="animate-[bv-spin-r_15s_linear_infinite]" />
+                    </svg>
+                </motion.div>
+            </div>
+
+            {/* Neural HUD Labels */}
+            <div className="absolute top-4 left-4 font-mono text-[8px] text-zinc-500 flex flex-col gap-1 tracking-[0.2em]">
+                <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-zinc-200 animate-pulse" />
+                    <span>LATTICE_ENGINE_v4</span>
+                </div>
+                <div className="opacity-40">REAL-TIME_ANALYSIS: ACTIVE</div>
+            </div>
+
+            <div className="absolute bottom-4 right-4 font-mono text-[7px] text-zinc-700 flex items-center gap-4 tracking-widest">
+                <div>THROUGHPUT: 12.4tps</div>
+                <div>NODES_STABLE: {LATTICE_POINTS.length}</div>
+            </div>
         </div>
-      </div>
-      <div className="absolute bottom-3 right-3 z-30">
-        <div className="text-[6px] text-white/10 font-mono tracking-wider">
-          MESH {MESH_POINTS.length} · EDGES {MESH_EDGES.length}
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 

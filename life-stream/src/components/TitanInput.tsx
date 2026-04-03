@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { predictMode } from "@/lib/auto-classifier";
 import { EntryMode, MODE_LABELS } from "@/lib/theme-config";
-import { Sparkles, Eye, Zap, Target, Brain, Wand2, ArrowRight } from "lucide-react";
+import { Sparkles, Eye, Zap, Target, Brain, Wand2, ArrowUp, Plus, Mic, ArrowRight } from "lucide-react";
 import { getTemplatesForCategory, EntryTemplate } from "@/lib/entry-templates";
 import { Button } from "@/components/ui/button";
 
@@ -146,9 +146,7 @@ export default function TitanInput({
                 className={cn(
                     "relative overflow-hidden rounded-[32px]",
                     "bg-gradient-to-b from-white/[0.12] to-white/[0.07] backdrop-blur-3xl",
-                    // Silver top-edge shimmer
                     "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.30),0_4px_40px_rgba(0,0,0,0.4)]",
-                    // Silver border
                     "border border-white/20",
                     "transition-all duration-500",
                     isFocused && "border-white/40 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.08)]",
@@ -165,82 +163,59 @@ export default function TitanInput({
                     }}
                 />
 
-                {/* Textarea */}
-                <textarea
-                    ref={textareaRef}
-                    value={text}
-                    onChange={handleTextChange}
-                    onKeyDown={handleKeyDown}
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
-                    placeholder={placeholder}
-                    className={cn(
-                        "relative z-10 w-full bg-transparent",
-                        "text-lg text-white placeholder:text-white/35",
-                        "p-6 min-h-[100px] outline-none resize-none",
-                        "font-light leading-relaxed",
-                        "scrollbar-hide"
-                    )}
-                    disabled={isAnalyzing}
+                {/* === NEURAL SCAN SWEEP (The Crossing Light) === */}
+                <motion.div
+                    className="absolute inset-y-0 w-24 z-[1] pointer-events-none opacity-40"
+                    style={{
+                        background: "linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent)",
+                        skewX: -25
+                    }}
+                    animate={{
+                        x: ['-100%', '600%'],
+                    }}
+                    transition={{
+                        duration: 8,
+                        repeat: Infinity,
+                        ease: "linear",
+                        repeatDelay: 2
+                    }}
                 />
 
-                {/* Loading state overlay */}
-                <AnimatePresence>
-                    {isAnalyzing && (
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/60 backdrop-blur-md"
-                        >
-                            <Sparkles className="w-8 h-8 text-white animate-pulse mb-3" />
-                            <p className="text-sm font-mono text-white/70 uppercase tracking-[0.2em] animate-pulse">
-                                Analyzing your vision...
-                            </p>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+                <div className="relative z-10 flex items-center gap-2 px-4 py-3 min-h-[64px]">
+                    {/* Plus Icon (Left) */}
+                    <button 
+                        onClick={() => setShowTemplates(!showTemplates)}
+                        className="p-2 rounded-full hover:bg-white/10 transition-colors text-white/40 hover:text-white"
+                    >
+                        <Plus className="w-5 h-5" />
+                    </button>
 
-                {/* Bottom Toolbar */}
-                <div className="relative z-10 flex items-center justify-between px-4 pb-4">
-                    {/* Mode Indicator & Tools */}
-                    <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide">
-                        <motion.div
-                            className={cn(
-                                "flex items-center gap-2 px-3 py-1.5 rounded-full",
-                                "bg-white/[0.10] border border-white/20",
-                                "transition-colors",
-                                activeModeConfig.color
-                            )}
-                            layout
-                        >
-                            <activeModeConfig.icon className="w-3.5 h-3.5" />
-                            <span className="text-xs font-medium uppercase tracking-wider">
-                                {activeModeConfig.label}
-                            </span>
-                        </motion.div>
-
-                        {/* Template Trigger */}
-                        {templates.length > 0 && !text && (
-                            <button
-                                onClick={() => setShowTemplates(!showTemplates)}
-                                className={cn(
-                                    "flex items-center gap-1.5 px-3 py-1.5 rounded-full",
-                                    "border border-white/20 transition-colors text-xs font-medium",
-                                    showTemplates
-                                        ? "bg-white/[0.08] text-white"
-                                        : "bg-white/[0.03] text-zinc-500 hover:text-white"
-                                )}
-                            >
-                                <Wand2 className="w-3.5 h-3.5" />
-                                <span>Templates</span>
-                            </button>
+                    {/* Textarea (Center) */}
+                    <textarea
+                        ref={textareaRef}
+                        value={text}
+                        onChange={handleTextChange}
+                        onKeyDown={handleKeyDown}
+                        onFocus={() => setIsFocused(true)}
+                        onBlur={() => setIsFocused(false)}
+                        placeholder={placeholder}
+                        className={cn(
+                            "flex-1 bg-transparent py-2 !outline-none !border-none !shadow-none focus:ring-0 focus:shadow-none resize-none",
+                            "text-base text-white placeholder:text-white/35",
+                            "font-light leading-relaxed",
+                            "scrollbar-hide"
                         )}
-                    </div>
+                        rows={1}
+                        disabled={isAnalyzing}
+                    />
 
-                    {/* Action Buttons */}
-                    <div className="flex items-center gap-2">
-                        {/* Submit Button */}
+                    {/* Right Tools (Mic & Send) */}
+                    <div className="flex items-center gap-1.5 self-end pb-1">
+                        <button className="p-2 rounded-full hover:bg-white/10 transition-colors text-white/40 hover:text-white">
+                            <Mic className="w-5 h-5" />
+                        </button>
+
+                        {/* Submit Button (White Circle) */}
                         <Button
                             size="icon"
                             onClick={() => {
@@ -251,19 +226,16 @@ export default function TitanInput({
                             }}
                             disabled={!text.trim() || isAnalyzing}
                             className={cn(
-                                "h-10 w-10 rounded-full transition-all duration-300",
+                                "h-8 w-8 rounded-full transition-all duration-300",
                                 text.trim()
-                                    ? "bg-white text-black hover:bg-zinc-200 hover:scale-105"
-                                    : "bg-white/[0.05] text-zinc-600"
+                                    ? "bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.4)]"
+                                    : "bg-white text-black opacity-40 hover:opacity-100"
                             )}
                         >
                             {isAnalyzing ? (
-                                <Sparkles className="w-5 h-5 animate-spin" />
+                                <Sparkles className="w-4 h-4 animate-spin" />
                             ) : (
-                                <div className="flex items-center gap-1.5">
-                                    <span className="text-[10px] font-mono text-black/40 mr-1 hidden sm:block">⌘↵</span>
-                                    <ArrowRight className="w-5 h-5" />
-                                </div>
+                                <ArrowUp className="w-4 h-4" />
                             )}
                         </Button>
                     </div>
