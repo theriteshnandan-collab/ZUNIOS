@@ -23,7 +23,9 @@ function CogitoBg() {
         const RAD  = 380;
 
         const mouse = { x: -9999, y: -9999 };
+        let isMouseIn = false;
         let raf: number;
+        let tick = 0;
 
         const resize = () => {
             const rect = canvas.getBoundingClientRect();
@@ -39,35 +41,61 @@ function CogitoBg() {
             const rect = canvas.getBoundingClientRect();
             mouse.x = e.clientX - rect.left;
             mouse.y = e.clientY - rect.top;
+            isMouseIn = true;
+        };
+        const onLeave = () => {
+            isMouseIn = false;
         };
         window.addEventListener("mousemove", onMove);
+        canvas.addEventListener("mouseleave", onLeave);
 
         const draw = () => {
+            tick += 0.85;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             const gx = canvas.width  / COLS;
             const gy = canvas.height / ROWS;
+
+            // ─── PROGRAMMED GHOST ATTRACTOR ─────────────────────────────────────
+            const ghostX = (tick * 4) % (canvas.width + 1200) - 600;
+            const ghostY = canvas.height / 2;
 
             for (let c = 0; c < COLS; c++) {
                 for (let r = 0; r < ROWS; r++) {
                     const px = gx * c + gx / 2;
                     const py = gy * r + gy / 2;
 
-                    const dx  = px - mouse.x;
-                    const dy  = py - mouse.y;
-                    const d   = Math.sqrt(dx * dx + dy * dy);
-                    const ang = Math.atan2(dy, dx);
-                    const inf = Math.max(0, 1 - d / RAD);
-                    const op  = BASE + inf * (HOT - BASE);
-                    const len = DASH + inf * 10;
+                    // 1. Calculate REAL Mouse Influence
+                    const rdx  = px - mouse.x;
+                    const rdy  = py - mouse.y;
+                    const rd   = Math.sqrt(rdx * rdx + rdy * rdy);
+                    const realInf = Math.max(0, 1 - rd / RAD);
+                    const realAng = Math.atan2(rdy, rdx);
 
-                    const hx = Math.cos(ang) * len / 2;
-                    const hy = Math.sin(ang) * len / 2;
+                    // 2. Calculate GHOST Attractor Influence (Autonomous)
+                    // CRITICAL: Ghost influence is ZERO if the real mouse is present
+                    const gdx  = px - ghostX;
+                    const Gdy  = py - ghostY;
+                    const gd   = Math.sqrt(gdx * gdx + Gdy * Gdy);
+                    const ghostInf = isMouseIn ? 0 : Math.max(0, 1 - gd / (RAD * 1.2));
+                    const ghostAng = Math.atan2(Gdy, gdx);
+
+                    // 3. Final Orientation Selection
+                    const totalInf = Math.max(realInf, ghostInf);
+                    const finalAng = isMouseIn ? realAng : ghostAng;
+
+                    // 4. Visual Intensity Logic
+                    const baseOp = BASE + totalInf * (HOT - BASE);
+                    const finalOp = Math.min(0.75, baseOp + (ghostInf * 0.08));
+
+                    const len = DASH + totalInf * 14;
+                    const hx  = Math.cos(finalAng) * len / 2;
+                    const hy  = Math.sin(finalAng) * len / 2;
 
                     ctx.beginPath();
                     ctx.moveTo(px - hx, py - hy);
                     ctx.lineTo(px + hx, py + hy);
-                    ctx.strokeStyle = `rgba(255,255,255,${op.toFixed(3)})`;
-                    ctx.lineWidth   = W;
+                    ctx.strokeStyle = `rgba(255,255,255,${finalOp.toFixed(3)})`;
+                    ctx.lineWidth   = W + (totalInf * 0.4);
                     ctx.lineCap     = "round";
                     ctx.stroke();
                 }
@@ -81,6 +109,7 @@ function CogitoBg() {
             cancelAnimationFrame(raf);
             window.removeEventListener("resize", onResize);
             window.removeEventListener("mousemove", onMove);
+            canvas.removeEventListener("mouseleave", onLeave);
         };
     }, []);
 
@@ -134,7 +163,7 @@ export default function Footer() {
                         </span>
                     </h2>
 
-                    <p className="text-lg md:text-xl text-white/40 font-serif leading-relaxed max-w-xl mx-auto italic">
+                    <p className="text-lg md:text-xl text-white font-serif leading-relaxed max-w-xl mx-auto italic drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
                         &ldquo;I think, therefore I am. Master your mind. Shape your reality.&rdquo;
                     </p>
 
@@ -171,25 +200,25 @@ export default function Footer() {
                             <Link href="/" className="inline-flex items-center gap-2 group">
                                 <ZuniosLogo size="sm" showText={true} />
                             </Link>
-                            <p className="text-sm text-white/30 leading-relaxed max-w-[260px]">
+                            <p className="text-sm text-white/90 leading-relaxed max-w-[260px] font-medium">
                                 Master your mind. Shape your reality.
                             </p>
                             {/* Social row */}
                             <div className="flex items-center gap-3 pt-2">
-                                <Link href="https://x.com/zunioscodes" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center hover:bg-white/[0.09] hover:border-white/[0.18] transition-all duration-300 group">
-                                    <svg role="img" viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 text-white/30 group-hover:text-white/80 transition-colors duration-300" xmlns="http://www.w3.org/2000/svg">
+                                <Link href="https://x.com/zunioscodes" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-white/[0.1] border border-white/[0.2] flex items-center justify-center hover:bg-white/[0.2] hover:border-white/[0.4] transition-all duration-300 group shadow-lg">
+                                    <svg role="img" viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 text-white group-hover:text-white transition-colors duration-300" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
                                     </svg>
                                 </Link>
-                                <Link href="mailto:zunios.codes@gmail.com" className="w-9 h-9 rounded-full bg-white/[0.04] border border-white/[0.08] flex items-center justify-center hover:bg-white/[0.09] hover:border-white/[0.18] transition-all duration-300 group">
-                                    <Mail className="w-3.5 h-3.5 text-white/30 group-hover:text-white/80 transition-colors duration-300" />
+                                <Link href="mailto:zunios.codes@gmail.com" className="w-9 h-9 rounded-full bg-white/[0.1] border border-white/[0.2] flex items-center justify-center hover:bg-white/[0.2] hover:border-white/[0.4] transition-all duration-300 group shadow-lg">
+                                    <Mail className="w-3.5 h-3.5 text-white group-hover:text-white transition-colors duration-300" />
                                 </Link>
                             </div>
                         </div>
 
                         {/* Navigation */}
                         <div className="space-y-5">
-                            <h3 className="text-[10px] font-bold text-white/30 uppercase tracking-[0.35em]">Explore</h3>
+                            <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.35em]">Explore</h3>
                             <ul className="space-y-3">
                                 {[
                                     { label: "New Entry", href: "/" },
@@ -198,7 +227,7 @@ export default function Footer() {
                                     { label: "North Star", href: "/manifesto" },
                                 ].map(link => (
                                     <li key={link.label}>
-                                        <Link href={link.href} className="text-sm text-white/30 hover:text-white transition-colors duration-200 flex items-center gap-1.5 group">
+                                        <Link href={link.href} className="text-sm text-white/90 hover:text-white transition-colors duration-200 flex items-center gap-1.5 group font-medium">
                                             {link.label}
                                             <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                                         </Link>
@@ -209,29 +238,30 @@ export default function Footer() {
 
                         {/* Status */}
                         <div className="space-y-5">
-                            <h3 className="text-[10px] font-bold text-white/30 uppercase tracking-[0.35em]">System</h3>
+                            <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.35em]">System</h3>
                             <div className="space-y-4">
                                 <div className="flex items-center gap-2.5">
-                                    <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.4)]" />
-                                    <span className="text-sm text-white/40">All Systems Operational</span>
+                                    <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_12px_rgba(52,211,153,0.6)]" />
+                                    <span className="text-sm text-white font-bold tracking-tight">All Systems Operational</span>
                                 </div>
                                 <div className="flex items-center gap-2.5">
-                                    <div className="w-2 h-2 rounded-full bg-white/30" />
-                                    <span className="text-sm text-white/30">v2.0</span>
+                                    <div className="w-2 h-2 rounded-full bg-white" />
+                                    <span className="text-sm text-white font-medium">v2.0</span>
                                 </div>
                                 <div className="flex items-center gap-2.5">
-                                    <div className="w-2 h-2 rounded-full bg-white/20" />
-                                    <span className="text-sm text-white/25">Edge Runtime</span>
+                                    <div className="w-2 h-2 rounded-full bg-white/80" />
+                                    <span className="text-sm text-white font-medium">Edge Runtime</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     {/* Bottom bar */}
-                    <div className="mt-16 pt-8 border-t border-white/[0.06] flex flex-col md:flex-row items-center justify-between gap-4">
-                        <p className="text-xs text-white/20">&copy; {new Date().getFullYear()} Zunios Systems. All rights reserved.</p>
-                        <p className="text-xs text-white/20 flex items-center gap-1.5">
-                            Made with <Heart className="w-3 h-3 text-white/50 fill-white/50 inline" /> by <span className="text-white/40 font-medium">Zunios Team</span>
+                    <div className="mt-16 pt-8 border-t border-white/[0.1] flex flex-col md:flex-row items-center justify-between gap-4 relative z-10">
+                        <div className="absolute inset-0 bg-black/20 backdrop-blur-sm -z-10 rounded-t-lg" />
+                        <p className="text-xs text-white/60">&copy; {new Date().getFullYear()} Zunios Systems. All rights reserved.</p>
+                        <p className="text-xs text-white/60 flex items-center gap-1.5">
+                            Made with <Heart className="w-3 h-3 text-white/80 fill-white/50 inline" /> by <span className="text-white/80 font-medium">Zunios Team</span>
                         </p>
                     </div>
                 </div>

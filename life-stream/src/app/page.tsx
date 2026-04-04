@@ -2,9 +2,9 @@
 
 import { useState, useEffect, Suspense, useRef } from "react";
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
-import { 
-  Moon, Sparkles, Lightbulb, Target, BrainCircuit, Brain, Database, 
-  Hexagon, Share2, Shield, Zap, Activity, ArrowRight, Eye, Wand2 
+import {
+  Moon, Sparkles, Lightbulb, Target, BrainCircuit, Brain, Database,
+  Hexagon, Share2, Shield, Zap, Activity, ArrowRight, Eye, Wand2
 } from "lucide-react";
 import Image from "next/image";
 import TitanInput from "@/components/TitanInput";
@@ -70,10 +70,10 @@ const FeatureSection = ({
   // Zero-State Hardware Transforms (Mathematically bound to scroll pixels, avoiding React entirely)
   const visualX = useTransform(scrollYProgress, [0, 1], [isRight ? -40 : 40, 0]);
   const textX = useTransform(scrollYProgress, [0, 1], [isRight ? 20 : -20, 0]);
-  
+
   // Opacity interpolation mapped identically to the physical progress
   const commonOpacity = useTransform(scrollYProgress, [0, 0.8], [0, 1]); // Hits 100% opacity slighly before fully translating
-  
+
   // Center wire socket transformations
   const nodeScale = useTransform(scrollYProgress, [0, 0.4], [0, 1]); // Pops in fast
   const sparkScaleX = useTransform(scrollYProgress, [0.3, 1], [0, 1]); // Sparks cleanly out
@@ -89,37 +89,37 @@ const FeatureSection = ({
       {/* TIMELINE SOCKET & SPARK */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex items-center justify-center z-10 pointer-events-none">
         {/* The Node Socket */}
-        <motion.div 
+        <motion.div
           style={{ scale: nodeScale, opacity: commonOpacity }}
           className="relative w-4 h-4 rounded-full bg-white border-2 border-black/10 shadow-[0_0_20px_rgba(0,0,0,0.15)] flex items-center justify-center transform-gpu"
         >
           <div className="w-1.5 h-1.5 bg-black rounded-full animate-pulse" />
         </motion.div>
-        
+
         {/* The Horizontal Spark Line */}
         <motion.div
           style={{ scaleX: sparkScaleX, opacity: commonOpacity }}
           className={cn(
             "absolute h-[2px] bg-gradient-to-r w-24 transform-gpu",
-            isRight 
-              ? "right-2 origin-left from-black/40 to-black/0" 
+            isRight
+              ? "right-2 origin-left from-black/40 to-black/0"
               : "left-2 origin-right from-black/0 to-black/40"
           )}
         />
       </div>
 
       {/* VISUAL SIDE — Spawning Container */}
-      <motion.div 
-        style={{ 
-          x: visualX, 
+      <motion.div
+        style={{
+          x: visualX,
           opacity: commonOpacity,
-          WebkitBackfaceVisibility: "hidden" 
-        }} 
+          WebkitBackfaceVisibility: "hidden"
+        }}
         className="w-full md:w-1/2 relative z-20 transform-gpu"
       >
         <div className="relative rounded-[16px] bg-gradient-to-b from-black/[0.08] to-black/[0.02] border border-black/15 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.25)] group-hover/section:border-black/30 group-hover/section:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.3)] transition-all duration-700 p-1">
           <div className="relative w-full h-[260px] md:h-[340px] rounded-[12px] overflow-hidden bg-black">
-            
+
             {/* Monitor Chrome */}
             <div className="absolute top-0 left-0 right-0 z-30 h-8 bg-gradient-to-b from-black/[0.1] to-transparent backdrop-blur-md flex items-center justify-between px-4 border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
@@ -174,19 +174,58 @@ const StatsStrip = () => (
   >
     {[
       { value: "Neural Analysis", label: "Thought mapping" },
-      { value: "Encrypted",       label: "Zero-knowledge" },
+      { value: "Encrypted", label: "Zero-knowledge" },
       { value: "Infinite Memory", label: "Vector-recall" },
-      { value: "Instant",         label: "Edge processing" },
+      { value: "Instant", label: "Edge processing" },
     ].map((stat) => (
       <div key={stat.label} className="text-center group">
         <div className="text-xl sm:text-2xl md:text-3xl xl:text-4xl font-bold font-serif text-[#050505] mb-2 group-hover:text-black/70 transition-colors duration-500 tracking-tighter leading-none whitespace-nowrap">
           {stat.value}
         </div>
-        <div className="text-[8px] md:text-[10px] text-black/35 uppercase tracking-[0.1em] md:tracking-[0.25em] font-bold">{stat.label}</div>
+        <div className="text-[8px] md:text-[10px] text-black/60 uppercase tracking-[0.1em] md:tracking-[0.25em] font-bold">{stat.label}</div>
       </div>
     ))}
   </motion.div>
 );
+
+// --- HERO BACKGROUND (PERSISTENT ATMOSPHERE) ---
+const HeroBackground = ({ isDashboard = false }: { isDashboard?: boolean }) => {
+  return (
+    <div className="fixed inset-0 z-[-10] pointer-events-none hidden md:block">
+      {/* Cinematic Photo Background */}
+      <Image
+        src={heroCinematicImage}
+        alt=""
+        fill
+        className={cn(
+          "object-cover object-center transition-all duration-1000 ease-out",
+          isDashboard ? "scale-105 blur-[1px] opacity-40" : "scale-100 opacity-100"
+        )}
+        priority
+      />
+
+      {/* Cinematic Gradients */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/10 to-black/0" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/20 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-transparent" />
+
+      {/* Surface Depth Highlight */}
+      <div className="absolute w-[1000px] h-[1000px] bg-white/[0.01] rounded-full blur-[200px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
+
+      {/* Frame Diagnostic Brackets (Persistent System Spine) */}
+      <div className="absolute top-[72px] left-6 w-14 h-14 border-t-[1.5px] border-l-[1.5px] border-white/20 z-20 transition-opacity duration-700" />
+      <div className="absolute top-[72px] right-6 w-14 h-14 border-t-[1.5px] border-r-[1.5px] border-white/20 z-20 transition-opacity duration-700" />
+      <div className="absolute bottom-6 left-6 w-14 h-14 border-b-[1.5px] border-l-[1.5px] border-white/20 z-20 transition-opacity duration-700" />
+      <div className="absolute bottom-6 right-6 w-14 h-14 border-b-[1.5px] border-r-[1.5px] border-white/20 z-20 transition-opacity duration-700" />
+
+      {/* Frame Diagnostic Nodes */}
+      <div className="absolute top-[72px] left-6 w-1.5 h-1.5 bg-white/40 rounded-full -translate-x-[2px] -translate-y-[2px] z-20" />
+      <div className="absolute top-[72px] right-6 w-1.5 h-1.5 bg-white/40 rounded-full translate-x-[2px] -translate-y-[2px] z-20" />
+      <div className="absolute bottom-6 left-6 w-1.5 h-1.5 bg-white/40 rounded-full -translate-x-[2px] translate-y-[2px] z-20" />
+      <div className="absolute bottom-6 right-6 w-1.5 h-1.5 bg-white/40 rounded-full translate-x-[2px] translate-y-[2px] z-20" />
+    </div>
+  );
+};
 
 const CinematicHero = () => {
   const [activeSpec, setActiveSpec] = useState(0);
@@ -199,40 +238,16 @@ const CinematicHero = () => {
   }, []);
 
   return (
-    <section 
-      className="relative w-full min-h-screen flex flex-col overflow-hidden hidden md:flex"
-    >
-      {/* Cinematic Photo Background - Stable & Clean */}
-      <div className="absolute inset-0 z-0">
-        <Image src={heroCinematicImage} alt="" fill className="object-cover object-center" priority />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/10 to-black/0" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/20 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-transparent" />
-      </div>
-
-      {/* Surface Depth Highlight */}
-      <div 
-        className="absolute w-[1000px] h-[1000px] bg-white/[0.01] rounded-full blur-[200px] pointer-events-none z-[1] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-      />
-
-      {/* Corner Bracket Frames */}
-      <div className="absolute top-[72px] left-6 w-14 h-14 border-t-[1.5px] border-l-[1.5px] border-white/20 z-20 pointer-events-none" />
-      <div className="absolute top-[72px] right-6 w-14 h-14 border-t-[1.5px] border-r-[1.5px] border-white/20 z-20 pointer-events-none" />
-      <div className="absolute bottom-6 left-6 w-14 h-14 border-b-[1.5px] border-l-[1.5px] border-white/20 z-20 pointer-events-none" />
-      <div className="absolute bottom-6 right-6 w-14 h-14 border-b-[1.5px] border-r-[1.5px] border-white/20 z-20 pointer-events-none" />
-
-      {/* Corner Dots */}
-      <div className="absolute top-[72px] left-6 w-1.5 h-1.5 bg-white/40 rounded-full -translate-x-[2px] -translate-y-[2px] z-20" />
-      <div className="absolute top-[72px] right-6 w-1.5 h-1.5 bg-white/40 rounded-full translate-x-[2px] -translate-y-[2px] z-20" />
-      <div className="absolute bottom-6 left-6 w-1.5 h-1.5 bg-white/40 rounded-full -translate-x-[2px] translate-y-[2px] z-20" />
-      <div className="absolute bottom-6 right-6 w-1.5 h-1.5 bg-white/40 rounded-full translate-x-[2px] translate-y-[2px] z-20" />
+    <section className="relative w-full min-h-screen flex flex-col overflow-hidden hidden md:flex">
+      {/* Background Layer */}
+      <HeroBackground isDashboard={false} />
 
       {/* Main Content — z-10, above canvas */}
       <div className="relative z-10 flex-1 flex flex-col justify-start w-full pt-16">
         <div className="w-full max-w-7xl mx-auto px-10 xl:px-16 relative" style={{ filter: "drop-shadow(0 4px 32px rgba(0,0,0,0.8))" }}>
-          
+
           {/* RIGHT SIDE FEATURE STRIP — Zinc / Titanium Order */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.1, delay: 0.5 }}
@@ -240,17 +255,17 @@ const CinematicHero = () => {
           >
             {/* The Connecting Data Spine — Zinc Metallic Gradient */}
             <div className="absolute right-0 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-zinc-400/30 to-transparent" />
-            
+
             {[
               { value: "Neural Analysis", label: "Real-time thought mapping", icon: Activity },
-              { value: "Encrypted",       label: "Zero-knowledge security",   icon: Shield },
-              { value: "Infinite Memory", label: "Vector-embedded recall",    icon: Database },
-              { value: "Instant",         label: "Edge runtime processing",   icon: Zap },
+              { value: "Encrypted", label: "Zero-knowledge security", icon: Shield },
+              { value: "Infinite Memory", label: "Vector-embedded recall", icon: Database },
+              { value: "Instant", label: "Edge runtime processing", icon: Zap },
             ].map((s, idx) => {
               const isAutoActive = activeSpec === idx;
               return (
-                <motion.div 
-                  key={s.value} 
+                <motion.div
+                  key={s.value}
                   initial={{ opacity: 0, x: 10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.6 + (idx * 0.1) }}
@@ -259,11 +274,11 @@ const CinematicHero = () => {
                   {/* Connection Node — Zinc Glow */}
                   <div className={cn(
                     "absolute right-[-3.5px] top-1/2 -translate-y-1/2 w-[7px] h-[7px] rounded-full transition-all duration-700",
-                    isAutoActive 
-                      ? "bg-zinc-100 shadow-[0_0_12px_rgba(255,255,255,0.5)] scale-110" 
+                    isAutoActive
+                      ? "bg-zinc-100 shadow-[0_0_12px_rgba(255,255,255,0.5)] scale-110"
                       : "bg-zinc-600/60 border border-zinc-400/40 group-hover:bg-zinc-100 group-hover:shadow-[0_0_10px_rgba(255,255,255,0.4)]"
                   )} />
-                  
+
                   <div className="flex flex-col items-end">
                     <div className="flex items-center gap-3 mb-1">
                       <span className={cn(
@@ -367,9 +382,9 @@ const NarrativeFlowLines = () => {
       {/* SECTION DIVIDER */}
       <div className="max-w-6xl mx-auto px-8 mb-4 pt-12">
         <div className="flex items-center gap-8">
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent to-black/[0.08]" />
-          <span className="text-[11px] text-black/30 uppercase tracking-[0.35em] font-bold whitespace-nowrap">The Architecture</span>
-          <div className="flex-1 h-px bg-gradient-to-l from-transparent to-black/[0.08]" />
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent to-black/[0.15]" />
+          <span className="text-[11px] text-black/60 uppercase tracking-[0.35em] font-bold whitespace-nowrap">The Architecture</span>
+          <div className="flex-1 h-px bg-gradient-to-l from-transparent to-black/[0.15]" />
         </div>
       </div>
 
@@ -425,8 +440,8 @@ const NarrativeFlowLines = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/40">Full Stack</span>
-            <h3 className="text-3xl md:text-4xl font-serif text-black mt-3">System Capabilities</h3>
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/70">Full Stack</span>
+            <h3 className="text-3xl md:text-4xl font-serif text-white mt-3">System Capabilities</h3>
           </motion.div>
           <div className="h-px w-16 bg-gradient-to-r from-transparent via-black/20 to-transparent mx-auto" />
         </div>
@@ -452,11 +467,11 @@ const NarrativeFlowLines = () => {
               <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-white/[0.05] to-transparent" />
               {/* Hover glow */}
               <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/0 group-hover:from-white/[0.02] group-hover:to-transparent transition-all duration-700 rounded-2xl" />
-              <div className="w-10 h-10 rounded-xl bg-white/[0.02] border border-white/[0.04] flex items-center justify-center mb-5 group-hover:scale-110 group-hover:border-white/[0.08] group-hover:bg-white/[0.05] transition-all duration-300 relative z-10">
-                <item.icon className="w-5 h-5 text-white/40 group-hover:text-white transition-colors duration-300" />
+              <div className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/[0.1] flex items-center justify-center mb-5 group-hover:scale-110 group-hover:border-white/[0.2] group-hover:bg-white/[0.08] transition-all duration-300 relative z-10 shadow-[0_0_20px_rgba(255,255,255,0.02)]">
+                <item.icon className="w-5 h-5 text-white/60 group-hover:text-white transition-colors duration-300" />
               </div>
               <h4 className="text-base font-bold text-white mb-2.5 relative z-10">{item.title}</h4>
-              <p className="text-white/40 text-sm leading-relaxed relative z-10 group-hover:text-white/60 transition-colors">{item.desc}</p>
+              <p className="text-white/65 text-sm leading-relaxed relative z-10 group-hover:text-white/90 transition-colors">{item.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -726,17 +741,16 @@ function HomeContent() {
 
         {isLoading && <DreamLoader mode={mode} />}
 
+        {/* ——— PERSISTENT BACKGROUND ——— */}
+        <HeroBackground isDashboard={!!user} />
+
         {/* ——— CINEMATIC HERO (non-users, desktop) ——— */}
         {!user && <CinematicHero />}
 
         {/* ——— COMPACT HERO (logged-in users, desktop) ——— */}
         {user && (
           <div className="w-full max-w-5xl mx-auto px-6 pt-28 pb-6 text-center relative hidden md:block">
-            <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
-              <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-gradient-to-b from-white/[0.03] via-white/[0.03] to-transparent blur-[80px]" />
-            </div>
             <div className="flex items-center justify-center mb-6 relative">
-              <div className="absolute inset-0 bg-white/[0.03] blur-[80px] rounded-full scale-[3] pointer-events-none" />
               <ZuniosLogo size="lg" showText={true} className="flex-col !gap-3 relative z-10" />
             </div>
             <motion.h1
@@ -752,7 +766,7 @@ function HomeContent() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.15 }}
-              className="text-lg text-white/30 mb-8 max-w-md mx-auto"
+              className="text-lg text-white/70 mb-8 max-w-md mx-auto font-medium"
             >
               Capture visions. Build ideas. Log moments. Think deeply.
             </motion.p>

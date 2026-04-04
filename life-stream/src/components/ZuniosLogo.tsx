@@ -84,7 +84,7 @@ export default function ZuniosLogo({ size = "md", showText = true, className }: 
                     )}>
                         ZUNIOS
                     </span>
-                    <span className="text-[10px] text-white/40 font-medium tracking-[0.2em] -mt-1 uppercase">
+                    <span className="text-[10px] text-white/80 font-bold tracking-[0.2em] -mt-1 uppercase">
                         The Mind OS
                     </span>
                 </div>

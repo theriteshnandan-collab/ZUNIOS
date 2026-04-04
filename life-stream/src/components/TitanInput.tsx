@@ -120,14 +120,14 @@ export default function TitanInput({
 
     return (
         <div className="w-full relative z-50">
-            {/* === THE TITAN GLOW (Underglow) === */}
+            {/* === THE TITAN GLOW (Underglow) — SUBTLE ONLY === */}
             <motion.div
                 className="absolute -bottom-6 left-1/2 -translate-x-1/2 pointer-events-none z-0"
-                initial={{ opacity: 0.3, width: "30%" }}
+                initial={{ opacity: 0.1, width: "30%" }}
                 animate={{
-                    opacity: isFocused ? 0.6 : 0.3,
-                    width: isFocused ? "80%" : "30%",
-                    height: isFocused ? "100px" : "60px"
+                    opacity: isFocused ? 0.3 : 0.15,
+                    width: isFocused ? "70%" : "30%",
+                    height: isFocused ? "80px" : "40px"
                 }}
                 transition={{ type: "spring", stiffness: 200, damping: 40 }}
             >
@@ -136,7 +136,6 @@ export default function TitanInput({
                     style={{
                         background: glowGradient,
                         filter: "blur(60px)",
-                        animation: `titan-breathe ${glowAnimationDuration} ease-in-out infinite`
                     }}
                 />
             </motion.div>
@@ -163,29 +162,12 @@ export default function TitanInput({
                     }}
                 />
 
-                {/* === NEURAL SCAN SWEEP (The Crossing Light) === */}
-                <motion.div
-                    className="absolute inset-y-0 w-24 z-[1] pointer-events-none opacity-40"
-                    style={{
-                        background: "linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent)",
-                        skewX: -25
-                    }}
-                    animate={{
-                        x: ['-100%', '600%'],
-                    }}
-                    transition={{
-                        duration: 8,
-                        repeat: Infinity,
-                        ease: "linear",
-                        repeatDelay: 2
-                    }}
-                />
 
                 <div className="relative z-10 flex items-center gap-2 px-4 py-3 min-h-[64px]">
                     {/* Plus Icon (Left) */}
                     <button 
                         onClick={() => setShowTemplates(!showTemplates)}
-                        className="p-2 rounded-full hover:bg-white/10 transition-colors text-white/40 hover:text-white"
+                        className="p-2 rounded-full hover:bg-white/10 transition-colors text-white/60 hover:text-white"
                     >
                         <Plus className="w-5 h-5" />
                     </button>
@@ -201,7 +183,7 @@ export default function TitanInput({
                         placeholder={placeholder}
                         className={cn(
                             "flex-1 bg-transparent py-2 !outline-none !border-none !shadow-none focus:ring-0 focus:shadow-none resize-none",
-                            "text-base text-white placeholder:text-white/35",
+                            "text-base text-white placeholder:text-white/60",
                             "font-light leading-relaxed",
                             "scrollbar-hide"
                         )}
@@ -211,7 +193,7 @@ export default function TitanInput({
 
                     {/* Right Tools (Mic & Send) */}
                     <div className="flex items-center gap-1.5 self-end pb-1">
-                        <button className="p-2 rounded-full hover:bg-white/10 transition-colors text-white/40 hover:text-white">
+                        <button className="p-2 rounded-full hover:bg-white/10 transition-colors text-white/60 hover:text-white">
                             <Mic className="w-5 h-5" />
                         </button>
 
@@ -229,7 +211,7 @@ export default function TitanInput({
                                 "h-8 w-8 rounded-full transition-all duration-300",
                                 text.trim()
                                     ? "bg-white text-black shadow-[0_0_20px_rgba(255,255,255,0.4)]"
-                                    : "bg-white text-black opacity-40 hover:opacity-100"
+                                    : "bg-white text-black opacity-60 hover:opacity-100"
                             )}
                         >
                             {isAnalyzing ? (
