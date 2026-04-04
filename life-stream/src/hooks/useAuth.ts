@@ -10,25 +10,34 @@ export function useAuth() {
     const supabase = createClient();
 
     useEffect(() => {
+        let isMounted = true;
+
         const checkUser = async () => {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
-                setUser(user);
+                if (isMounted) {
+                    setUser(user);
+                }
             } catch (e) {
                 console.error("Auth check failed", e);
             } finally {
-                setLoading(false);
+                if (isMounted) {
+                    setLoading(false);
+                }
             }
         };
 
         checkUser();
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            setUser(session?.user ?? null);
-            setLoading(false);
+            if (isMounted) {
+                setUser(session?.user ?? null);
+                setLoading(false);
+            }
         });
 
         return () => {
+            isMounted = false;
             subscription.unsubscribe();
         };
     }, []);
