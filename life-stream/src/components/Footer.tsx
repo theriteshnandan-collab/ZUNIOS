@@ -124,7 +124,7 @@ function CogitoBg() {
 
 export default function Footer() {
     return (
-        <footer className="relative w-full hidden md:block overflow-hidden bg-black">
+        <footer className="relative w-full overflow-hidden bg-black">
 
             {/* ══════ CINEMATIC CLOSING — "Cogito" ══════ */}
             <section className="relative py-24 md:py-36 flex items-center justify-center overflow-hidden bg-black">
@@ -188,38 +188,38 @@ export default function Footer() {
             </section>
 
             {/* ══════ MAIN FOOTER ══════ */}
-            <div className="relative border-t border-white/[0.08] bg-black">
+            <div className="relative border-t border-white/10 bg-black z-50">
                 {/* Top shine */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
 
-                <div className="container mx-auto max-w-5xl px-8 py-16">
-                    <div className="grid md:grid-cols-3 gap-12 items-start">
+                <div className="container mx-auto max-w-6xl px-6 py-20 relative z-30">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-16 lg:gap-24 items-start">
 
                         {/* Brand */}
-                        <div className="space-y-5">
-                            <Link href="/" className="inline-flex items-center gap-2 group">
-                                <ZuniosLogo size="sm" showText={true} />
+                        <div className="space-y-6">
+                            <Link href="/" className="inline-flex items-center gap-3 group">
+                                <ZuniosLogo size="md" showText={true} />
                             </Link>
-                            <p className="text-sm text-white/90 leading-relaxed max-w-[260px] font-medium">
-                                Master your mind. Shape your reality.
+                            <p className="text-sm text-white leading-relaxed max-w-[280px] font-medium drop-shadow-sm">
+                                Master your mind. Shape your reality. Master the OS of your potential.
                             </p>
                             {/* Social row */}
-                            <div className="flex items-center gap-3 pt-2">
-                                <Link href="https://x.com/zunioscodes" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-white/[0.1] border border-white/[0.2] flex items-center justify-center hover:bg-white/[0.2] hover:border-white/[0.4] transition-all duration-300 group shadow-lg">
-                                    <svg role="img" viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5 text-white group-hover:text-white transition-colors duration-300" xmlns="http://www.w3.org/2000/svg">
+                            <div className="flex items-center gap-4 pt-4">
+                                <Link href="https://x.com/zunioscodes" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/[0.08] border border-white/[0.15] flex items-center justify-center hover:bg-white/[0.15] hover:border-white/[0.3] transition-all duration-300 group shadow-xl">
+                                    <svg role="img" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-white group-hover:scale-110 transition-transform duration-300" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z" />
                                     </svg>
                                 </Link>
-                                <Link href="mailto:zunios.codes@gmail.com" className="w-9 h-9 rounded-full bg-white/[0.1] border border-white/[0.2] flex items-center justify-center hover:bg-white/[0.2] hover:border-white/[0.4] transition-all duration-300 group shadow-lg">
-                                    <Mail className="w-3.5 h-3.5 text-white group-hover:text-white transition-colors duration-300" />
+                                <Link href="mailto:zunios.codes@gmail.com" className="w-10 h-10 rounded-full bg-white/[0.08] border border-white/[0.15] flex items-center justify-center hover:bg-white/[0.15] hover:border-white/[0.3] transition-all duration-300 group shadow-xl">
+                                    <Mail className="w-4 h-4 text-white group-hover:scale-110 transition-transform duration-300" />
                                 </Link>
                             </div>
                         </div>
 
                         {/* Navigation */}
-                        <div className="space-y-5">
-                            <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.35em]">Explore</h3>
-                            <ul className="space-y-3">
+                        <div className="space-y-6">
+                            <h3 className="text-[11px] font-black text-white uppercase tracking-[0.4em] mb-4">Explore</h3>
+                            <ul className="space-y-4">
                                 {[
                                     { label: "New Entry", href: "/" },
                                     { label: "Memory Bank", href: "/journal" },
@@ -227,9 +227,9 @@ export default function Footer() {
                                     { label: "North Star", href: "/manifesto" },
                                 ].map(link => (
                                     <li key={link.label}>
-                                        <Link href={link.href} className="text-sm text-white/90 hover:text-white transition-colors duration-200 flex items-center gap-1.5 group font-medium">
+                                        <Link href={link.href} className="text-sm text-white/90 hover:text-white transition-all duration-300 flex items-center gap-2 group font-medium hover:translate-x-1">
                                             {link.label}
-                                            <ArrowUpRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                            <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-y-1 translate-x-1 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-300" />
                                         </Link>
                                     </li>
                                 ))}
@@ -237,31 +237,30 @@ export default function Footer() {
                         </div>
 
                         {/* Status */}
-                        <div className="space-y-5">
-                            <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.35em]">System</h3>
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-2.5">
-                                    <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_12px_rgba(52,211,153,0.6)]" />
-                                    <span className="text-sm text-white font-bold tracking-tight">All Systems Operational</span>
+                        <div className="space-y-6">
+                            <h3 className="text-[11px] font-black text-white uppercase tracking-[0.4em] mb-4">System</h3>
+                            <div className="space-y-5">
+                                <div className="flex items-center gap-3 p-3 rounded-lg bg-white/[0.03] border border-white/5">
+                                    <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_12px_rgba(52,211,153,0.8)]" />
+                                    <span className="text-[12px] text-white font-bold tracking-tight">Active & Operational</span>
                                 </div>
-                                <div className="flex items-center gap-2.5">
-                                    <div className="w-2 h-2 rounded-full bg-white" />
-                                    <span className="text-sm text-white font-medium">v2.0</span>
+                                <div className="flex items-center gap-3 px-1">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-white/40" />
+                                    <span className="text-[12px] text-white font-medium uppercase tracking-widest">v2.1 Stable</span>
                                 </div>
-                                <div className="flex items-center gap-2.5">
-                                    <div className="w-2 h-2 rounded-full bg-white/80" />
-                                    <span className="text-sm text-white font-medium">Edge Runtime</span>
+                                <div className="flex items-center gap-3 px-1">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-white/40" />
+                                    <span className="text-[12px] text-white font-medium uppercase tracking-widest">Cloud Sync: Active</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     {/* Bottom bar */}
-                    <div className="mt-16 pt-8 border-t border-white/[0.1] flex flex-col md:flex-row items-center justify-between gap-4 relative z-10">
-                        <div className="absolute inset-0 bg-black/20 backdrop-blur-sm -z-10 rounded-t-lg" />
-                        <p className="text-xs text-white/60">&copy; {new Date().getFullYear()} Zunios Systems. All rights reserved.</p>
-                        <p className="text-xs text-white/60 flex items-center gap-1.5">
-                            Made with <Heart className="w-3 h-3 text-white/80 fill-white/50 inline" /> by <span className="text-white/80 font-medium">Zunios Team</span>
+                    <div className="mt-24 pt-10 border-t border-white/[0.08] flex flex-col md:flex-row items-center justify-between gap-6 relative z-10 transition-opacity duration-300">
+                        <p className="text-[11px] text-white/50 tracking-wide font-medium">&copy; {new Date().getFullYear()} Zunios Systems. Reserved for the Sovereign.</p>
+                        <p className="text-[11px] text-white/50 flex items-center gap-2 font-medium">
+                            Synthesized with <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500/20" /> by <span className="text-white font-bold hover:text-rose-400 transition-colors">Zunios Team</span>
                         </p>
                     </div>
                 </div>
