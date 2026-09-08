@@ -23,6 +23,7 @@ import { parseCommandLocally } from "@/lib/local-intelligence";
 import { ParticleBackground } from "@/components/ui/ParticleBackground";
 import { NeuralVisual, SyncVisual, CaptureVisual, VaultVisual } from "@/components/ui/BentoVisuals";
 import heroCinematicImage from "../../public/images/hero-sunrays.jpg";
+import heroMobileCinematicImage from "../../public/images/hero-sunrays-mobile.jpg";
 import dynamic from "next/dynamic";
 
 const RevelationView = dynamic(() => import("@/components/RevelationView"), {
@@ -192,13 +193,25 @@ const StatsStrip = () => (
 const HeroBackground = ({ isDashboard = false }: { isDashboard?: boolean }) => {
   return (
     <div className="fixed inset-0 z-[-10] pointer-events-none">
-      {/* Cinematic Photo Background */}
+      {/* Mobile Cinematic Photo Background */}
+      <Image
+        src={heroMobileCinematicImage}
+        alt=""
+        fill
+        className={cn(
+          "object-cover object-center transition-all duration-1000 ease-out md:hidden",
+          isDashboard ? "scale-105 blur-[1px] opacity-40" : "scale-100 opacity-100"
+        )}
+        priority
+      />
+
+      {/* Desktop Cinematic Photo Background */}
       <Image
         src={heroCinematicImage}
         alt=""
         fill
         className={cn(
-          "object-cover object-center transition-all duration-1000 ease-out",
+          "object-cover object-center transition-all duration-1000 ease-out hidden md:block",
           isDashboard ? "scale-105 blur-[1px] opacity-40" : "scale-100 opacity-100"
         )}
         priority
