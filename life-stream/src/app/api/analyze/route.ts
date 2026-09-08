@@ -134,62 +134,78 @@ Return a strictly valid JSON object:
         // 2. CLOUD INTELLIGENCE (Groq)
         const systemPrompt = SYSTEM_PROMPTS[category] || SYSTEM_PROMPTS['thought'];
 
-        let analysis;
-        try {
-            const groqApiKey = process.env.GROQ_API_KEY || process.env.GROQ_API_KEY1;
-            if (!groqApiKey) {
-                throw new Error("GROQ_API_KEY or GROQ_API_KEY1 is not set in environment variables.");
-            }
+        // Models available on Groq in priority order
+        const CANDIDATE_MODELS = [
+            "qwen/qwen3.8-27b",
+            "openai/gpt-oss-120b",
+            "openai/gpt-oss-20b",
+            "groq/compound"
+        ];
 
-            const response = await fetch(GROQ_API_URL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${groqApiKey}`
-                },
-                body: JSON.stringify({
-                    model: "llama-3.3-70b-versatile",
-                    messages: [
-                        { role: "system", content: systemPrompt },
-                        { role: "user", content: `Here is what's on my mind: "${dream}"` }
-                    ],
-                    temperature: 0.7,
-                    max_tokens: 2048,
-                    response_format: { type: "json_object" }
-                })
-            });
+        let analysis: any = null;
+        let lastError: any = null;
 
-            if (!response.ok) {
-                const errorBody = await response.text();
-                throw new Error(`Groq API Error: ${response.status} - ${errorBody}`);
-            }
-            const data = await response.json();
-            const rawText = data.choices[0]?.message?.content || "";
+        const groqApiKey = process.env.GROQ_API_KEY || process.env.GROQ_API_KEY1;
 
-            // Robust JSON Parsing Helper
-            const cleanAndParse = (input: string) => {
-                try {
-                    return JSON.parse(input);
-                } catch (e) {
-                    try {
-                        let cleaned = input.trim();
-                        const firstBrace = cleaned.indexOf('{');
-                        const lastBrace = cleaned.lastIndexOf('}');
-                        if (firstBrace !== -1 && lastBrace !== -1) {
-                            cleaned = cleaned.substring(firstBrace, lastBrace + 1);
-                            return JSON.parse(cleaned);
-                        }
-                        throw new Error("No JSON structure found");
-                    } catch (innerError: any) {
-                        throw new Error(`Parse Failed: ${innerError.message}`);
-                    }
+        // Robust JSON Parsing Helper
+        const cleanAndParse = (input: string) => {
+            try {
+                return JSON.parse(input);
+            } catch (e) {
+                let cleaned = input.trim();
+                const firstBrace = cleaned.indexOf('{');
+                const lastBrace = cleaned.lastIndexOf('}');
+                if (firstBrace !== -1 && lastBrace !== -1) {
+                    cleaned = cleaned.substring(firstBrace, lastBrace + 1);
+                    return JSON.parse(cleaned);
                 }
-            };
+                throw new Error("No JSON structure found");
+            }
+        };
 
-            analysis = cleanAndParse(rawText);
+        for (const model of CANDIDATE_MODELS) {
+            try {
+                const response = await fetch(GROQ_API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${groqApiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        messages: [
+                            { role: "system", content: systemPrompt },
+                            { role: "user", content: `Here is what's on my mind: "${dream}"` }
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 2048,
+                        response_format: { type: "json_object" }
+                    })
+                });
 
-        } catch (groqError: any) {
-            console.warn("Cloud Intelligence Failed:", groqError.message);
+                if (!response.ok) {
+                    const errorBody = await response.text();
+                    console.warn(`Groq model ${model} failed (${response.status}): ${errorBody}`);
+                    lastError = new Error(`Groq ${model} Error: ${response.status} - ${errorBody}`);
+                    continue;
+                }
+
+                const data = await response.json();
+                const rawText = data.choices?.[0]?.message?.content || "";
+                const parsed = cleanAndParse(rawText);
+
+                if (parsed && (parsed.interpretation || parsed.theme)) {
+                    analysis = parsed;
+                    break; // Success!
+                }
+            } catch (err: any) {
+                console.warn(`Groq model ${model} error:`, err.message);
+                lastError = err;
+            }
+        }
+
+        if (!analysis) {
+            console.error("All Groq models failed. Last error:", lastError?.message);
             analysis = analyzeLocally(dream, category);
         }
 

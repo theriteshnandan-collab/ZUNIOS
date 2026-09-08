@@ -43,31 +43,54 @@ export async function POST(req: Request) {
         }
 
         const groqApiKey = process.env.GROQ_API_KEY || process.env.GROQ_API_KEY1;
-        if (!groqApiKey) {
-            throw new Error("GROQ_API_KEY or GROQ_API_KEY1 is not set in environment variables.");
+
+        const CANDIDATE_MODELS = [
+            "qwen/qwen3.8-27b",
+            "openai/gpt-oss-120b",
+            "openai/gpt-oss-20b",
+            "groq/compound"
+        ];
+
+        let result: any = null;
+        let lastError: any = null;
+
+        for (const model of CANDIDATE_MODELS) {
+            try {
+                const response = await fetch(GROQ_API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${groqApiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: model,
+                        messages: [
+                            { role: "system", content: SYSTEM_PROMPT },
+                            { role: "user", content: command }
+                        ],
+                        temperature: 0.1, // Low temp for precision
+                        response_format: { type: "json_object" }
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorBody = await response.text();
+                    lastError = new Error(`Groq ${model} failed: ${errorBody}`);
+                    continue;
+                }
+
+                const data = await response.json();
+                const rawContent = data.choices?.[0]?.message?.content || "";
+                result = JSON.parse(rawContent);
+                if (result) break;
+            } catch (err: any) {
+                lastError = err;
+            }
         }
 
-        const response = await fetch(GROQ_API_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${groqApiKey}`
-            },
-            body: JSON.stringify({
-                model: "llama-3.3-70b-versatile",
-                messages: [
-                    { role: "system", content: SYSTEM_PROMPT },
-                    { role: "user", content: command }
-                ],
-                temperature: 0.1, // Low temp for precision
-                response_format: { type: "json_object" }
-            })
-        });
-
-        if (!response.ok) throw new Error("AI Processing Failed");
-
-        const data = await response.json();
-        const result = JSON.parse(data.choices[0].message.content);
+        if (!result) {
+            throw lastError || new Error("AI Processing Failed");
+        }
 
         return NextResponse.json(result);
 
