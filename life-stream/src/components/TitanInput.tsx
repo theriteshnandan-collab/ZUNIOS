@@ -88,10 +88,10 @@ export default function TitanInput({
     };
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+        if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            if (text.trim()) {
-                onAnalyze(text, predictedMode);
+            if (text.trim() && !isAnalyzing) {
+                onAnalyze(text.trim(), predictedMode);
                 setText("");
             }
         }
@@ -201,8 +201,8 @@ export default function TitanInput({
                         <Button
                             size="icon"
                             onClick={() => {
-                                if (text.trim()) {
-                                    onAnalyze(text, predictedMode);
+                                if (text.trim() && !isAnalyzing) {
+                                    onAnalyze(text.trim(), predictedMode);
                                     setText("");
                                 }
                             }}
