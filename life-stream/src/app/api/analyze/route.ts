@@ -136,15 +136,16 @@ Return a strictly valid JSON object:
 
         let analysis;
         try {
-            if (!process.env.GROQ_API_KEY) {
-                throw new Error("GROQ_API_KEY is not set in environment variables.");
+            const groqApiKey = process.env.GROQ_API_KEY || process.env.GROQ_API_KEY1;
+            if (!groqApiKey) {
+                throw new Error("GROQ_API_KEY or GROQ_API_KEY1 is not set in environment variables.");
             }
 
             const response = await fetch(GROQ_API_URL, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${process.env.GROQ_API_KEY}`
+                    "Authorization": `Bearer ${groqApiKey}`
                 },
                 body: JSON.stringify({
                     model: "llama-3.3-70b-versatile",
