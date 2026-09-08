@@ -22,7 +22,7 @@ import { useAppBadge } from "@/hooks/useAppBadge";
 import { parseCommandLocally } from "@/lib/local-intelligence";
 import { ParticleBackground } from "@/components/ui/ParticleBackground";
 import { NeuralVisual, SyncVisual, CaptureVisual, VaultVisual } from "@/components/ui/BentoVisuals";
-import heroCinematicImage from "../../public/images/image1234.jpg";
+import heroCinematicImage from "../../public/images/hero-sunrays.jpg";
 import dynamic from "next/dynamic";
 
 const RevelationView = dynamic(() => import("@/components/RevelationView"), {
@@ -191,7 +191,7 @@ const StatsStrip = () => (
 // --- HERO BACKGROUND (PERSISTENT ATMOSPHERE) ---
 const HeroBackground = ({ isDashboard = false }: { isDashboard?: boolean }) => {
   return (
-    <div className="fixed inset-0 z-[-10] pointer-events-none hidden md:block">
+    <div className="fixed inset-0 z-[-10] pointer-events-none">
       {/* Cinematic Photo Background */}
       <Image
         src={heroCinematicImage}
@@ -213,16 +213,16 @@ const HeroBackground = ({ isDashboard = false }: { isDashboard?: boolean }) => {
       <div className="absolute w-[1000px] h-[1000px] bg-white/[0.01] rounded-full blur-[200px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" />
 
       {/* Frame Diagnostic Brackets (Persistent System Spine) */}
-      <div className="absolute top-[72px] left-6 w-14 h-14 border-t-[1.5px] border-l-[1.5px] border-white/20 z-20 transition-opacity duration-700" />
-      <div className="absolute top-[72px] right-6 w-14 h-14 border-t-[1.5px] border-r-[1.5px] border-white/20 z-20 transition-opacity duration-700" />
-      <div className="absolute bottom-6 left-6 w-14 h-14 border-b-[1.5px] border-l-[1.5px] border-white/20 z-20 transition-opacity duration-700" />
-      <div className="absolute bottom-6 right-6 w-14 h-14 border-b-[1.5px] border-r-[1.5px] border-white/20 z-20 transition-opacity duration-700" />
+      <div className="hidden md:block absolute top-[72px] left-6 w-14 h-14 border-t-[1.5px] border-l-[1.5px] border-white/20 z-20 transition-opacity duration-700" />
+      <div className="hidden md:block absolute top-[72px] right-6 w-14 h-14 border-t-[1.5px] border-r-[1.5px] border-white/20 z-20 transition-opacity duration-700" />
+      <div className="hidden md:block absolute bottom-6 left-6 w-14 h-14 border-b-[1.5px] border-l-[1.5px] border-white/20 z-20 transition-opacity duration-700" />
+      <div className="hidden md:block absolute bottom-6 right-6 w-14 h-14 border-b-[1.5px] border-r-[1.5px] border-white/20 z-20 transition-opacity duration-700" />
 
       {/* Frame Diagnostic Nodes */}
-      <div className="absolute top-[72px] left-6 w-1.5 h-1.5 bg-white/40 rounded-full -translate-x-[2px] -translate-y-[2px] z-20" />
-      <div className="absolute top-[72px] right-6 w-1.5 h-1.5 bg-white/40 rounded-full translate-x-[2px] -translate-y-[2px] z-20" />
-      <div className="absolute bottom-6 left-6 w-1.5 h-1.5 bg-white/40 rounded-full -translate-x-[2px] translate-y-[2px] z-20" />
-      <div className="absolute bottom-6 right-6 w-1.5 h-1.5 bg-white/40 rounded-full translate-x-[2px] translate-y-[2px] z-20" />
+      <div className="hidden md:block absolute top-[72px] left-6 w-1.5 h-1.5 bg-white/40 rounded-full -translate-x-[2px] -translate-y-[2px] z-20" />
+      <div className="hidden md:block absolute top-[72px] right-6 w-1.5 h-1.5 bg-white/40 rounded-full translate-x-[2px] -translate-y-[2px] z-20" />
+      <div className="hidden md:block absolute bottom-6 left-6 w-1.5 h-1.5 bg-white/40 rounded-full -translate-x-[2px] translate-y-[2px] z-20" />
+      <div className="hidden md:block absolute bottom-6 right-6 w-1.5 h-1.5 bg-white/40 rounded-full translate-x-[2px] translate-y-[2px] z-20" />
     </div>
   );
 };
@@ -239,8 +239,6 @@ const CinematicHero = () => {
 
   return (
     <section className="relative w-full min-h-screen flex flex-col overflow-hidden hidden md:flex">
-      {/* Background Layer */}
-      <HeroBackground isDashboard={false} />
 
       {/* Main Content — z-10, above canvas */}
       <div className="relative z-10 flex-1 flex flex-col justify-start w-full pt-16">
