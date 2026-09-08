@@ -42,12 +42,37 @@ export default function TitanInput({
     const [text, setText] = useState(initialValue);
     const [predictedMode, setPredictedMode] = useState<EntryMode>(initialMode);
     const [isFocused, setIsFocused] = useState(false);
+    const [isActivated, setIsActivated] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
     const [showTemplates, setShowTemplates] = useState(false);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+    useEffect(() => {
+        const handleFocusTitan = () => {
+            if (textareaRef.current) {
+                textareaRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+                setTimeout(() => {
+                    if (textareaRef.current) {
+                        textareaRef.current.focus();
+                        textareaRef.current.setSelectionRange(
+                            textareaRef.current.value.length,
+                            textareaRef.current.value.length
+                        );
+                    }
+                }, 150);
+                setIsFocused(true);
+                setIsActivated(true);
+                setTimeout(() => setIsActivated(false), 2000);
+            }
+        };
+
+        window.addEventListener("focus-titan-input", handleFocusTitan);
+        return () => {
+            window.removeEventListener("focus-titan-input", handleFocusTitan);
+        };
+    }, []);
 
     useEffect(() => {
         setPredictedMode(initialMode);
@@ -125,9 +150,9 @@ export default function TitanInput({
                 className="absolute -bottom-6 left-1/2 -translate-x-1/2 pointer-events-none z-0"
                 initial={{ opacity: 0.1, width: "30%" }}
                 animate={{
-                    opacity: isFocused ? 0.3 : 0.15,
-                    width: isFocused ? "70%" : "30%",
-                    height: isFocused ? "80px" : "40px"
+                    opacity: (isFocused || isActivated) ? 0.4 : 0.15,
+                    width: (isFocused || isActivated) ? "75%" : "30%",
+                    height: (isFocused || isActivated) ? "85px" : "40px"
                 }}
                 transition={{ type: "spring", stiffness: 200, damping: 40 }}
             >
@@ -148,7 +173,7 @@ export default function TitanInput({
                     "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.30),0_4px_40px_rgba(0,0,0,0.4)]",
                     "border border-white/20",
                     "transition-all duration-500",
-                    isFocused && "border-white/40 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.4),0_0_60px_rgba(255,255,255,0.08)]",
+                    (isFocused || isActivated) && "border-white/60 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.5),0_0_60px_rgba(255,255,255,0.15)] ring-2 ring-white/20",
                     isAnalyzing && "opacity-50 pointer-events-none"
                 )}
                 layout
@@ -175,6 +200,7 @@ export default function TitanInput({
                     {/* Textarea (Center) */}
                     <textarea
                         ref={textareaRef}
+                        id="titan-textarea"
                         value={text}
                         onChange={handleTextChange}
                         onKeyDown={handleKeyDown}
