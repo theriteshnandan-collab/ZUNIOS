@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { X, Share2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
@@ -21,15 +21,17 @@ export default function DreamInsightModal({ dream, isOpen, onClose }: DreamInsig
 
     if (!isOpen || !dream) return null;
 
-    // Parse interpretation if it's stored as JSON string
+    // Parse interpretation if it's stored as JSON string or string
     let insights: string[] = [];
     if (dream.interpretation) {
         try {
             insights = Array.isArray(dream.interpretation)
                 ? dream.interpretation
-                : JSON.parse(dream.interpretation as any);
+                : typeof dream.interpretation === 'string' && dream.interpretation.trim().startsWith('[')
+                    ? JSON.parse(dream.interpretation)
+                    : [dream.interpretation];
         } catch {
-            insights = [];
+            insights = typeof dream.interpretation === 'string' ? [dream.interpretation] : [];
         }
     }
 
@@ -173,7 +175,7 @@ export default function DreamInsightModal({ dream, isOpen, onClose }: DreamInsig
                                                             key={index}
                                                             className="bg-white/5 rounded-2xl p-4 text-base leading-relaxed font-serif border border-white/5 hover:bg-white/10 transition-colors"
                                                         >
-                                                            <p className="opacity-90">{cleanText || insight}</p>
+                                                            <p className="opacity-90 whitespace-pre-line">{cleanText || insight}</p>
                                                         </div>
                                                     );
                                                 })}

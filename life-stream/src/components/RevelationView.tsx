@@ -60,14 +60,14 @@ export default function RevelationView({ result, onClose, onSave, isSaving }: Re
                     />
 
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
+                        initial={{ opacity: 0, scale: 0.98 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.8, duration: 0.8 }}
-                        className="prose prose-invert prose-2xl max-w-2xl mx-auto"
+                        className="max-w-2xl mx-auto w-full max-h-[46vh] overflow-y-auto px-6 py-5 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-md text-left"
                     >
-                        <p className="text-zinc-300 leading-[1.6] text-2xl md:text-3xl font-light italic tracking-tight font-serif">
-                            "{result.interpretation}"
-                        </p>
+                        <div className="text-zinc-200 leading-relaxed text-base sm:text-lg font-sans font-normal whitespace-pre-line space-y-4">
+                            {result.interpretation}
+                        </div>
                     </motion.div>
 
                     <motion.div
