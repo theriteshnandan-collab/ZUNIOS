@@ -62,6 +62,8 @@ drop policy if exists "Users can delete own tasks" on tasks;
 
 drop policy if exists "Users can see own entries" on entries;
 drop policy if exists "Users can insert own entries" on entries;
+drop policy if exists "Users can update own entries" on entries;
+drop policy if exists "Users can delete own entries" on entries;
 
 -- Re-create Policies
 create policy "Users can see own tasks" on tasks for select using (auth.uid()::text = user_id);
@@ -71,6 +73,8 @@ create policy "Users can delete own tasks" on tasks for delete using (auth.uid()
 
 create policy "Users can see own entries" on entries for select using (auth.uid()::text = user_id);
 create policy "Users can insert own entries" on entries for insert with check (auth.uid()::text = user_id);
+create policy "Users can update own entries" on entries for update using (auth.uid()::text = user_id);
+create policy "Users can delete own entries" on entries for delete using (auth.uid()::text = user_id);
 
 -- 6. INTELLIGENCE: Neural Search Function
 create or replace function match_documents (
