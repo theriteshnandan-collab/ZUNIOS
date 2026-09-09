@@ -85,10 +85,14 @@ export default function FloatingNav() {
                     {/* User Action */}
                     <div className="flex items-center gap-4">
                         {!user && mounted && (
-                          <Link href="/" className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full bg-white/[0.06] border border-white/10 text-xs font-semibold text-white/70 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-300 group">
+                          <button
+                            type="button"
+                            onClick={() => window.dispatchEvent(new Event("open-auth-modal"))}
+                            className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full bg-white/[0.06] border border-white/10 text-xs font-semibold text-white/70 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-300 group cursor-pointer"
+                          >
                             Get Access
                             <span className="group-hover:translate-x-0.5 transition-transform duration-200 text-white/40">→</span>
-                          </Link>
+                          </button>
                         )}
                         {mounted ? (
                             <AuthButton />

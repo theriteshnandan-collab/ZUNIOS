@@ -8,10 +8,15 @@ export async function middleware(request: NextRequest) {
         },
     });
 
-    // Bypass heavy network calls if the user has no auth cookie
+    // Bypass if Supabase credentials are not configured or user has no auth cookie
     const hasAuthCookie = request.cookies.getAll().some(c => c.name.startsWith('sb-') && c.name.endsWith('-auth-token'));
+    const isConfigured = !!(
+        process.env.NEXT_PUBLIC_SUPABASE_URL &&
+        process.env.NEXT_PUBLIC_SUPABASE_URL.startsWith('http') &&
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    );
     
-    if (!hasAuthCookie) {
+    if (!hasAuthCookie || !isConfigured) {
         return response;
     }
 

@@ -3,6 +3,7 @@
 import React from "react";
 import CleanConsole from "@/components/CleanConsole";
 import NotificationManager from "@/components/NotificationManager";
+import AuthModal from "@/components/auth/AuthModal";
 
 interface ClientShellProps {
     children: React.ReactNode;
@@ -19,6 +20,7 @@ export default function ClientShell({ children }: ClientShellProps) {
         <>
             <CleanConsole />
             <NotificationManager />
+            <AuthModal />
             {children}
         </>
     );

@@ -534,7 +534,7 @@ function HomeContent() {
     }
   }, []);
 
-  // 🔗 BRICK W3: SHORTCUT ROUTER
+  // 🔗 BRICK W3: SHORTCUT ROUTER & AUTH URL LISTENER
   useEffect(() => {
     const shortcutMode = searchParams.get('mode');
     if (shortcutMode && ['task', 'idea', 'journal', 'dream', 'thought'].includes(shortcutMode)) {
@@ -542,6 +542,18 @@ function HomeContent() {
       setMode(targetMode);
       router.replace('/', { scroll: false });
       toast.info(`Mode set to: ${shortcutMode.toUpperCase()}`);
+    }
+
+    const authError = searchParams.get('auth_error');
+    if (authError) {
+      toast.error(decodeURIComponent(authError));
+      router.replace('/', { scroll: false });
+    }
+
+    const openAuth = searchParams.get('open_auth');
+    if (openAuth) {
+      window.dispatchEvent(new Event('open-auth-modal'));
+      router.replace('/', { scroll: false });
     }
   }, [searchParams, setMode, router]);
 
