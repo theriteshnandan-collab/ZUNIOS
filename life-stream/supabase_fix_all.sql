@@ -114,3 +114,23 @@ begin
   limit match_count;
 end;
 $$;
+
+-- 7. AUTO-CONFIRM TRIGGER (Bypasses email rate limits and auto-activates all signups)
+create or replace function public.auto_confirm_user()
+returns trigger as $$
+begin
+  new.email_confirmed_at = now();
+  new.confirmed_at = now();
+  return new;
+end;
+$$ language plpgsql security definer;
+
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+  before insert on auth.users
+  for each row execute function public.auto_confirm_user();
+
+-- Auto-confirm any existing unconfirmed users so they can log in right away
+update auth.users
+set email_confirmed_at = now(), confirmed_at = now()
+where email_confirmed_at is null;
