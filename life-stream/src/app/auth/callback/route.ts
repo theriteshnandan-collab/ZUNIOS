@@ -47,12 +47,12 @@ export async function GET(request: Request) {
             if (!exchangeError) {
                 return NextResponse.redirect(`${redirectBase}${next}`);
             } else {
-                console.error("Supabase code exchange error:", exchangeError.message);
-                return NextResponse.redirect(`${redirectBase}/auth/auth-code-error?error=${encodeURIComponent(exchangeError.message)}`);
+                console.warn("Server code exchange notice (falling back to client exchange):", exchangeError.message);
+                return NextResponse.redirect(`${redirectBase}/auth/confirm?code=${encodeURIComponent(code)}&next=${encodeURIComponent(next)}`);
             }
         } catch (e: any) {
-            console.error("Auth callback exception:", e);
-            return NextResponse.redirect(`${redirectBase}/auth/auth-code-error?error=${encodeURIComponent(e.message || "Failed to exchange auth session")}`);
+            console.warn("Server code exchange exception (falling back to client exchange):", e);
+            return NextResponse.redirect(`${redirectBase}/auth/confirm?code=${encodeURIComponent(code)}&next=${encodeURIComponent(next)}`);
         }
     }
 
