@@ -164,9 +164,15 @@ export default function AuthModal({ isOpen: controlledOpen, onClose: controlledC
 
                 if (error) throw error;
 
+                // When email is already registered and email confirmation is on,
+                // Supabase returns an empty identities array to avoid email enumeration
+                if (data.user && data.user.identities && data.user.identities.length === 0) {
+                    throw new Error("An account with this email already exists. Please sign in instead.");
+                }
+
                 if (data.user && !data.session) {
-                    setSuccessMessage("Account created! Check your email to confirm your account and sign in.");
-                    toast.success("Account created! Please verify your email.");
+                    setSuccessMessage("Account created! Check your email inbox to confirm your account (or disable 'Confirm email' in Supabase for instant sign up).");
+                    toast.success("Account created! Please check your email inbox to confirm.");
                 } else {
                     toast.success("Welcome to Zunios!");
                     closeModal();
