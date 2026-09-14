@@ -26,14 +26,26 @@ export function AuthButton() {
     useEffect(() => {
         let isMounted = true;
 
+        const getLocalUser = (): User | null => {
+            if (typeof window === "undefined") return null;
+            try {
+                const stored = localStorage.getItem("zunios_local_user");
+                if (stored) return JSON.parse(stored);
+            } catch {}
+            return null;
+        };
+
         const checkUser = async () => {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
                 if (isMounted) {
-                    setUser(user);
+                    setUser(user || getLocalUser());
                 }
             } catch (e) {
                 console.error("Auth check failed", e);
+                if (isMounted) {
+                    setUser(getLocalUser());
+                }
             } finally {
                 if (isMounted) {
                     setLoading(false);
@@ -43,29 +55,48 @@ export function AuthButton() {
 
         checkUser();
 
+        const handleAuthChange = () => {
+            if (isMounted) {
+                const local = getLocalUser();
+                if (local) {
+                    setUser(local);
+                } else {
+                    checkUser();
+                }
+            }
+        };
+
+        window.addEventListener("zunios-auth-change", handleAuthChange);
+
         // Listen for auth state changes
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             if (isMounted) {
-                setUser(session?.user ?? null);
+                setUser(session?.user ?? getLocalUser());
                 setLoading(false);
             }
         });
 
         return () => {
             isMounted = false;
+            window.removeEventListener("zunios-auth-change", handleAuthChange);
             subscription.unsubscribe();
         };
     }, []);
 
     const handleSignOut = async () => {
         try {
+            localStorage.removeItem("zunios_local_user");
+            document.cookie = "zunios_local_user=; Max-Age=0; path=/";
+            window.dispatchEvent(new Event("zunios-auth-change"));
             await supabase.auth.signOut();
             setUser(null);
             toast.success("Signed out successfully.");
             window.location.reload();
         } catch (error: any) {
             console.error("Sign out error:", error);
-            toast.error(error.message || "Failed to sign out");
+            localStorage.removeItem("zunios_local_user");
+            setUser(null);
+            window.location.reload();
         }
     };
 

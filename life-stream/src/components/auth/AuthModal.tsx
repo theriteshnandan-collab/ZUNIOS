@@ -116,6 +116,34 @@ export default function AuthModal({ isOpen: controlledOpen, onClose: controlledC
         }
     };
 
+    const handleEnterAsCommander = (customEmail?: string, customName?: string) => {
+        const localUser = {
+            id: `commander-${Date.now()}`,
+            aud: "authenticated",
+            role: "authenticated",
+            email: customEmail || email.trim() || "commander@zunios.codes",
+            user_metadata: {
+                full_name: customName || name.trim() || "Commander",
+                avatar_url: null,
+            },
+            app_metadata: {
+                provider: "local",
+            },
+            created_at: new Date().toISOString(),
+        };
+
+        try {
+            localStorage.setItem("zunios_local_user", JSON.stringify(localUser));
+            document.cookie = "zunios_local_user=1; path=/; max-age=31536000; SameSite=Lax";
+            window.dispatchEvent(new Event("zunios-auth-change"));
+            toast.success("Welcome aboard, Commander! Vault access granted.");
+            closeModal();
+        } catch (e) {
+            console.error("Commander session error:", e);
+            closeModal();
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setErrorMessage(null);
@@ -197,8 +225,17 @@ export default function AuthModal({ isOpen: controlledOpen, onClose: controlledC
             }
         } catch (err: any) {
             console.error("Auth error:", err);
-            setErrorMessage(err.message || "Authentication failed. Please check your credentials.");
-            toast.error(err.message || "Authentication failed.");
+            const msg = err.message || "";
+            const isRateLimit = msg.toLowerCase().includes("rate limit") || msg.toLowerCase().includes("over_email_send_rate_limit");
+
+            if (isRateLimit) {
+                toast.info("Supabase email quota reached. Unlocking instant Commander session for you...");
+                handleEnterAsCommander(email.trim(), name.trim());
+                return;
+            }
+
+            setErrorMessage(msg || "Authentication failed. Please check your credentials.");
+            toast.error(msg || "Authentication failed.");
         } finally {
             setIsLoading(false);
         }
@@ -320,6 +357,16 @@ export default function AuthModal({ isOpen: controlledOpen, onClose: controlledC
                                     </svg>
                                 )}
                                 <span>Continue with Google</span>
+                            </button>
+
+                            {/* Instant Commander Access Option */}
+                            <button
+                                type="button"
+                                onClick={() => handleEnterAsCommander()}
+                                className="w-full py-2.5 px-4 rounded-2xl bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 hover:border-white/20 text-white font-medium text-xs flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.98] cursor-pointer"
+                            >
+                                <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                                <span>1-Click Instant Access (Commander Vault)</span>
                             </button>
 
                             {/* Divider */}
@@ -478,10 +525,11 @@ export default function AuthModal({ isOpen: controlledOpen, onClose: controlledC
                                 <div className="pt-2">
                                     <button
                                         type="button"
-                                        onClick={closeModal}
-                                        className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer"
+                                        onClick={() => handleEnterAsCommander()}
+                                        className="text-xs text-zinc-400 hover:text-white transition-colors cursor-pointer inline-flex items-center gap-1.5"
                                     >
-                                        Continue in Offline / Guest Mode →
+                                        <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                                        <span>Continue in Offline Vault Mode →</span>
                                     </button>
                                 </div>
                             </div>

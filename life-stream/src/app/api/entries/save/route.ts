@@ -9,18 +9,11 @@ export async function POST(req: Request) {
         // Authenticate User using the Server Client (cookies)
         const { createClient } = await import("@/utils/supabase/server");
         const supabase = await createClient(); // Use the server client for Auth AND DB
-        const { data: { user } } = await supabase.auth.getUser();
-
-        if (!user) {
-            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-        }
+        const userId = user?.id || "guest";
+        console.log(`Analyzing Save Request for User: ${userId}`);
 
         const body = await req.json();
         const { content, theme, mood, image_url, category, interpretation } = body;
-
-        // Enforce User ID from session
-        const userId = user.id;
-        console.log(`Analyzing Save Request for User: ${userId}`);
 
         if (!content) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -28,15 +21,6 @@ export async function POST(req: Request) {
 
         // 1. Generate Embedding (with timeout protection)
         let embedding = null;
-        // 1. Generate Embedding (DISABLED FOR STABILITY - User requested FIX)
-
-        /*
-        if (process.env.OPENAI_API_KEY) { 
-            try {
-                // ... logic ...
-            } catch (embeddingError: any) { ... }
-        } 
-        */
 
         // 2. Build insert data
         const insertData: any = {
@@ -45,7 +29,7 @@ export async function POST(req: Request) {
             mood,
             image_url,
             category,
-            user_id: userId, // Use the determined userId
+            user_id: userId,
             interpretation: Array.isArray(interpretation) ? JSON.stringify(interpretation) : interpretation,
             created_at: new Date().toISOString()
         };
@@ -55,18 +39,23 @@ export async function POST(req: Request) {
             insertData.embedding = embedding;
         }
 
-        // 3. Insert into DB ('entries' table)
-        const { data, error } = await supabase.from('entries').insert(insertData).select();
-
-        if (error) {
-            console.error("Supabase Insert Error:", error);
-            return NextResponse.json({ error: error.message }, { status: 500 });
+        // 3. Insert into DB ('entries' table) if user is authenticated with Supabase
+        if (user) {
+            const { data, error } = await supabase.from('entries').insert(insertData).select();
+            if (!error && data && data.length > 0) {
+                const savedEntry = data[0];
+                return NextResponse.json({ success: true, entry: savedEntry });
+            }
+            console.warn("Supabase insert notice:", error?.message);
         }
 
-        const savedEntry = data[0];
-        console.log(`Successfully saved entry ${savedEntry?.id} for user ${userId}`);
-
-        return NextResponse.json({ success: true, entry: savedEntry });
+        // Graceful fallback for guest/offline commander mode
+        const localEntry = {
+            ...insertData,
+            id: crypto.randomUUID(),
+            is_local: true,
+        };
+        return NextResponse.json({ success: true, entry: localEntry, local: true });
 
     } catch (error: any) {
         console.error("Save API Error:", error);

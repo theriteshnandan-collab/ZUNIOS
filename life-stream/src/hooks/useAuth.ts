@@ -9,6 +9,19 @@ export function useAuth() {
     const [loading, setLoading] = useState(true);
     const supabase = createClient();
 
+    const getLocalUser = (): User | null => {
+        if (typeof window === "undefined") return null;
+        try {
+            const stored = localStorage.getItem("zunios_local_user");
+            if (stored) {
+                return JSON.parse(stored);
+            }
+        } catch {
+            // Ignore parse errors
+        }
+        return null;
+    };
+
     useEffect(() => {
         let isMounted = true;
 
@@ -16,10 +29,17 @@ export function useAuth() {
             try {
                 const { data: { user } } = await supabase.auth.getUser();
                 if (isMounted) {
-                    setUser(user);
+                    if (user) {
+                        setUser(user);
+                    } else {
+                        setUser(getLocalUser());
+                    }
                 }
             } catch (e) {
                 console.error("Auth check failed", e);
+                if (isMounted) {
+                    setUser(getLocalUser());
+                }
             } finally {
                 if (isMounted) {
                     setLoading(false);
@@ -29,15 +49,33 @@ export function useAuth() {
 
         checkUser();
 
+        const handleAuthChange = () => {
+            if (isMounted) {
+                const local = getLocalUser();
+                if (local) {
+                    setUser(local);
+                } else {
+                    checkUser();
+                }
+            }
+        };
+
+        window.addEventListener("zunios-auth-change", handleAuthChange);
+
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             if (isMounted) {
-                setUser(session?.user ?? null);
+                if (session?.user) {
+                    setUser(session.user);
+                } else {
+                    setUser(getLocalUser());
+                }
                 setLoading(false);
             }
         });
 
         return () => {
             isMounted = false;
+            window.removeEventListener("zunios-auth-change", handleAuthChange);
             subscription.unsubscribe();
         };
     }, []);
