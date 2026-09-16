@@ -30,10 +30,10 @@ export function GlassCard({
         <div
             className={cn(
                 "relative overflow-hidden rounded-2xl",
-                "bg-white/[0.03] backdrop-blur-xl",
-                innerLight && "shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)]",
+                "bg-white/[0.035] backdrop-blur-xl border border-white/10",
+                innerLight && "shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.12),0_12px_32px_rgba(0,0,0,0.5)]",
                 "transition-all duration-300",
-                "hover:bg-white/[0.05] hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1)]",
+                "hover:bg-white/[0.055] hover:border-white/20 hover:shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.2),0_16px_40px_rgba(0,0,0,0.6)]",
                 className
             )}
         >

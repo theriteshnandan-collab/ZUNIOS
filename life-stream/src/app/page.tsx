@@ -57,27 +57,20 @@ const FeatureSection = ({
   align?: "left" | "right",
   tag?: string
 }) => {
-  // If 'right', image is strictly on the right side and text is on the left.
   const isRight = align === "right";
 
-  // Create a ref to track the physical scroll intersection of this specific component container
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    // Animation starts perfectly when node hits 85% down the screen, and fully finishes when its center hits 45% (optimal view height).
     offset: ["start 85%", "center 45%"]
   });
 
-  // Zero-State Hardware Transforms (Mathematically bound to scroll pixels, avoiding React entirely)
   const visualX = useTransform(scrollYProgress, [0, 1], [isRight ? -40 : 40, 0]);
   const textX = useTransform(scrollYProgress, [0, 1], [isRight ? 20 : -20, 0]);
+  const commonOpacity = useTransform(scrollYProgress, [0, 0.8], [0, 1]);
 
-  // Opacity interpolation mapped identically to the physical progress
-  const commonOpacity = useTransform(scrollYProgress, [0, 0.8], [0, 1]); // Hits 100% opacity slighly before fully translating
-
-  // Center wire socket transformations
-  const nodeScale = useTransform(scrollYProgress, [0, 0.4], [0, 1]); // Pops in fast
-  const sparkScaleX = useTransform(scrollYProgress, [0.3, 1], [0, 1]); // Sparks cleanly out
+  const nodeScale = useTransform(scrollYProgress, [0, 0.4], [0, 1]);
+  const sparkScaleX = useTransform(scrollYProgress, [0.3, 1], [0, 1]);
 
   return (
     <motion.div
@@ -92,9 +85,9 @@ const FeatureSection = ({
         {/* The Node Socket */}
         <motion.div
           style={{ scale: nodeScale, opacity: commonOpacity }}
-          className="relative w-4 h-4 rounded-full bg-white border-2 border-black/10 shadow-[0_0_20px_rgba(0,0,0,0.15)] flex items-center justify-center transform-gpu"
+          className="relative w-4 h-4 rounded-full bg-zinc-950 border-2 border-zinc-400/60 shadow-[0_0_20px_rgba(255,255,255,0.25)] flex items-center justify-center transform-gpu"
         >
-          <div className="w-1.5 h-1.5 bg-black rounded-full animate-pulse" />
+          <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
         </motion.div>
 
         {/* The Horizontal Spark Line */}
@@ -103,13 +96,13 @@ const FeatureSection = ({
           className={cn(
             "absolute h-[2px] bg-gradient-to-r w-24 transform-gpu",
             isRight
-              ? "right-2 origin-left from-black/40 to-black/0"
-              : "left-2 origin-right from-black/0 to-black/40"
+              ? "right-2 origin-left from-white/40 to-transparent"
+              : "left-2 origin-right from-transparent to-white/40"
           )}
         />
       </div>
 
-      {/* VISUAL SIDE — Spawning Container */}
+      {/* VISUAL SIDE — Double-Bezel Hardware Enclosure */}
       <motion.div
         style={{
           x: visualX,
@@ -118,27 +111,27 @@ const FeatureSection = ({
         }}
         className="w-full md:w-1/2 relative z-20 transform-gpu"
       >
-        <div className="relative rounded-[16px] bg-gradient-to-b from-black/[0.08] to-black/[0.02] border border-black/15 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.25)] group-hover/section:border-black/30 group-hover/section:shadow-[0_40px_80px_-15px_rgba(0,0,0,0.3)] transition-all duration-700 p-1">
-          <div className="relative w-full h-[260px] md:h-[340px] rounded-[12px] overflow-hidden bg-black">
+        <div className="relative rounded-[22px] bg-white/[0.035] border border-white/10 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.8)] group-hover/section:border-white/25 group-hover/section:shadow-[0_40px_90px_-15px_rgba(0,0,0,0.9)] transition-all duration-700 p-1.5 backdrop-blur-2xl">
+          <div className="relative w-full h-[260px] md:h-[340px] rounded-[calc(22px-0.375rem)] overflow-hidden bg-black border border-white/[0.06]">
 
             {/* Monitor Chrome */}
-            <div className="absolute top-0 left-0 right-0 z-30 h-8 bg-gradient-to-b from-black/[0.1] to-transparent backdrop-blur-md flex items-center justify-between px-4 border-b border-white/[0.08]">
+            <div className="absolute top-0 left-0 right-0 z-30 h-8 bg-black/60 backdrop-blur-md flex items-center justify-between px-4 border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-[#FF5F57]" />
-                <div className="w-2 h-2 rounded-full bg-[#FEBC2E]" />
-                <div className="w-2 h-2 rounded-full bg-[#28C840]" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#FF5F57]/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]/80" />
+                <div className="w-2.5 h-2.5 rounded-full bg-[#28C840]/80" />
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
-                <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/50">LIVE</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                <span className="text-[9px] font-mono font-bold uppercase tracking-[0.2em] text-zinc-400">ACTIVE CORE</span>
               </div>
             </div>
 
             <div className="absolute inset-0 z-0 p-1"><Visual /></div>
 
             {/* Cinematic Overlays */}
-            <div className="absolute inset-0 z-20 pointer-events-none mix-blend-multiply opacity-40 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-            <div className="absolute inset-0 ring-1 ring-inset ring-white/[0.1] rounded-[12px] pointer-events-none z-30" />
+            <div className="absolute inset-0 z-20 pointer-events-none opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+            <div className="absolute inset-0 ring-1 ring-inset ring-white/[0.08] rounded-[calc(22px-0.375rem)] pointer-events-none z-30" />
           </div>
         </div>
       </motion.div>
@@ -146,18 +139,18 @@ const FeatureSection = ({
       {/* TEXT SIDE */}
       <motion.div style={{ x: textX, opacity: commonOpacity, WebkitBackfaceVisibility: "hidden" }} className="w-full md:w-1/2 space-y-6 text-center md:text-left relative z-10 transform-gpu">
         {tag && (
-          <span className="inline-block text-[11px] font-bold uppercase tracking-[0.25em] text-black/60 bg-black/[0.04] border border-black/10 px-3.5 py-1.5 rounded-full">
+          <span className="inline-block text-[10px] font-bold uppercase tracking-[0.25em] text-zinc-300 bg-white/[0.06] border border-white/10 px-3.5 py-1.5 rounded-full backdrop-blur-md">
             {tag}
           </span>
         )}
-        <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-black tracking-tight leading-[1.05]">
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white tracking-tight leading-[1.05]">
           {title}
         </h2>
-        <p className="text-lg md:text-xl text-black/50 font-light leading-relaxed max-w-md mx-auto md:mx-0">
+        <p className="text-lg md:text-xl text-zinc-400 font-light leading-relaxed max-w-md mx-auto md:mx-0">
           {description}
         </p>
         <div className="pt-4 flex justify-center md:justify-start">
-          <div className="h-[2px] w-16 bg-gradient-to-r from-black/30 to-transparent rounded-full" />
+          <div className="h-[2px] w-16 bg-gradient-to-r from-zinc-400/50 to-transparent rounded-full" />
         </div>
       </motion.div>
     </motion.div>
@@ -180,10 +173,10 @@ const StatsStrip = () => (
       { value: "Instant", label: "Edge processing" },
     ].map((stat) => (
       <div key={stat.label} className="text-center group">
-        <div className="text-xl sm:text-2xl md:text-3xl xl:text-4xl font-bold font-serif text-[#050505] mb-2 group-hover:text-black/70 transition-colors duration-500 tracking-tighter leading-none whitespace-nowrap">
+        <div className="text-xl sm:text-2xl md:text-3xl xl:text-4xl font-bold font-serif bg-gradient-to-b from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent mb-2 group-hover:text-white transition-colors duration-500 tracking-tighter leading-none whitespace-nowrap">
           {stat.value}
         </div>
-        <div className="text-[8px] md:text-[10px] text-black/60 uppercase tracking-[0.1em] md:tracking-[0.25em] font-bold">{stat.label}</div>
+        <div className="text-[8px] md:text-[10px] text-zinc-400 uppercase tracking-[0.1em] md:tracking-[0.25em] font-mono font-medium">{stat.label}</div>
       </div>
     ))}
   </motion.div>
@@ -251,7 +244,7 @@ const CinematicHero = () => {
   }, []);
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col overflow-hidden hidden md:flex">
+    <section className="relative w-full min-h-[100dvh] flex flex-col overflow-hidden hidden md:flex">
 
       {/* Main Content — z-10, above canvas */}
       <div className="relative z-10 flex-1 flex flex-col justify-start w-full pt-16">
@@ -374,14 +367,13 @@ const CinematicHero = () => {
                         document.getElementById("titan-input")?.scrollIntoView({ behavior: "smooth", block: "center" });
                       }
                     }}
-                    className="group relative px-8 py-3.5 rounded-full bg-white text-black font-bold text-sm transition-all duration-300 active:scale-95 hover:shadow-[0_0_40px_rgba(255,255,255,0.3)] flex items-center gap-2 overflow-hidden cursor-pointer">
+                    className="group relative pl-7 pr-2.5 py-2 rounded-full bg-white text-black font-semibold text-sm transition-all duration-300 active:scale-[0.98] hover:bg-zinc-100 hover:shadow-[0_0_40px_rgba(255,255,255,0.35)] flex items-center gap-3 cursor-pointer shadow-[inset_0_1px_1px_rgba(255,255,255,0.9)]">
                     <span className="relative z-10">Start Thinking Free</span>
-                    <span className="relative z-10 group-hover:translate-x-1 transition-transform duration-200">→</span>
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/[0.04] to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
+                    <span className="relative z-10 w-7 h-7 rounded-full bg-black/10 flex items-center justify-center text-xs font-bold transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-[0.5px] scale-100 group-hover:scale-105">→</span>
                   </button>
                   <button
                     onClick={() => document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })}
-                    className="px-8 py-3.5 rounded-full border border-white/30 text-white/70 font-medium text-sm hover:border-white/60 hover:text-white transition-all duration-300 bg-black/20 backdrop-blur-sm cursor-pointer">
+                    className="px-7 py-3 rounded-full border border-white/20 text-white/80 font-medium text-sm hover:border-white/50 hover:text-white hover:bg-white/[0.05] transition-all duration-300 bg-black/30 backdrop-blur-md cursor-pointer active:scale-[0.98]">
                     See How It Works
                   </button>
                 </div>
@@ -399,14 +391,16 @@ const CinematicHero = () => {
 // WRAPPER COMPONENT TO HANDLE SCROLL LOGIC
 const NarrativeFlowLines = () => {
   return (
-    <div id="how-it-works" className="w-full mt-4 pb-16 hidden sm:block bg-white overflow-hidden">
+    <div id="how-it-works" className="w-full mt-10 pb-24 hidden sm:block bg-[#050505] relative overflow-hidden border-t border-white/[0.06]">
+      {/* Ambient Depth Glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] bg-gradient-to-b from-white/[0.02] to-transparent rounded-full blur-[140px] pointer-events-none" />
 
       {/* SECTION DIVIDER */}
-      <div className="max-w-6xl mx-auto px-8 mb-4 pt-12">
+      <div className="max-w-6xl mx-auto px-8 mb-4 pt-16">
         <div className="flex items-center gap-8">
-          <div className="flex-1 h-px bg-gradient-to-r from-transparent to-black/[0.15]" />
-          <span className="text-[11px] text-black/60 uppercase tracking-[0.35em] font-bold whitespace-nowrap">The Architecture</span>
-          <div className="flex-1 h-px bg-gradient-to-l from-transparent to-black/[0.15]" />
+          <div className="flex-1 h-px bg-gradient-to-r from-transparent to-white/10" />
+          <span className="text-[10px] text-zinc-400 uppercase tracking-[0.35em] font-mono font-bold whitespace-nowrap">The Architecture</span>
+          <div className="flex-1 h-px bg-gradient-to-l from-transparent to-white/10" />
         </div>
       </div>
 
@@ -414,10 +408,10 @@ const NarrativeFlowLines = () => {
       <StatsStrip />
 
       {/* CONNECTED FEATURES CONTAINER */}
-      <div className="relative pb-20">
+      <div className="relative pb-24">
         {/* STATIC PASSIVE SPINE */}
-        <div className="absolute left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-transparent via-black/10 to-black/5 -translate-x-1/2 z-0">
-          <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[1px] bg-gradient-to-b from-transparent via-black/20 to-transparent" />
+        <div className="absolute left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-transparent via-white/10 to-transparent -translate-x-1/2 z-0">
+          <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[1px] bg-gradient-to-b from-transparent via-white/20 to-transparent" />
         </div>
 
         <FeatureSection
@@ -454,18 +448,19 @@ const NarrativeFlowLines = () => {
       </div>
 
       {/* CAPABILITIES GRID */}
-      <div className="pt-20 px-8 max-w-6xl mx-auto border-t border-black/[0.06]">
-        <div className="text-center space-y-4 mb-16">
+      <div className="pt-20 px-8 max-w-6xl mx-auto border-t border-white/[0.06]">
+        <div className="text-center space-y-3 mb-16">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/70">Full Stack</span>
-            <h3 className="text-3xl md:text-4xl font-serif text-white mt-3">System Capabilities</h3>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-[0.3em] text-zinc-400">Full Stack Infrastructure</span>
+            <h3 className="text-3xl md:text-5xl font-serif font-bold text-white mt-3 tracking-tight">System Capabilities</h3>
+            <p className="text-sm md:text-base text-zinc-400 mt-2 max-w-md mx-auto">Engineered from first principles for instant neural capture and zero-latency recall.</p>
           </motion.div>
-          <div className="h-px w-16 bg-gradient-to-r from-transparent via-black/20 to-transparent mx-auto" />
+          <div className="h-px w-16 bg-gradient-to-r from-transparent via-white/20 to-transparent mx-auto pt-2" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -483,17 +478,17 @@ const NarrativeFlowLines = () => {
               transition={{ delay: i * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true }}
               key={i}
-              className="relative p-6 rounded-2xl bg-[#070707] border border-white/[0.03] hover:border-white/[0.08] hover:shadow-[0_8px_30px_rgba(255,255,255,0.02)] transition-all duration-500 group overflow-hidden"
+              className="relative p-1 rounded-[22px] bg-white/[0.03] border border-white/10 hover:border-white/25 hover:shadow-[0_12px_40px_rgba(0,0,0,0.8)] transition-all duration-500 group overflow-hidden"
             >
-              {/* Top shine line */}
-              <div className="absolute top-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-white/[0.05] to-transparent" />
-              {/* Hover glow */}
-              <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/0 group-hover:from-white/[0.02] group-hover:to-transparent transition-all duration-700 rounded-2xl" />
-              <div className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/[0.1] flex items-center justify-center mb-5 group-hover:scale-110 group-hover:border-white/[0.2] group-hover:bg-white/[0.08] transition-all duration-300 relative z-10 shadow-[0_0_20px_rgba(255,255,255,0.02)]">
-                <item.icon className="w-5 h-5 text-white/60 group-hover:text-white transition-colors duration-300" />
+              <div className="p-6 rounded-[calc(22px-0.25rem)] bg-zinc-950/80 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] backdrop-blur-xl h-full flex flex-col justify-between">
+                <div>
+                  <div className="w-11 h-11 rounded-xl bg-white/[0.06] border border-white/15 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:border-white/30 group-hover:bg-white/[0.1] transition-all duration-300 relative z-10 shadow-[0_0_20px_rgba(255,255,255,0.03)]">
+                    <item.icon className="w-5 h-5 text-white/70 group-hover:text-white transition-colors duration-300" />
+                  </div>
+                  <h4 className="text-base font-bold text-white mb-2 relative z-10">{item.title}</h4>
+                  <p className="text-zinc-400 text-sm leading-relaxed relative z-10 group-hover:text-zinc-300 transition-colors">{item.desc}</p>
+                </div>
               </div>
-              <h4 className="text-base font-bold text-white mb-2.5 relative z-10">{item.title}</h4>
-              <p className="text-white/65 text-sm leading-relaxed relative z-10 group-hover:text-white/90 transition-colors">{item.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -771,7 +766,7 @@ function HomeContent() {
         style={{ scaleX: scrollYProgress }}
       />
 
-      <div className="min-h-screen flex flex-col items-center relative z-10">
+      <div className="min-h-[100dvh] flex flex-col items-center relative z-10">
 
         {isLoading && <DreamLoader mode={mode} />}
 
@@ -814,11 +809,11 @@ function HomeContent() {
           </div>
           {!user && (
             <>
-              <h1 className="text-4xl font-bold font-serif tracking-tight leading-[0.9] pb-3">
-                <span className="bg-gradient-to-b from-white to-white/30 bg-clip-text text-transparent">The OS for </span>
-                <span className="bg-gradient-to-r from-[#e8e8e8] to-[#888888] bg-clip-text text-transparent">Your Mind.</span>
+              <h1 className="text-4xl sm:text-5xl font-bold font-serif tracking-tight leading-[0.92] pb-3">
+                <span className="bg-gradient-to-b from-white via-white/95 to-white/40 bg-clip-text text-transparent">The OS for </span>
+                <span className="bg-gradient-to-r from-[#e8e8e8] via-[#c0c0c0] to-[#888888] bg-clip-text text-transparent">Your Mind.</span>
               </h1>
-              <p className="text-base text-white/35 mb-6 max-w-xs mx-auto">Capture ideas. Analyze patterns. Extract intelligence.</p>
+              <p className="text-sm sm:text-base text-zinc-400 mb-6 max-w-xs mx-auto font-medium">Capture ideas. Analyze patterns. Extract intelligence.</p>
             </>
           )}
         </div>

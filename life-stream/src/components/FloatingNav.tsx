@@ -35,20 +35,20 @@ export default function FloatingNav() {
 
     return (
         <>
-            {/* Desktop Top Navigation */}
-            <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-black/20 backdrop-blur-md hidden md:block">
-                <div className="container mx-auto px-6 h-16 flex items-center justify-between">
+            {/* Desktop Top Detached Floating Island */}
+            <header className="fixed top-4 inset-x-0 mx-auto max-w-4xl px-4 z-50 pointer-events-none hidden md:block">
+                <div className="pointer-events-auto h-14 px-4 pl-5 rounded-full border border-white/10 bg-black/75 backdrop-blur-2xl shadow-[0_16px_36px_rgba(0,0,0,0.6),inset_0_1px_1px_rgba(255,255,255,0.15)] flex items-center justify-between gap-4 transition-all duration-500">
                     {/* Logo Area */}
-                    <Link href="/" className="flex items-center gap-2 group">
-                        <ZuniosLogo size="md" showText={true} />
+                    <Link href="/" className="flex items-center gap-2 group cursor-pointer">
+                        <ZuniosLogo size="sm" showText={true} />
                     </Link>
 
                     {/* Nav Items — Precision Island Architecture */}
                     <motion.nav
-                        initial={{ y: 100, opacity: 0 }}
+                        initial={{ y: -20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                        className="flex items-center gap-0.5 p-1 rounded-full border border-white/20 bg-black/80 backdrop-blur-3xl shadow-lg shadow-black/40 h-11"
+                        transition={{ type: "spring", stiffness: 300, damping: 28 }}
+                        className="flex items-center gap-1 p-1 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-md shadow-inner h-10"
                     >
                         {navItems.map(link => {
                             const isActive = pathname === link.href;
@@ -59,22 +59,27 @@ export default function FloatingNav() {
                                     key={link.name}
                                     href={link.href}
                                     onClick={isSearch ? openSearch : undefined}
-                                    className="relative group"
+                                    className="relative group px-3 py-1.5 rounded-full flex items-center gap-2 transition-all duration-300"
                                 >
                                     <div className={cn(
-                                        "relative z-10 p-2.5 rounded-full transition-all duration-300", 
-                                        isActive ? "text-white bg-white/[0.08]" : "text-white/40 hover:text-white hover:bg-white/[0.04]",
-                                        "active:scale-95"
+                                        "relative z-10 flex items-center gap-1.5 transition-all duration-300", 
+                                        isActive ? "text-white" : "text-white/50 hover:text-white"
                                     )}>
-                                        <link.icon className={cn("w-5 h-5", isActive && "stroke-[2.2px]")} />
+                                        <link.icon className={cn("w-4 h-4", isActive ? "stroke-[2.2px] text-white" : "text-white/60 group-hover:text-white")} />
+                                        <span className={cn(
+                                            "text-xs font-medium tracking-tight",
+                                            isActive ? "text-white font-semibold" : "text-white/60 group-hover:text-white"
+                                        )}>
+                                            {link.name}
+                                        </span>
                                     </div>
 
-                                    {/* Active Glow — Tighter & Subtler */}
+                                    {/* Active Pill Indicator */}
                                     {isActive && (
                                         <motion.div
                                             layoutId="nav-glow"
-                                            className="absolute inset-0 bg-white/[0.05] blur-md rounded-full -z-10"
-                                            transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                            className="absolute inset-0 bg-white/[0.12] rounded-full border border-white/15 shadow-[0_0_15px_rgba(255,255,255,0.08),inset_0_1px_0_rgba(255,255,255,0.2)]"
+                                            transition={{ type: "spring", bounce: 0.18, duration: 0.5 }}
                                         />
                                     )}
                                 </Link>
@@ -83,15 +88,15 @@ export default function FloatingNav() {
                     </motion.nav>
 
                     {/* User Action */}
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3">
                         {!user && mounted && (
                           <button
                             type="button"
                             onClick={() => window.dispatchEvent(new Event("open-auth-modal"))}
-                            className="hidden md:flex items-center gap-2 px-5 py-2 rounded-full bg-white/[0.06] border border-white/10 text-xs font-semibold text-white/70 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all duration-300 group cursor-pointer"
+                            className="hidden md:flex items-center gap-2 pl-4 pr-1.5 py-1.5 rounded-full bg-white/[0.06] border border-white/15 text-xs font-semibold text-white hover:bg-white/10 hover:border-white/25 active:scale-[0.98] transition-all duration-300 group cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.05)]"
                           >
-                            Get Access
-                            <span className="group-hover:translate-x-0.5 transition-transform duration-200 text-white/40">→</span>
+                            <span>Get Access</span>
+                            <span className="w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-[10px] text-white/80 group-hover:bg-white group-hover:text-black group-hover:translate-x-0.5 transition-all duration-300">→</span>
                           </button>
                         )}
                         {mounted ? (
