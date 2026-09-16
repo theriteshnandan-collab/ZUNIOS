@@ -83,37 +83,41 @@ export default function RevelationView({ result, onClose, onSave, isSaving }: Re
                         <div className="w-24 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent mx-auto" />
                     </motion.div>
 
-                    {/* The Answer / Interpretation Card */}
+                    {/* The Answer / Interpretation Card — Double-Bezel Hardware Architecture */}
                     <motion.div
                         initial={{ opacity: 0, scale: 0.98 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.25, duration: 0.5 }}
-                        className="w-full max-h-[50vh] overflow-y-auto px-6 py-6 sm:px-8 sm:py-7 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-xl shadow-2xl text-left"
+                        className="w-full p-1 rounded-[24px] bg-white/[0.04] border border-white/10 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.8)] backdrop-blur-2xl"
                     >
-                        <div className="text-zinc-100 leading-relaxed text-base sm:text-lg font-sans font-light whitespace-pre-line space-y-4 select-text">
-                            {result.interpretation || "No interpretation generated."}
+                        <div className="w-full max-h-[50vh] overflow-y-auto px-6 py-6 sm:px-8 sm:py-7 rounded-[calc(24px-0.25rem)] bg-zinc-950/85 border border-white/[0.06] shadow-[inset_0_1px_1px_rgba(255,255,255,0.14)] text-left">
+                            <div className="text-zinc-100 leading-relaxed text-base sm:text-lg font-sans font-light whitespace-pre-line space-y-4 select-text">
+                                {result.interpretation || "No interpretation generated."}
+                            </div>
                         </div>
                     </motion.div>
 
-                    {/* Action Buttons */}
+                    {/* Action Buttons — Button-in-Button Architecture */}
                     <motion.div
                         initial={{ opacity: 0, y: 15 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.35, duration: 0.5 }}
                         className="pt-4 flex flex-col sm:flex-row gap-4 items-center justify-center w-full"
                     >
-                        <ShinyButton
+                        <button
+                            type="button"
                             onClick={onSave}
                             disabled={isSaving}
-                            className="px-8 py-4 text-base min-w-[200px]"
+                            className="group relative pl-8 pr-3 py-3 rounded-full bg-white text-black font-semibold text-base min-w-[240px] transition-all duration-300 active:scale-[0.98] hover:bg-zinc-100 hover:shadow-[0_0_40px_rgba(255,255,255,0.35)] flex items-center justify-between cursor-pointer disabled:opacity-50 disabled:pointer-events-none shadow-[inset_0_1px_1px_rgba(255,255,255,0.9)]"
                         >
-                            {isSaving ? "Saving..." : "Log to Consciousness"}
-                        </ShinyButton>
+                            <span>{isSaving ? "Securing Memory..." : "Log to Consciousness"}</span>
+                            <span className="w-8 h-8 rounded-full bg-black/10 flex items-center justify-center text-xs font-bold transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-[0.5px] scale-100 group-hover:scale-105">→</span>
+                        </button>
 
                         <Button
                             variant="ghost"
                             onClick={onClose}
-                            className="text-zinc-400 hover:text-white transition-colors text-base"
+                            className="text-zinc-400 hover:text-white transition-colors text-base px-6 py-3 rounded-full cursor-pointer"
                         >
                             Discard
                         </Button>
